@@ -50,7 +50,7 @@ class SpotifyService {
     try {
       const response = await this.spotifyApi.searchTracks(cleanQuery, { 
         limit: 50,
-        market: 'US'
+        market: 'SE'
       });
       const tracks = response.body.tracks?.items || [];
       console.log(`Spotify: Got ${tracks.length} raw tracks from API`);
@@ -106,7 +106,7 @@ class SpotifyService {
     try {
       const response = await this.spotifyApi.searchTracks(query, { 
         limit: 10,
-        market: 'US'
+        market: 'SE'
       });
       const tracks = response.body.tracks?.items || [];
 
@@ -114,7 +114,7 @@ class SpotifyService {
         const fallbackQuery = `${title} ${artist}`;
         const fallbackResponse = await this.spotifyApi.searchTracks(fallbackQuery, {
           limit: 10,
-          market: 'US'
+          market: 'SE'
         });
         tracks.push(...(fallbackResponse.body.tracks?.items || []));
       }
@@ -177,7 +177,7 @@ class SpotifyService {
         seed_genres: seedGenres,
         limit: 50,
         min_popularity: 30,
-        market: 'US'
+        market: 'SE'
       });
 
       const tracks = response.body.tracks || [];
