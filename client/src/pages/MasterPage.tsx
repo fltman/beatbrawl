@@ -53,9 +53,14 @@ export default function MasterPage() {
       const audio = new Audio(audioUrl);
       
       audio.onended = () => {
-        console.log('DJ commentary finished');
+        console.log('DJ commentary finished, auto-starting next round...');
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
+        
+        // Automatiskt gå till nästa runda
+        setTimeout(() => {
+          socketService.nextRound();
+        }, 1500);
       };
       
       audio.onerror = (e) => {
@@ -172,7 +177,7 @@ export default function MasterPage() {
           isDJPlaying={isDJPlaying}
         />
 
-        {gameState.phase === 'reveal' && gameState.currentSong && (
+        {gameState.phase === 'reveal' && gameState.currentSong && !isDJPlaying && (
           <RevealScreen
             song={gameState.currentSong}
             results={results}
