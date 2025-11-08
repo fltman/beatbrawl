@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Play, SkipForward, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { Play, SkipForward, Trophy, Volume2, VolumeX, Disc3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
 import type { Player, Song } from '@/types/game.types';
 
 interface GameControlProps {
@@ -11,15 +12,36 @@ interface GameControlProps {
   players: Player[];
   onNextRound?: () => void;
   phase: 'playing' | 'reveal' | 'finished';
+  spotifyConnected?: boolean;
 }
 
-export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase }: GameControlProps) {
+export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase, spotifyConnected }: GameControlProps) {
+  const spotify = useSpotifyPlayer();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasPreview, setHasPreview] = useState(false);
+  const [playbackMethod, setPlaybackMethod] = useState<'spotify' | 'preview' | 'none'>('none');
 
   useEffect(() => {
-    if (phase === 'playing' && currentSong?.previewUrl) {
+    if (phase !== 'playing' || !currentSong) {
+      if (spotify.isPlaying) {
+        spotify.pausePlayback();
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      setIsPlaying(false);
+      return;
+    }
+
+    if (spotify.isConnected && spotify.isReady && currentSong.id) {
+      const trackUri = `spotify:track:${currentSong.id}`;
+      spotify.playTrack(trackUri);
+      setPlaybackMethod('spotify');
+      setIsPlaying(true);
+      setHasPreview(true);
+    } else if (currentSong.previewUrl) {
+      setPlaybackMethod('preview');
       setHasPreview(true);
       
       if (!audioRef.current) {
@@ -33,24 +55,30 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
       audioRef.current.play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
-          console.error('Audio playback failed:', err);
+          console.error('Preview playback failed:', err);
           setIsPlaying(false);
         });
-    } else if (phase === 'playing' && currentSong && !currentSong.previewUrl) {
+    } else {
+      setPlaybackMethod('none');
       setHasPreview(false);
       setIsPlaying(false);
     }
 
     return () => {
-      if (audioRef.current && phase === 'reveal') {
+      if (audioRef.current) {
         audioRef.current.pause();
-        setIsPlaying(false);
       }
     };
-  }, [currentSong, phase]);
+  }, [currentSong, phase, spotify.isConnected, spotify.isReady]);
 
   const togglePlayback = () => {
-    if (audioRef.current) {
+    if (playbackMethod === 'spotify') {
+      if (isPlaying) {
+        spotify.pausePlayback();
+      } else if (currentSong) {
+        spotify.playTrack(`spotify:track:${currentSong.id}`);
+      }
+    } else if (playbackMethod === 'preview' && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
         setIsPlaying(false);
@@ -81,14 +109,19 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="text-9xl font-bold text-primary/30 mb-4">?</div>
                 <div className="flex items-center gap-3 mb-2">
-                  {hasPreview ? (
+                  {playbackMethod === 'spotify' ? (
+                    <Disc3 className={`w-6 h-6 ${isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
+                  ) : hasPreview ? (
                     <Volume2 className={`w-6 h-6 ${isPlaying ? 'text-primary animate-pulse' : 'text-muted-foreground'}`} />
                   ) : (
                     <VolumeX className="w-6 h-6 text-muted-foreground" />
                   )}
                   <p className="text-2xl font-semibold text-muted-foreground">
-                    {hasPreview ? 'Lyssna på musiken' : 'Ingen förhandsvisning tillgänglig'}
+                    {playbackMethod === 'spotify' ? 'Spelar via Spotify' : hasPreview ? 'Lyssna på musiken' : 'Ingen förhandsvisning tillgänglig'}
                   </p>
+                  {playbackMethod === 'spotify' && (
+                    <Badge variant="secondary" className="ml-2">Premium</Badge>
+                  )}
                 </div>
                 {hasPreview && (
                   <Button

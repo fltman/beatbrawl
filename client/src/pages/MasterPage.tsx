@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Music } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 import AIChat from '@/components/AIChat';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
 import GameControl from '@/components/GameControl';
@@ -12,9 +14,15 @@ export default function MasterPage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [preferences, setPreferences] = useState('');
+  const [spotifyConnected, setSpotifyConnected] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
+    fetch('/api/spotify/status')
+      .then(res => res.json())
+      .then(data => setSpotifyConnected(data.connected))
+      .catch(console.error);
+
     const socket = socketService.connect();
 
     socketService.createGame((data) => {
@@ -117,9 +125,26 @@ export default function MasterPage() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-6 text-center">
-          <h1 className="text-4xl font-bold mb-2">HITSTER AI</h1>
-          <p className="text-muted-foreground">Spelkod: <span className="font-mono font-bold">{gameState.id}</span></p>
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-4xl font-bold">HITSTER AI</h1>
+            {!spotifyConnected && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.location.href = '/auth/spotify'}
+                className="gap-2"
+                data-testid="button-connect-spotify"
+              >
+                <Music className="w-4 h-4" />
+                Anslut Spotify Premium
+              </Button>
+            )}
+          </div>
+          <p className="text-muted-foreground text-center">
+            Spelkod: <span className="font-mono font-bold">{gameState.id}</span>
+            {spotifyConnected && <span className="ml-3 text-green-600">● Spotify Ansluten</span>}
+          </p>
         </div>
 
         <GameControl
@@ -128,6 +153,7 @@ export default function MasterPage() {
           players={gameState.players}
           phase={gameState.phase}
           onNextRound={handleNextRound}
+          spotifyConnected={spotifyConnected}
         />
 
         {gameState.phase === 'reveal' && gameState.currentSong && (
