@@ -63,37 +63,44 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
               <p className="text-xs text-muted-foreground">Före {timeline[0].year}</p>
             </Card>
 
-            {timeline.map((song, idx) => (
-              <div key={song.id} className="flex gap-4 snap-start">
-                <Card className="min-w-[160px] h-64 p-3 flex flex-col">
-                  {song.albumCover && (
-                    <img
-                      src={song.albumCover}
-                      alt={song.title}
-                      className="w-full h-32 object-cover rounded-lg mb-2"
-                    />
-                  )}
-                  <Badge className="text-lg font-mono font-bold mb-2 self-start">
-                    {song.year}
-                  </Badge>
-                  <h4 className="font-semibold text-sm line-clamp-2">{song.title}</h4>
-                  <p className="text-xs text-muted-foreground line-clamp-1">{song.artist}</p>
-                </Card>
+            {timeline.map((song, idx) => {
+              const nextSong = timeline[idx + 1];
+              const showPlaceholder = !nextSong || song.year !== nextSong.year;
+              
+              return (
+                <div key={song.id} className="flex gap-4 snap-start">
+                  <Card className="min-w-[160px] h-64 p-3 flex flex-col">
+                    {song.albumCover && (
+                      <img
+                        src={song.albumCover}
+                        alt={song.title}
+                        className="w-full h-32 object-cover rounded-lg mb-2"
+                      />
+                    )}
+                    <Badge className="text-lg font-mono font-bold mb-2 self-start">
+                      {song.year}
+                    </Badge>
+                    <h4 className="font-semibold text-sm line-clamp-2">{song.title}</h4>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{song.artist}</p>
+                  </Card>
 
-                <Card
-                  className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 ${
-                    highlightPosition === idx + 1 ? 'ring-4 ring-primary' : ''
-                  }`}
-                  onClick={() => onPlaceCard?.(idx + 1)}
-                  data-testid={`slot-${idx + 1}`}
-                >
-                  <Plus className="w-10 h-10 text-muted-foreground mb-2" />
-                  <p className="text-xs text-muted-foreground text-center px-2">
-                    {timeline[idx + 1] ? `Mellan ${song.year} och ${timeline[idx + 1].year}` : `Efter ${song.year}`}
-                  </p>
-                </Card>
-              </div>
-            ))}
+                  {showPlaceholder && (
+                    <Card
+                      className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 ${
+                        highlightPosition === idx + 1 ? 'ring-4 ring-primary' : ''
+                      }`}
+                      onClick={() => onPlaceCard?.(idx + 1)}
+                      data-testid={`slot-${idx + 1}`}
+                    >
+                      <Plus className="w-10 h-10 text-muted-foreground mb-2" />
+                      <p className="text-xs text-muted-foreground text-center px-2">
+                        {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                      </p>
+                    </Card>
+                  )}
+                </div>
+              );
+            })}
           </>
         )}
       </div>

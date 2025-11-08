@@ -85,6 +85,14 @@ export class Game {
   }
 
   nextRound(): Song | null {
+    const winner = this.state.players.find(p => p.score >= 10);
+    if (winner) {
+      this.state.phase = 'finished';
+      this.state.winner = winner;
+      this.state.currentSong = null;
+      return null;
+    }
+
     if (this.state.roundNumber >= this.state.songs.length) {
       this.state.phase = 'finished';
       this.state.currentSong = null;

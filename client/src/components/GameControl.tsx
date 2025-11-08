@@ -47,7 +47,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold">Runda {roundNumber}/10</h2>
+            <h2 className="text-2xl font-bold">Runda {Math.min(roundNumber, 10)}/10</h2>
             <p className="text-muted-foreground">Spelare placerar sina kort</p>
           </div>
           <Badge variant="secondary" className="text-xl font-mono px-4 py-2">
