@@ -86,24 +86,28 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         game.setMusicPreferences(preferences, preferences);
         
-        const mockSongs = Array.from({ length: 15 }, (_, i) => ({
-          id: `song-${i}`,
-          title: `Låt ${i + 1}`,
-          artist: `Artist ${i + 1}`,
-          year: 1960 + Math.floor(Math.random() * 60),
-          albumCover: `https://picsum.photos/seed/song${i}/400/400`,
-          previewUrl: undefined
-        }));
+        const { spotifyService } = await import('./spotify');
+        let songs = await spotifyService.searchSongs(preferences, 15);
+        
+        if (songs.length < 10) {
+          console.log(`Not enough songs from search, trying recommendations...`);
+          songs = await spotifyService.getRecommendations(preferences, 15);
+        }
 
-        game.setSongs(mockSongs);
+        if (songs.length === 0) {
+          socket.emit('error', 'Could not find songs matching your preferences. Try different keywords.');
+          return;
+        }
+
+        game.setSongs(songs);
         game.setPhase('lobby');
 
         socket.emit('preferencesConfirmed', {
-          songs: mockSongs,
+          songs,
           gameState: game.getState()
         });
 
-        console.log(`Preferences confirmed for game ${game.getId()}`);
+        console.log(`Preferences confirmed for game ${game.getId()} with ${songs.length} songs`);
       } catch (error) {
         console.error('Error confirming preferences:', error);
         socket.emit('error', 'Failed to confirm preferences');
