@@ -1,6 +1,12 @@
 import SpotifyWebApi from 'spotify-web-api-node';
 import type { Song } from '../shared/types';
 
+interface SongSuggestion {
+  title: string;
+  artist: string;
+  year: number;
+}
+
 class SpotifyService {
   private spotifyApi: SpotifyWebApi;
   private tokenExpiresAt: number = 0;
@@ -87,6 +93,63 @@ class SpotifyService {
       console.error('Spotify search failed:', error);
       throw new Error('Failed to search songs on Spotify');
     }
+  }
+
+  async searchSpecificSong(title: string, artist: string): Promise<Song | null> {
+    await this.ensureAuthenticated();
+
+    const query = `track:"${title}" artist:"${artist}"`;
+    
+    try {
+      const response = await this.spotifyApi.searchTracks(query, { limit: 5 });
+      const tracks = response.body.tracks?.items || [];
+
+      const validTrack = tracks.find((track: any) => {
+        const releaseDate = track.album.release_date;
+        const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : null;
+        return year && year >= 1950 && year <= 2024 && track.preview_url;
+      });
+
+      if (!validTrack) {
+        return null;
+      }
+
+      const releaseDate = validTrack.album.release_date;
+      const year = parseInt(releaseDate.split('-')[0]);
+
+      return {
+        id: validTrack.id,
+        title: validTrack.name,
+        artist: validTrack.artists.map((a: any) => a.name).join(', '),
+        year,
+        albumCover: validTrack.album.images[0]?.url || '',
+        previewUrl: validTrack.preview_url
+      };
+    } catch (error) {
+      console.error(`Failed to find "${title}" by ${artist}:`, error);
+      return null;
+    }
+  }
+
+  async searchFromSuggestions(suggestions: SongSuggestion[], targetCount: number = 15): Promise<Song[]> {
+    console.log(`Spotify: Searching for ${suggestions.length} AI-suggested songs`);
+    
+    const songs: Song[] = [];
+    
+    for (const suggestion of suggestions) {
+      if (songs.length >= targetCount) break;
+      
+      const song = await this.searchSpecificSong(suggestion.title, suggestion.artist);
+      if (song) {
+        console.log(`  ✓ Found: "${song.title}" by ${song.artist}`);
+        songs.push(song);
+      } else {
+        console.log(`  ✗ Not found: "${suggestion.title}" by ${suggestion.artist}`);
+      }
+    }
+
+    console.log(`Spotify: Successfully found ${songs.length}/${targetCount} songs`);
+    return songs;
   }
 
   async getRecommendations(genre: string, limit: number = 15): Promise<Song[]> {
