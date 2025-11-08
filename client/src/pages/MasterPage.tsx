@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Music } from 'lucide-react';
+import { Music, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import AIChat from '@/components/AIChat';
@@ -15,6 +15,7 @@ export default function MasterPage() {
   const [results, setResults] = useState<RoundResult[]>([]);
   const [preferences, setPreferences] = useState('');
   const [spotifyConnected, setSpotifyConnected] = useState(false);
+  const [isConnectingSpotify, setIsConnectingSpotify] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -132,12 +133,25 @@ export default function MasterPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.location.href = '/auth/spotify'}
+                onClick={() => {
+                  setIsConnectingSpotify(true);
+                  window.location.href = '/auth/spotify';
+                }}
+                disabled={isConnectingSpotify}
                 className="gap-2"
                 data-testid="button-connect-spotify"
               >
-                <Music className="w-4 h-4" />
-                Anslut Spotify Premium
+                {isConnectingSpotify ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Ansluter...
+                  </>
+                ) : (
+                  <>
+                    <Music className="w-4 h-4" />
+                    Anslut Spotify Premium
+                  </>
+                )}
               </Button>
             )}
           </div>
