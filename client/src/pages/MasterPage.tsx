@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import AIChat from '@/components/AIChat';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
@@ -15,6 +15,12 @@ export default function MasterPage() {
   const [spotifyConnected, setSpotifyConnected] = useState(false);
   const [isDJPlaying, setIsDJPlaying] = useState(false);
   const { toast } = useToast();
+  const gameStateRef = useRef<GameState | null>(null);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
   useEffect(() => {
     fetch('/api/spotify/status')
@@ -53,13 +59,19 @@ export default function MasterPage() {
       const audio = new Audio(audioUrl);
       
       audio.onended = () => {
-        console.log('DJ commentary finished, auto-starting next round...');
+        console.log('DJ commentary finished, checking if we should continue...');
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
         
-        // Automatiskt gå till nästa runda
+        // Vänta lite och kolla om spelet är finished innan vi går vidare
         setTimeout(() => {
-          socketService.nextRound();
+          const currentState = gameStateRef.current;
+          if (currentState && currentState.phase !== 'finished') {
+            console.log('Auto-starting next round...');
+            socketService.nextRound();
+          } else {
+            console.log('Game finished - not starting next round');
+          }
         }, 1500);
       };
       

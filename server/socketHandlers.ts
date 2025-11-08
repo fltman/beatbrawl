@@ -182,21 +182,30 @@ export function setupSocketHandlers(io: SocketIOServer) {
               gameState: game.getState()
             });
 
+            // Check winner BEFORE generating DJ commentary
             const winner = game.checkWinner();
-            if (winner) {
-              io.to(game.getId()).emit('gameStateUpdate', game.getState());
-            }
+            const isGameFinished = !!winner;
 
             const currentSong = game.getState().currentSong;
             if (currentSong) {
               const { elevenLabsService } = await import('./elevenlabs');
-              const audioBuffer = await elevenLabsService.generateDJCommentary(currentSong);
+              const audioBuffer = await elevenLabsService.generateDJCommentary(
+                currentSong, 
+                isGameFinished, 
+                winner?.name,
+                game.getId()
+              );
               
               if (audioBuffer) {
                 const base64Audio = audioBuffer.toString('base64');
                 io.to(game.getId()).emit('djCommentary', base64Audio);
                 console.log(`DJ commentary generated for game ${game.getId()}`);
               }
+            }
+
+            if (winner) {
+              io.to(game.getId()).emit('gameStateUpdate', game.getState());
+              console.log(`Game ${game.getId()} finished - ${winner.name} won!`);
             }
 
             console.log(`Results auto-revealed for game ${game.getId()}`);
@@ -234,21 +243,30 @@ export function setupSocketHandlers(io: SocketIOServer) {
           gameState: game.getState()
         });
 
+        // Check winner BEFORE generating DJ commentary
         const winner = game.checkWinner();
-        if (winner) {
-          io.to(game.getId()).emit('gameStateUpdate', game.getState());
-        }
+        const isGameFinished = !!winner;
 
         const currentSong = game.getState().currentSong;
         if (currentSong) {
           const { elevenLabsService } = await import('./elevenlabs');
-          const audioBuffer = await elevenLabsService.generateDJCommentary(currentSong);
+          const audioBuffer = await elevenLabsService.generateDJCommentary(
+            currentSong, 
+            isGameFinished, 
+            winner?.name,
+            game.getId()
+          );
           
           if (audioBuffer) {
             const base64Audio = audioBuffer.toString('base64');
             io.to(game.getId()).emit('djCommentary', base64Audio);
             console.log(`DJ commentary generated for game ${game.getId()}`);
           }
+        }
+
+        if (winner) {
+          io.to(game.getId()).emit('gameStateUpdate', game.getState());
+          console.log(`Game ${game.getId()} finished - ${winner.name} won!`);
         }
 
         console.log(`Results revealed for game ${game.getId()}`);
