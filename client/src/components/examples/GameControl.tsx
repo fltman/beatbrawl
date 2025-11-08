@@ -17,14 +17,17 @@ export default function GameControlExample() {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="max-w-2xl mx-auto">
-        <GameControl
-          currentSong={mockSong}
-          roundNumber={8}
-          players={mockPlayers}
-          phase="playing"
-          onNextRound={() => console.log('Next round')}
-        />
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div>
+          <h2 className="text-xl font-bold mb-4">Playing Phase (spelarna ser detta)</h2>
+          <GameControl
+            currentSong={mockSong}
+            roundNumber={8}
+            players={mockPlayers}
+            phase="playing"
+            onNextRound={() => console.log('Next round')}
+          />
+        </div>
       </div>
     </div>
   )

@@ -27,23 +27,31 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
         </div>
 
         {currentSong && (
-          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-6 mb-6">
-            <div className="flex items-center gap-6">
-              {currentSong.albumCover && (
-                <img 
-                  src={currentSong.albumCover} 
-                  alt={currentSong.title}
-                  className="w-32 h-32 rounded-xl shadow-lg"
-                />
-              )}
-              <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-1">{currentSong.title}</h3>
-                <p className="text-xl text-muted-foreground mb-2">{currentSong.artist}</p>
-                <Badge className="text-2xl font-mono font-bold px-4 py-1">
-                  {currentSong.year}
-                </Badge>
+          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 mb-6">
+            {phase === 'playing' ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="text-9xl font-bold text-primary/30 mb-4">?</div>
+                <p className="text-2xl font-semibold text-muted-foreground">Lyssna på musiken</p>
+                <p className="text-lg text-muted-foreground mt-2">Väntar på att alla placerar sina kort...</p>
               </div>
-            </div>
+            ) : (
+              <div className="flex items-center gap-6">
+                {currentSong.albumCover && (
+                  <img 
+                    src={currentSong.albumCover} 
+                    alt={currentSong.title}
+                    className="w-32 h-32 rounded-xl shadow-lg"
+                  />
+                )}
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-1">{currentSong.title}</h3>
+                  <p className="text-xl text-muted-foreground mb-2">{currentSong.artist}</p>
+                  <Badge className="text-2xl font-mono font-bold px-4 py-1">
+                    {currentSong.year}
+                  </Badge>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
