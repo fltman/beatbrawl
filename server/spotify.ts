@@ -44,12 +44,26 @@ class SpotifyService {
     try {
       const response = await this.spotifyApi.searchTracks(cleanQuery, { limit: 50 });
       const tracks = response.body.tracks?.items || [];
+      console.log(`Spotify: Got ${tracks.length} raw tracks from API`);
+
+      let filteredCount = 0;
+      let noPreviewCount = 0;
+      let invalidYearCount = 0;
 
       const songs: Song[] = tracks
         .filter((track: any) => {
           const releaseDate = track.album.release_date;
           const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : null;
-          return year && year >= 1950 && year <= 2024 && track.preview_url;
+          const hasValidYear = year && year >= 1950 && year <= 2024;
+          const hasPreview = !!track.preview_url;
+          
+          if (!hasValidYear) invalidYearCount++;
+          if (!hasPreview) noPreviewCount++;
+          
+          const keep = hasValidYear && hasPreview;
+          if (keep) filteredCount++;
+          
+          return keep;
         })
         .slice(0, limit)
         .map((track: any) => {
@@ -66,7 +80,8 @@ class SpotifyService {
           };
         });
 
-      console.log(`Spotify: Found ${songs.length} songs for query "${query}"`);
+      console.log(`Spotify: Filtered - ${filteredCount} valid, ${noPreviewCount} no preview, ${invalidYearCount} bad year`);
+      console.log(`Spotify: Returning ${songs.length} songs for query "${cleanQuery}"`);
       return songs;
     } catch (error) {
       console.error('Spotify search failed:', error);
