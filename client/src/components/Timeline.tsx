@@ -20,15 +20,34 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
 
       <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
         {timeline.length === 0 ? (
-          <div className="min-w-full flex items-center justify-center">
+          <div className="min-w-full flex items-center justify-center gap-4">
             <Card
-              className="w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2"
+              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start ${
+                highlightPosition === 0 ? 'ring-4 ring-primary' : ''
+              }`}
               onClick={() => onPlaceCard?.(0)}
-              data-testid="slot-empty"
+              data-testid="slot-before-start"
             >
               <Plus className="w-12 h-12 text-muted-foreground mb-2" />
-              <Badge className="text-xl font-mono font-bold mb-2">{startYear}</Badge>
-              <p className="text-sm text-muted-foreground">Första kortet</p>
+              <p className="text-sm text-muted-foreground font-medium">Före {startYear}</p>
+            </Card>
+
+            <Card className="w-48 h-64 flex flex-col items-center justify-center bg-accent/20 border-2 border-dashed" data-testid="card-start-year">
+              <Badge variant="outline" className="text-2xl font-mono font-bold px-4 py-2">
+                {startYear}
+              </Badge>
+              <p className="text-sm text-muted-foreground mt-2">Startår</p>
+            </Card>
+
+            <Card
+              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start ${
+                highlightPosition === 1 ? 'ring-4 ring-primary' : ''
+              }`}
+              onClick={() => onPlaceCard?.(1)}
+              data-testid="slot-after-start"
+            >
+              <Plus className="w-12 h-12 text-muted-foreground mb-2" />
+              <p className="text-sm text-muted-foreground font-medium">Efter {startYear}</p>
             </Card>
           </div>
         ) : (

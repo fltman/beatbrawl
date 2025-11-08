@@ -132,7 +132,12 @@ export class Game {
       let correct = false;
 
       if (timeline.length === 0) {
-        correct = true;
+        // First card: position 0 = before startYear, position 1 = after startYear
+        if (position === 0) {
+          correct = song.year <= player.startYear;
+        } else if (position === 1) {
+          correct = song.year >= player.startYear;
+        }
       } else if (position === 0) {
         correct = song.year <= timeline[0].year;
       } else if (position === timeline.length) {
