@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Play, SkipForward, Trophy, Disc3, AlertCircle } from 'lucide-react';
+import { Play, SkipForward, Trophy, Disc3, AlertCircle, Radio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -63,7 +63,13 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
 
         {currentSong && (
           <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 mb-6">
-            {phase === 'playing' ? (
+            {isDJPlaying ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <Radio className="w-24 h-24 text-primary mb-4 animate-pulse" />
+                <p className="text-3xl font-bold text-primary mb-2">DJ ON AIR</p>
+                <p className="text-xl text-muted-foreground">Din energiska radio-DJ kommenterar...</p>
+              </div>
+            ) : phase === 'playing' ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="text-9xl font-bold text-primary/30 mb-4">?</div>
                 {spotify.isConnected && spotify.isReady ? (

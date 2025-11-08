@@ -80,8 +80,14 @@ Preferred communication style: Simple, everyday language.
 - **OpenRouter API**: LLM (Claude Sonnet 4.5) for generating song suggestions from user chat preferences
   - Takes natural language input (e.g., "80s pop", "Swedish rock")
   - Generates 20 specific song suggestions with title, artist, and year
+  - Generates contextual year ranges for player start years based on music preferences
   - Validates year ranges (1950-2024) to ensure timeline accuracy
-- **ElevenLabs API**: Text-to-speech for AI voice commentary during gameplay (not yet implemented)
+- **ElevenLabs API**: Text-to-speech for energetic Swedish radio DJ commentary (November 2025)
+  - Generates voice commentary between songs after all players have placed their cards
+  - Uses "Adam" voice with multilingual model for natural Swedish pronunciation
+  - Commentary includes fun facts about the decade (e.g., "året då tubsockorna var så populära")
+  - Audio automatically played on master device with visual "DJ ON AIR" indicator
+  - Spotify playback automatically pauses during DJ commentary and resumes after
 
 **Utility Libraries**:
 - **Howler.js**: Audio playback management and control
@@ -126,6 +132,17 @@ Preferred communication style: Simple, everyday language.
   - Visual indicator: Spinning disc icon + "Premium" badge
   - If not connected: Game shows message prompting user to connect Spotify
   - No preview URL fallback - Spotify Premium is mandatory for playback
+  - Automatically pauses during DJ commentary and resumes after
+
+**DJ Commentary Flow** (November 2025):
+1. All players place their cards during playing phase
+2. Master clicks "Visa Resultat" which triggers result evaluation on server
+3. Server generates DJ commentary via ElevenLabs API (MP3 audio)
+4. Audio sent to all clients as base64-encoded string via Socket.io
+5. Master device automatically pauses Spotify playback
+6. DJ commentary plays with "DJ ON AIR" visual indicator
+7. After commentary finishes, reveal screen shows song details and scores
+8. Master clicks "Nästa Runda" to continue gameplay
 
 **OAuth Security Implementation** (November 2025):
 - CSRF protection with cryptographically secure state tokens (crypto.randomBytes)

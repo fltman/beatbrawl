@@ -93,7 +93,7 @@ export default function MasterPage() {
       }
       socketService.disconnect();
     };
-  }, [toast]);
+  }, [toast, djAudio]);
 
   const handleAIChatConfirm = (pref: string) => {
     if (!preferences) {
