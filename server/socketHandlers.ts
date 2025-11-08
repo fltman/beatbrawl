@@ -148,7 +148,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('placeCard', (position: number) => {
+    socket.on('placeCard', async (position: number) => {
       try {
         const game = gameManager.getGameBySocket(socket.id);
         if (!game) {
@@ -171,7 +171,36 @@ export function setupSocketHandlers(io: SocketIOServer) {
         console.log(`Player ${socket.id} placed card at position ${position}`);
 
         if (game.allPlayersReady()) {
-          io.to(game.getId()).emit('gameStateUpdate', game.getState());
+          console.log('All players ready, automatically revealing results...');
+          
+          const results = game.evaluateRound();
+          if (results) {
+            game.setPhase('reveal');
+
+            io.to(game.getId()).emit('resultsRevealed', {
+              results,
+              gameState: game.getState()
+            });
+
+            const winner = game.checkWinner();
+            if (winner) {
+              io.to(game.getId()).emit('gameStateUpdate', game.getState());
+            }
+
+            const currentSong = game.getState().currentSong;
+            if (currentSong) {
+              const { elevenLabsService } = await import('./elevenlabs');
+              const audioBuffer = await elevenLabsService.generateDJCommentary(currentSong);
+              
+              if (audioBuffer) {
+                const base64Audio = audioBuffer.toString('base64');
+                io.to(game.getId()).emit('djCommentary', base64Audio);
+                console.log(`DJ commentary generated for game ${game.getId()}`);
+              }
+            }
+
+            console.log(`Results auto-revealed for game ${game.getId()}`);
+          }
         }
       } catch (error) {
         console.error('Error placing card:', error);

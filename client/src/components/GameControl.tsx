@@ -127,25 +127,17 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
           </div>
         )}
 
-        <Button 
-          size="lg" 
-          className="w-full text-xl"
-          onClick={onNextRound}
-          disabled={phase === 'playing' && players.some(p => !p.isReady)}
-          data-testid="button-next-round"
-        >
-          {phase === 'reveal' ? (
-            <>
-              <SkipForward className="w-6 h-6 mr-2" />
-              Nästa Runda
-            </>
-          ) : (
-            <>
-              <Play className="w-6 h-6 mr-2" />
-              Visa Resultat
-            </>
-          )}
-        </Button>
+        {phase === 'reveal' && (
+          <Button 
+            size="lg" 
+            className="w-full text-xl"
+            onClick={onNextRound}
+            data-testid="button-next-round"
+          >
+            <SkipForward className="w-6 h-6 mr-2" />
+            Nästa Runda
+          </Button>
+        )}
       </Card>
 
       <Card className="p-6">
