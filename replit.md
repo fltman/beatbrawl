@@ -60,13 +60,21 @@ Preferred communication style: Simple, everyday language.
 ### External Dependencies
 
 **Music Services**:
-- **Spotify Web API**: Song search and metadata retrieval
-- **Spotify Web Playback SDK**: Actual audio playback on master device
-- Note: Preview URLs may be used as fallback for non-premium accounts
+- **Spotify Web API**: Song search and metadata retrieval with Swedish market (SE)
+  - Client Credentials flow for server-side authentication
+  - Searches for AI-suggested songs by title and artist
+  - **Year Matching**: Filters results to ±2 years of AI-suggested year to avoid remasters
+  - Example: AI suggests "Stairway to Heaven (1971)" → Spotify returns 1971 original, not 2014 remaster
+  - Most tracks lack preview URLs; stores Spotify track IDs for future playback implementation
+- **Spotify Web Playback SDK**: Actual audio playback on master device (not yet implemented)
+- Note: Preview URLs rarely available via Client Credentials API
 
 **AI Services**:
-- **OpenRouter API**: LLM for generating music preferences from user chat and creating game commentary
-- **ElevenLabs API**: Text-to-speech for AI voice commentary during gameplay
+- **OpenRouter API**: LLM (Claude Sonnet 4.5) for generating song suggestions from user chat preferences
+  - Takes natural language input (e.g., "80s pop", "Swedish rock")
+  - Generates 20 specific song suggestions with title, artist, and year
+  - Validates year ranges (1950-2024) to ensure timeline accuracy
+- **ElevenLabs API**: Text-to-speech for AI voice commentary during gameplay (not yet implemented)
 
 **Utility Libraries**:
 - **Howler.js**: Audio playback management and control
@@ -94,3 +102,15 @@ Preferred communication style: Simple, everyday language.
 **Swedish Language First**: All UI text, AI prompts, and user-facing content designed for Swedish language as primary interface.
 
 **Component-Driven UI**: Extensive component library in `/client/src/components/` with example files demonstrating usage patterns for AI-based development assistance.
+
+**AI-Powered Song Selection Pipeline** (November 2025):
+1. User chats with AI about music preferences (e.g., "80s rock", "Swedish pop from the 90s")
+2. AI service (Claude Sonnet 4.5) generates 20 specific song suggestions with accurate years
+3. Spotify service searches each suggestion using Swedish market with year-matching filters
+4. System validates ≥10 songs found before proceeding to lobby
+5. Songs stored with Spotify track IDs for future Web Playback SDK integration
+
+**Known Limitations**:
+- Most Spotify tracks lack 30-second preview URLs via Client Credentials API
+- Audio playback requires future Spotify Web Playback SDK implementation
+- Year matching tolerance is ±2 years to handle slight date variations in Spotify metadata
