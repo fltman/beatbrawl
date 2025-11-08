@@ -1,37 +1,83 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'wouter';
+import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Timeline from '@/components/Timeline';
 import CardPlacement from '@/components/CardPlacement';
 import ScoreDisplay from '@/components/ScoreDisplay';
-import type { Song } from '@/types/game.types';
-
-type PlayerPhase = 'join' | 'waiting' | 'playing';
+import WinnerScreen from '@/components/WinnerScreen';
+import { socketService } from '@/lib/socket';
+import type { GameState, Player, Song } from '@/types/game.types';
 
 export default function PlayerPage() {
-  const [phase, setPhase] = useState<PlayerPhase>('join');
+  const params = useParams<{ gameCode?: string }>();
+  const [phase, setPhase] = useState<'join' | 'lobby' | 'playing'>('join');
   const [playerName, setPlayerName] = useState('');
-  const [gameCode, setGameCode] = useState('');
+  const [gameCode, setGameCode] = useState(params.gameCode || '');
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
+  const [gameState, setGameState] = useState<GameState | null>(null);
+  const [myPlayer, setMyPlayer] = useState<Player | null>(null);
+  const { toast } = useToast();
 
-  const timeline: Song[] = [
-    { id: '1', title: 'Bohemian Rhapsody', artist: 'Queen', year: 1975, albumCover: 'https://picsum.photos/seed/queen/400/400' },
-    { id: '2', title: 'Billie Jean', artist: 'Michael Jackson', year: 1983, albumCover: 'https://picsum.photos/seed/mj/400/400' },
-    { id: '3', title: 'Smells Like Teen Spirit', artist: 'Nirvana', year: 1991, albumCover: 'https://picsum.photos/seed/nirvana/400/400' },
-  ];
+  useEffect(() => {
+    if (phase !== 'join') {
+      const socket = socketService.connect();
 
-  const currentSong: Song = {
-    id: '4',
-    title: 'Okänd låt',
-    artist: 'Okänd artist',
-    year: 0,
-  };
+      socketService.onGameStateUpdate((newState) => {
+        setGameState(newState);
+        const player = newState.players.find(p => p.id === socket?.id);
+        if (player) {
+          setMyPlayer(player);
+        }
+        
+        if (newState.phase === 'playing' && phase !== 'playing') {
+          setPhase('playing');
+        }
+      });
+
+      socketService.onGameStarted((newState) => {
+        setGameState(newState);
+        setPhase('playing');
+      });
+
+      socketService.onRoundStarted((newState) => {
+        setGameState(newState);
+        setSelectedPosition(null);
+      });
+
+      socketService.onError((message) => {
+        toast({
+          title: 'Fel',
+          description: message,
+          variant: 'destructive'
+        });
+      });
+    }
+
+    return () => {
+      if (phase !== 'join') {
+        socketService.disconnect();
+      }
+    };
+  }, [phase, toast]);
 
   const handleJoin = () => {
-    if (playerName && gameCode) {
-      setPhase('playing');
-    }
+    if (!playerName || !gameCode) return;
+
+    socketService.connect();
+    socketService.joinGame(gameCode.toUpperCase(), playerName, (data) => {
+      setMyPlayer(data.player);
+      setGameState(data.gameState);
+      setPhase('lobby');
+    });
+  };
+
+  const handleConfirmPlacement = () => {
+    if (selectedPosition === null) return;
+    socketService.placeCard(selectedPosition);
+    setSelectedPosition(null);
   };
 
   if (phase === 'join') {
@@ -54,7 +100,7 @@ export default function PlayerPage() {
               <label className="block text-sm font-medium mb-2">Spelkod</label>
               <Input
                 value={gameCode}
-                onChange={(e) => setGameCode(e.target.value)}
+                onChange={(e) => setGameCode(e.target.value.toUpperCase())}
                 placeholder="Ange spelkod"
                 className="text-lg font-mono"
                 data-testid="input-game-code"
@@ -75,31 +121,58 @@ export default function PlayerPage() {
     );
   }
 
+  if (phase === 'lobby' || !myPlayer) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <Card className="p-8 text-center">
+          <h1 className="text-2xl font-bold mb-4">Välkommen, {playerName}!</h1>
+          <p className="text-lg text-muted-foreground">Väntar på att spelet ska starta...</p>
+        </Card>
+      </div>
+    );
+  }
+
+  if (gameState?.phase === 'finished' && gameState.winner) {
+    return (
+      <WinnerScreen
+        winner={gameState.winner}
+        allPlayers={gameState.players}
+        onNewGame={() => window.location.reload()}
+      />
+    );
+  }
+
+  const hiddenSong: Song = {
+    id: gameState?.currentSong?.id || '?',
+    title: '?',
+    artist: '?',
+    year: 0
+  };
+
   return (
     <div className="min-h-screen bg-background pb-80">
       <div className="p-6">
         <ScoreDisplay
-          playerName={playerName || 'Spelare'}
-          score={3}
-          timelineLength={timeline.length}
+          playerName={myPlayer.name}
+          score={myPlayer.score}
+          timelineLength={myPlayer.timeline.length}
         />
       </div>
 
       <Timeline
-        timeline={timeline}
-        startYear={1980}
+        timeline={myPlayer.timeline}
+        startYear={myPlayer.startYear}
         highlightPosition={selectedPosition ?? undefined}
         onPlaceCard={setSelectedPosition}
       />
 
-      <CardPlacement
-        song={currentSong}
-        selectedPosition={selectedPosition}
-        onConfirm={() => {
-          console.log('Confirmed placement at', selectedPosition);
-          setSelectedPosition(null);
-        }}
-      />
+      {gameState?.phase === 'playing' && (
+        <CardPlacement
+          song={hiddenSong}
+          selectedPosition={selectedPosition}
+          onConfirm={handleConfirmPlacement}
+        />
+      )}
     </div>
   );
 }

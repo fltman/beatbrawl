@@ -1,80 +1,114 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import AIChat from '@/components/AIChat';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
 import GameControl from '@/components/GameControl';
 import RevealScreen from '@/components/RevealScreen';
 import WinnerScreen from '@/components/WinnerScreen';
-import type { Player, Song } from '@/types/game.types';
-
-type Phase = 'setup' | 'lobby' | 'playing' | 'reveal' | 'finished';
+import { socketService } from '@/lib/socket';
+import type { GameState, RoundResult } from '@/types/game.types';
 
 export default function MasterPage() {
-  const [phase, setPhase] = useState<Phase>('setup');
-  const [gameCode] = useState('ABC123');
-  const [roundNumber, setRoundNumber] = useState(1);
-  
-  const [players, setPlayers] = useState<Player[]>([
-    { id: '1', name: 'Anna', score: 7, isReady: false, timeline: [], startYear: 1985 },
-    { id: '2', name: 'Erik', score: 5, isReady: true, timeline: [], startYear: 1992 },
-    { id: '3', name: 'Sofia', score: 6, isReady: true, timeline: [], startYear: 1978 },
-  ]);
+  const [gameState, setGameState] = useState<GameState | null>(null);
+  const [results, setResults] = useState<RoundResult[]>([]);
+  const [preferences, setPreferences] = useState('');
+  const { toast } = useToast();
 
-  const currentSong: Song = {
-    id: '1',
-    title: 'Dancing Queen',
-    artist: 'ABBA',
-    year: 1976,
-    albumCover: 'https://picsum.photos/seed/abba/400/400'
-  };
+  useEffect(() => {
+    const socket = socketService.connect();
 
-  const handlePreferencesConfirmed = () => {
-    setPhase('lobby');
+    socketService.createGame((data) => {
+      setGameState(data.gameState);
+    });
+
+    socketService.onGameStateUpdate((newState) => {
+      setGameState(newState);
+    });
+
+    socketService.onGameStarted((newState) => {
+      setGameState(newState);
+    });
+
+    socketService.onResultsRevealed((data) => {
+      setResults(data.results);
+      setGameState(data.gameState);
+    });
+
+    socketService.onRoundStarted((newState) => {
+      setGameState(newState);
+      setResults([]);
+    });
+
+    socketService.onError((message) => {
+      toast({
+        title: 'Fel',
+        description: message,
+        variant: 'destructive'
+      });
+    });
+
+    return () => {
+      socketService.disconnect();
+    };
+  }, [toast]);
+
+  const handleAIChatConfirm = (pref: string) => {
+    if (!preferences) {
+      setPreferences(pref || 'rock music');
+    }
+    
+    socketService.confirmPreferences(pref || preferences, (data) => {
+      setGameState(data.gameState);
+    });
   };
 
   const handleStartGame = () => {
-    setPhase('playing');
+    socketService.startGame();
+  };
+
+  const handleRevealResults = () => {
+    socketService.revealResults();
   };
 
   const handleNextRound = () => {
-    if (phase === 'playing') {
-      setPhase('reveal');
-    } else if (phase === 'reveal') {
-      if (roundNumber >= 10) {
-        setPhase('finished');
-      } else {
-        setRoundNumber(prev => prev + 1);
-        setPlayers(prev => prev.map(p => ({ ...p, isReady: false })));
-        setPhase('playing');
-      }
+    if (gameState?.phase === 'playing') {
+      handleRevealResults();
+    } else if (gameState?.phase === 'reveal') {
+      socketService.nextRound();
     }
   };
 
-  if (phase === 'setup') {
+  if (!gameState) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <AIChat onPreferencesConfirmed={handlePreferencesConfirmed} />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-xl">Skapar spel...</p>
       </div>
     );
   }
 
-  if (phase === 'lobby') {
+  if (gameState.phase === 'setup') {
+    return (
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
+        <AIChat onPreferencesConfirmed={handleAIChatConfirm} />
+      </div>
+    );
+  }
+
+  if (gameState.phase === 'lobby') {
     return (
       <QRCodeDisplay
-        gameCode={gameCode}
-        playerCount={players.length}
+        gameCode={gameState.id}
+        playerCount={gameState.players.length}
         onStartGame={handleStartGame}
       />
     );
   }
 
-  if (phase === 'finished') {
-    const winner = players.reduce((prev, current) => 
-      current.score > prev.score ? current : prev
-    );
+  if (gameState.phase === 'finished' && gameState.winner) {
     return (
       <WinnerScreen
-        winner={winner}
-        allPlayers={players}
+        winner={gameState.winner}
+        allPlayers={gameState.players}
         onNewGame={() => window.location.reload()}
       />
     );
@@ -85,25 +119,21 @@ export default function MasterPage() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-6 text-center">
           <h1 className="text-4xl font-bold mb-2">HITSTER AI</h1>
-          <p className="text-muted-foreground">Spelkod: <span className="font-mono font-bold">{gameCode}</span></p>
+          <p className="text-muted-foreground">Spelkod: <span className="font-mono font-bold">{gameState.id}</span></p>
         </div>
 
         <GameControl
-          currentSong={currentSong}
-          roundNumber={roundNumber}
-          players={players}
-          phase={phase}
+          currentSong={gameState.currentSong}
+          roundNumber={gameState.roundNumber}
+          players={gameState.players}
+          phase={gameState.phase}
           onNextRound={handleNextRound}
         />
 
-        {phase === 'reveal' && (
+        {gameState.phase === 'reveal' && gameState.currentSong && (
           <RevealScreen
-            song={currentSong}
-            results={players.map(p => ({
-              playerName: p.name,
-              correct: Math.random() > 0.3,
-              placedAt: Math.floor(Math.random() * 5)
-            }))}
+            song={gameState.currentSong}
+            results={results}
             onContinue={handleNextRound}
           />
         )}

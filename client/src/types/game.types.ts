@@ -3,6 +3,8 @@ export interface Song {
   title: string;
   artist: string;
   year: number;
+  spotifyUri?: string;
+  previewUrl?: string;
   albumCover?: string;
 }
 
@@ -13,13 +15,33 @@ export interface Player {
   startYear: number;
   score: number;
   isReady: boolean;
+  currentPlacement?: { song: Song; position: number };
 }
 
 export interface GameState {
   id: string;
-  phase: 'setup' | 'lobby' | 'playing' | 'reveal' | 'finished';
+  masterSocketId: string;
   players: Player[];
   currentSong: Song | null;
+  songs: Song[];
+  phase: 'setup' | 'lobby' | 'playing' | 'reveal' | 'finished';
+  musicPreferences: string;
+  searchQuery: string;
   roundNumber: number;
   winner: Player | null;
+}
+
+export interface AIResponse {
+  searchQuery: string;
+  preferences: string;
+  response: string;
+  voicePrompt: string;
+}
+
+export interface RoundResult {
+  playerId: string;
+  playerName: string;
+  correct: boolean;
+  placedAt: number;
+  correctYear: number;
 }

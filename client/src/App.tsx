@@ -14,6 +14,7 @@ function Router() {
       <Route path="/" component={HomePage} />
       <Route path="/master" component={MasterPage} />
       <Route path="/player" component={PlayerPage} />
+      <Route path="/join/:gameCode" component={PlayerPage} />
       <Route component={NotFound} />
     </Switch>
   );
