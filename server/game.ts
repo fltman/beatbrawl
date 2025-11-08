@@ -14,7 +14,8 @@ export class Game {
       musicPreferences: '',
       searchQuery: '',
       roundNumber: 0,
-      winner: null
+      winner: null,
+      startYearRange: { min: 1950, max: 2020 }
     };
   }
 
@@ -35,7 +36,8 @@ export class Game {
   }
 
   addPlayer(socketId: string, name: string): Player {
-    const startYear = Math.floor(Math.random() * (2020 - 1950 + 1)) + 1950;
+    const range = this.state.startYearRange || { min: 1950, max: 2020 };
+    const startYear = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
     const player: Player = {
       id: socketId,
       name,
@@ -63,6 +65,10 @@ export class Game {
 
   setSongs(songs: Song[]): void {
     this.state.songs = songs.sort(() => Math.random() - 0.5);
+  }
+
+  setStartYearRange(range: { min: number; max: number }): void {
+    this.state.startYearRange = range;
   }
 
   setPhase(phase: GameState['phase']): void {

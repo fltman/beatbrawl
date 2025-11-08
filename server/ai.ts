@@ -8,6 +8,10 @@ interface SongSuggestion {
 
 interface AIResponse {
   songs: SongSuggestion[];
+  startYearRange?: {
+    min: number;
+    max: number;
+  };
 }
 
 export class AIService {
@@ -29,7 +33,7 @@ export class AIService {
     });
   }
 
-  async generateSongSuggestions(userPreference: string): Promise<SongSuggestion[]> {
+  async generateSongSuggestions(userPreference: string): Promise<{ songs: SongSuggestion[]; startYearRange: { min: number; max: number } }> {
     console.log(`AI: Generating song suggestions for "${userPreference}"`);
 
     const prompt = `You are a music expert. Based on the user's music preference, suggest 20 popular, well-known songs that match their taste.
@@ -40,6 +44,7 @@ Requirements:
 - Choose popular songs from 1950-2024
 - Include a mix of classic hits and recognizable tracks
 - Ensure variety in years within the genre/style
+- Also determine an appropriate year range for player start years based on the music preference (e.g., if they want "80s music", suggest 1980-1989)
 - Format your response as valid JSON only, no markdown or explanations
 
 Return JSON in this exact format:
@@ -47,7 +52,8 @@ Return JSON in this exact format:
   "songs": [
     {"title": "Song Name", "artist": "Artist Name", "year": 1985},
     ...
-  ]
+  ],
+  "startYearRange": {"min": 1980, "max": 1989}
 }`;
 
     try {
@@ -91,8 +97,12 @@ Return JSON in this exact format:
         .filter(s => s.title && s.artist && s.year >= 1950 && s.year <= 2024)
         .slice(0, 20);
 
+      const startYearRange = parsed.startYearRange || { min: 1950, max: 2020 };
+
       console.log(`AI: Generated ${validSongs.length} song suggestions`);
-      return validSongs;
+      console.log(`AI: Suggested start year range: ${startYearRange.min}-${startYearRange.max}`);
+      
+      return { songs: validSongs, startYearRange };
 
     } catch (error: any) {
       console.error('AI service error:', error.message || error);

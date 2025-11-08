@@ -29,6 +29,7 @@ export interface GameState {
   searchQuery: string;
   roundNumber: number;
   winner: Player | null;
+  startYearRange?: { min: number; max: number };
 }
 
 export interface AIResponse {

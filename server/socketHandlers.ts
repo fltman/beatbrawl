@@ -97,7 +97,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         const { aiService } = await import('./ai');
         const { spotifyService } = await import('./spotify');
 
-        const suggestions = await aiService.generateSongSuggestions(searchQuery);
+        const { songs: suggestions, startYearRange } = await aiService.generateSongSuggestions(searchQuery);
         
         if (suggestions.length === 0) {
           socket.emit('error', 'Could not generate song suggestions. Please try again.');
@@ -112,6 +112,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         }
 
         game.setSongs(songs);
+        game.setStartYearRange(startYearRange);
         game.setPhase('lobby');
 
         socket.emit('preferencesConfirmed', {
