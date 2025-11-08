@@ -13,7 +13,6 @@ export default function MasterPage() {
   const [results, setResults] = useState<RoundResult[]>([]);
   const [preferences, setPreferences] = useState('');
   const [spotifyConnected, setSpotifyConnected] = useState(false);
-  const [djAudio, setDjAudio] = useState<HTMLAudioElement | null>(null);
   const [isDJPlaying, setIsDJPlaying] = useState(false);
   const { toast } = useToast();
 
@@ -68,9 +67,8 @@ export default function MasterPage() {
       audio.play().catch(err => {
         console.error('Failed to play DJ audio:', err);
         setIsDJPlaying(false);
+        URL.revokeObjectURL(audioUrl);
       });
-      
-      setDjAudio(audio);
     });
 
     socketService.onRoundStarted((newState) => {
@@ -87,13 +85,9 @@ export default function MasterPage() {
     });
 
     return () => {
-      if (djAudio) {
-        djAudio.pause();
-        djAudio.src = '';
-      }
       socketService.disconnect();
     };
-  }, [toast, djAudio]);
+  }, [toast]);
 
   const handleAIChatConfirm = (pref: string) => {
     if (!preferences) {
