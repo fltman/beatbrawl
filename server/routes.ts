@@ -35,7 +35,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.spotifyRefreshToken = refreshToken;
       req.session.spotifyTokenExpiry = Date.now() + expiresIn * 1000;
 
-      res.redirect('/master?spotify_connected=true');
+      res.redirect('/?spotify_connected=true');
     } catch (error) {
       console.error('Spotify OAuth callback error:', error);
       res.redirect('/?error=spotify_token_failed');
