@@ -118,16 +118,14 @@ Preferred communication style: Simple, everyday language.
 5. Songs stored with Spotify track IDs for future Web Playback SDK integration
 
 **Spotify Playback Strategy** (November 2025):
-- **Primary**: Spotify Web Playback SDK when user connects Spotify Premium account
+- **Spotify Web Playback SDK Required**: All music playback requires Spotify Premium
   - Full-track playback (unlimited duration)
   - High-quality audio streaming
   - Browser-based player with device management
   - Automatic token refresh on expiry
-- **Fallback**: HTML5 Audio with 30-second preview URLs
-  - Used when Spotify not connected or premium not available
-  - Limited to 30 seconds maximum
-  - Many tracks lack preview URLs
-  - Graceful degradation for non-premium users
+  - Visual indicator: Spinning disc icon + "Premium" badge
+  - If not connected: Game shows message prompting user to connect Spotify
+  - No preview URL fallback - Spotify Premium is mandatory for playback
 
 **OAuth Security Implementation** (November 2025):
 - CSRF protection with cryptographically secure state tokens (crypto.randomBytes)
@@ -137,7 +135,7 @@ Preferred communication style: Simple, everyday language.
 - 401/403 error handling with retry logic in playback functions
 
 **Known Limitations**:
-- Most Spotify tracks lack 30-second preview URLs via Client Credentials API
-- Spotify Web Playback SDK requires active Spotify Premium subscription
-- Year matching tolerance is ±2 years to handle slight date variations in Spotify metadata
+- Spotify Premium subscription is **required** for all music playback (no preview URL fallback)
 - OAuth flow requires browser-based user interaction for initial authentication
+- Year matching tolerance is ±2 years to handle slight date variations in Spotify metadata
+- Game cannot be played without Spotify Premium connection on master device

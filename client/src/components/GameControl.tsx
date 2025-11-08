@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Play, SkipForward, Trophy, Volume2, VolumeX, Disc3 } from 'lucide-react';
+import { useEffect } from 'react';
+import { Play, SkipForward, Trophy, Disc3, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,78 +15,30 @@ interface GameControlProps {
   spotifyConnected?: boolean;
 }
 
-export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase, spotifyConnected }: GameControlProps) {
+export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase }: GameControlProps) {
   const spotify = useSpotifyPlayer();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasPreview, setHasPreview] = useState(false);
-  const [playbackMethod, setPlaybackMethod] = useState<'spotify' | 'preview' | 'none'>('none');
 
   useEffect(() => {
     if (phase !== 'playing' || !currentSong) {
       if (spotify.isPlaying) {
         spotify.pausePlayback();
       }
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      setIsPlaying(false);
       return;
     }
 
     if (spotify.isConnected && spotify.isReady && currentSong.id) {
       const trackUri = `spotify:track:${currentSong.id}`;
       spotify.playTrack(trackUri);
-      setPlaybackMethod('spotify');
-      setIsPlaying(true);
-      setHasPreview(true);
-    } else if (currentSong.previewUrl) {
-      setPlaybackMethod('preview');
-      setHasPreview(true);
-      
-      if (!audioRef.current) {
-        audioRef.current = new Audio(currentSong.previewUrl);
-        audioRef.current.loop = true;
-        audioRef.current.volume = 0.6;
-      } else {
-        audioRef.current.src = currentSong.previewUrl;
-      }
-      
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => {
-          console.error('Preview playback failed:', err);
-          setIsPlaying(false);
-        });
-    } else {
-      setPlaybackMethod('none');
-      setHasPreview(false);
-      setIsPlaying(false);
     }
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-    };
   }, [currentSong, phase, spotify.isConnected, spotify.isReady]);
 
   const togglePlayback = () => {
-    if (playbackMethod === 'spotify') {
-      if (isPlaying) {
-        spotify.pausePlayback();
-      } else if (currentSong) {
-        spotify.playTrack(`spotify:track:${currentSong.id}`);
-      }
-    } else if (playbackMethod === 'preview' && audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch(err => console.error('Playback failed:', err));
-      }
+    if (!spotify.isConnected || !spotify.isReady) return;
+
+    if (spotify.isPlaying) {
+      spotify.pausePlayback();
+    } else if (currentSong) {
+      spotify.playTrack(`spotify:track:${currentSong.id}`);
     }
   };
 
@@ -108,33 +60,39 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
             {phase === 'playing' ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="text-9xl font-bold text-primary/30 mb-4">?</div>
-                <div className="flex items-center gap-3 mb-2">
-                  {playbackMethod === 'spotify' ? (
-                    <Disc3 className={`w-6 h-6 ${isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
-                  ) : hasPreview ? (
-                    <Volume2 className={`w-6 h-6 ${isPlaying ? 'text-primary animate-pulse' : 'text-muted-foreground'}`} />
-                  ) : (
-                    <VolumeX className="w-6 h-6 text-muted-foreground" />
-                  )}
-                  <p className="text-2xl font-semibold text-muted-foreground">
-                    {playbackMethod === 'spotify' ? 'Spelar via Spotify' : hasPreview ? 'Lyssna på musiken' : 'Ingen förhandsvisning tillgänglig'}
-                  </p>
-                  {playbackMethod === 'spotify' && (
-                    <Badge variant="secondary" className="ml-2">Premium</Badge>
-                  )}
-                </div>
-                {hasPreview && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={togglePlayback}
-                    className="mb-3"
-                    data-testid="button-toggle-audio"
-                  >
-                    {isPlaying ? 'Pausa' : 'Spela'}
-                  </Button>
+                {spotify.isConnected && spotify.isReady ? (
+                  <>
+                    <div className="flex items-center gap-3 mb-2">
+                      <Disc3 className={`w-6 h-6 ${spotify.isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
+                      <p className="text-2xl font-semibold text-muted-foreground">
+                        Spelar via Spotify
+                      </p>
+                      <Badge variant="secondary" className="ml-2">Premium</Badge>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={togglePlayback}
+                      className="mb-3"
+                      data-testid="button-toggle-audio"
+                    >
+                      {spotify.isPlaying ? 'Pausa' : 'Spela'}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3 mb-4">
+                      <AlertCircle className="w-6 h-6 text-muted-foreground" />
+                      <p className="text-2xl font-semibold text-muted-foreground">
+                        Anslut Spotify för att spela musik
+                      </p>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Klicka på "Anslut Spotify Premium" längst upp för att aktivera musikuppspelning
+                    </p>
+                  </>
                 )}
-                <p className="text-lg text-muted-foreground mt-2">Väntar på att alla placerar sina kort...</p>
+                <p className="text-lg text-muted-foreground mt-4">Väntar på att alla placerar sina kort...</p>
               </div>
             ) : (
               <div className="flex items-center gap-6">
