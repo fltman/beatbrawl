@@ -1,0 +1,79 @@
+22:05 AM [express] GET /api/spotify/token 200 in 2ms :: {"accessToken":"BQDknP06ghfhaOGweexS9kSUwM…
+12:22:05 AM [express] GET /api/spotify/token 304 in 0ms :: {"accessToken":"BQDknP06ghfhaOGweexS9kSUwM…
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 1
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Wow, Ace of Base! Den här låten satte Sverige på popkartan och blev en global megahit. 1993 - vilket år för svensk musik!"
+ElevenLabs: Generated 148420 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 0
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Robyn! Bara 16 år när hon slog igenom med den här. 1995 var hennes år - ren popmagin från Stockholm som erövrade världen!"
+ElevenLabs: Generated 129194 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 1
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Fräsch från 2024! Doktorhokashi och Lazul Azur - helt ny musik direkt från nutiden. Spännande att se vad framtiden har att erbjuda!"
+ElevenLabs: Generated 139643 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 1
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Fame och 2004! Idol-vinnaren som gav oss den här känslosamma balladen. Svensk pop på sitt bästa - vilken nostalgitripp!"
+ElevenLabs: Generated 129194 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 2
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Veronica Maggio och 2008! Hon tog svensk pop till nya höjder med sin unika stil. "Ridå" - en klassiker som fortfarande får hela Sverige att sjunga med!"
+ElevenLabs: Generated 158869 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 1
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Culture Beat satte fart på dansgolven 1993! Eurodance när den var som bäst - den här beaten fick hela världen att röra på sig!"
+ElevenLabs: Generated 132120 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 2
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "The Cardigans från Jönköping! 1998 och "Gran Turismo"-albumet gjorde dem internationella. Nina Perssons röst och den där gitarriffen - purfekt!"
+ElevenLabs: Generated 150092 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 2
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Rednex och 1994! Svenska killar klädda som amerikanska hillbillies - det blev en global dansbandsfeber med countrykänsla. Totalt galet och genialt!"
+ElevenLabs: Generated 174334 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 3
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "The Cardigans igen! 1996 och "Lovefool" exploderade efter Romeo + Juliet-filmen. Nina Persson fick hela världen att smälta - ren magi från Malmö!"
+ElevenLabs: Generated 173916 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 5
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Alcazar och 2001! Disco-popens kungar fick hela Sverige att gråta på dansgolvet. Andreas Lundstedt och gänget levererade ren eurodisco-perfektion!"
+ElevenLabs: Generated 155943 bytes of audio
+DJ commentary generated for game QBQ8L9
+Results auto-revealed for game QBQ8L9
+Next round started for game QBQ8L9
+Player 4tXk4wx5R_jpES_KAAAJ placed card at position 5
+All players ready, automatically revealing results...
+ElevenLabs: Generating DJ commentary: "Håkan Hellström från 2000 - vilket avslut! Grattis T, du krossade det med 10 poäng! Tack för ikväll, ni var fantastiska. Vi ses nästa gång - puss och kram!"
+ElevenLabs: Generated 160541 bytes of audio
+DJ commentary generated for game QBQ8L9
+Game QBQ8L9 finished - T won!
+Results auto-revealed for game QBQ8L9
