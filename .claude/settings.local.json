@@ -7,7 +7,9 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nAdd player reconnection system and CLAUDE.md documentation\n\nImplemented comprehensive player reconnection logic to handle disconnections gracefully:\n\n**Core Features:**\n- Players receive persistent IDs stored in localStorage\n- Disconnected players marked as `connected: false` but remain in game\n- Reconnection UI shows \"Välkommen Tillbaka!\" screen with saved session\n- Sessions expire after 2 hours\n- Only connected players count toward \"all ready\" checks\n\n**Changes:**\n- Added `connected` and `persistentId` fields to Player interface\n- Implemented `reconnectPlayer` socket event and handler\n- Added localStorage session management in socket service\n- Updated Game class with reconnection methods (markPlayerDisconnected, reconnectPlayer, getPlayerByPersistentId)\n- Enhanced GameControl component to show disconnection badges\n- Modified PlayerPage to detect and handle reconnection flow\n- Added player disconnection notifications to MasterPage\n\n**Documentation:**\n- Created comprehensive CLAUDE.md with project architecture, development commands, and implementation patterns\n- Documented reconnection system with flow diagrams and edge case handling\n\n**Testing:**\n- All TypeScript type checks pass\n- Updated example components with new connected field\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []

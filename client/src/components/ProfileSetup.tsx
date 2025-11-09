@@ -16,7 +16,7 @@ interface PlayerProfile {
 }
 
 interface ProfileSetupProps {
-  onProfileReady: (profile: PlayerProfile) => void;
+  onProfileReady: (profile: PlayerProfile | null) => void;
 }
 
 const PROFILE_ID_KEY = 'hitster_profile_id';
@@ -112,6 +112,10 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
     }
   };
 
+  const handleContinueAsGuest = () => {
+    onProfileReady(null);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
@@ -175,7 +179,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
             </div>
           </div>
 
-          <div className="pt-4">
+          <div className="pt-4 space-y-3">
             <Button
               size="lg"
               className="w-full"
@@ -192,10 +196,21 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 'Skapa Profil'
               )}
             </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full"
+              onClick={handleContinueAsGuest}
+              disabled={isSaving}
+              data-testid="button-continue-guest"
+            >
+              Fortsätt som Gäst
+            </Button>
           </div>
 
           <p className="text-xs text-center text-muted-foreground">
-            Din profil sparas lokalt på denna enhet och på servern
+            Med profil sparas ditt namn och favoritfärg för snabbare uppkoppling
           </p>
         </div>
       </Card>

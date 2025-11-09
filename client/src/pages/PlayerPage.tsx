@@ -34,10 +34,13 @@ export default function PlayerPage() {
   const [savedSession, setSavedSession] = useState<{ gameCode: string; playerName: string; persistentId: string; profileId?: string } | null>(null);
   const { toast } = useToast();
 
-  const handleProfileReady = (loadedProfile: PlayerProfile) => {
-    setProfile(loadedProfile);
-    setPlayerName(loadedProfile.displayName);
-    
+  const handleProfileReady = (loadedProfile: PlayerProfile | null) => {
+    if (loadedProfile) {
+      setProfile(loadedProfile);
+      setPlayerName(loadedProfile.displayName);
+    }
+    // If no profile (guest mode), playerName will be entered manually
+
     // Check for existing session after profile is loaded
     const session = socketService.getPlayerSession();
     if (session && (!params.gameCode || params.gameCode.toUpperCase() === session.gameCode)) {
@@ -227,7 +230,12 @@ export default function PlayerPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
         <Card className="w-full max-w-md p-8">
-          <h1 className="text-3xl font-bold mb-6 text-center">Gå Med i Spel</h1>
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold">Gå Med i Spel</h1>
+            {!profile && (
+              <p className="text-sm text-muted-foreground mt-2">Gästläge</p>
+            )}
+          </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Ditt Namn</label>
@@ -237,7 +245,13 @@ export default function PlayerPage() {
                 placeholder="Ange ditt namn"
                 className="text-lg"
                 data-testid="input-player-name"
+                disabled={!!profile}
               />
+              {profile && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Från din sparade profil
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Spelkod</label>
