@@ -47,6 +47,14 @@ export default function MasterPage() {
       setGameState(data.gameState);
     });
 
+    socketService.onPlayerDisconnected((data) => {
+      toast({
+        title: 'Spelare frånkopplad',
+        description: `${data.playerName} har tappat anslutningen och kan återansluta`,
+        duration: 5000
+      });
+    });
+
     socketService.onDJCommentary((base64Audio) => {
       console.log('DJ commentary received, playing...');
       setIsDJPlaying(true);

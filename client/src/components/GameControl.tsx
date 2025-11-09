@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Play, SkipForward, Trophy, Disc3, AlertCircle, Radio } from 'lucide-react';
+import { Play, SkipForward, Trophy, Disc3, AlertCircle, Radio, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -58,7 +58,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
             <p className="text-muted-foreground">Spelare placerar sina kort</p>
           </div>
           <Badge variant="secondary" className="text-xl font-mono px-4 py-2">
-            {players.filter(p => p.isReady).length}/{players.length} klara
+            {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
           </Badge>
         </div>
 
@@ -184,9 +184,11 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
           {players
             .sort((a, b) => b.score - a.score)
             .map((player, idx) => (
-              <div 
+              <div
                 key={player.id}
-                className="flex items-center justify-between p-3 rounded-xl hover-elevate"
+                className={`flex items-center justify-between p-3 rounded-xl hover-elevate ${
+                  !player.connected ? 'opacity-60 bg-muted/50' : ''
+                }`}
                 data-testid={`player-score-${idx}`}
               >
                 <div className="flex items-center gap-3">
@@ -196,7 +198,13 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                     {idx + 1}
                   </div>
                   <span className="font-semibold text-lg">{player.name}</span>
-                  {player.isReady && (
+                  {!player.connected && (
+                    <Badge variant="destructive" className="text-xs flex items-center gap-1">
+                      <WifiOff className="w-3 h-3" />
+                      Frånkopplad
+                    </Badge>
+                  )}
+                  {player.connected && player.isReady && (
                     <Badge variant="secondary" className="text-xs">Klar</Badge>
                   )}
                 </div>

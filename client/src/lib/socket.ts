@@ -46,8 +46,62 @@ class SocketService {
 
   joinGame(gameCode: string, playerName: string, callback: (data: { player: Player; gameState: GameState }) => void) {
     if (!this.socket) return;
-    this.socket.emit('joinGame', { gameCode, playerName });
-    this.socket.once('playerJoined', callback);
+
+    // Get or create persistent ID
+    let persistentId = localStorage.getItem('hitster_player_id');
+    if (!persistentId) {
+      persistentId = this.generatePersistentId();
+      localStorage.setItem('hitster_player_id', persistentId);
+    }
+
+    this.socket.emit('joinGame', { gameCode, playerName, persistentId });
+    this.socket.once('playerJoined', (data) => {
+      // Save session info for reconnection
+      this.savePlayerSession(gameCode, playerName, data.player.persistentId || persistentId);
+      callback(data);
+    });
+  }
+
+  reconnectPlayer(gameCode: string, persistentId: string, callback: (data: { player: Player; gameState: GameState }) => void) {
+    if (!this.socket) return;
+    this.socket.emit('reconnectPlayer', { gameCode, persistentId });
+    this.socket.once('playerReconnected', callback);
+  }
+
+  private generatePersistentId(): string {
+    return Math.random().toString(36).substring(2, 15) +
+           Math.random().toString(36).substring(2, 15);
+  }
+
+  savePlayerSession(gameCode: string, playerName: string, persistentId: string) {
+    const session = {
+      gameCode,
+      playerName,
+      persistentId,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('hitster_session', JSON.stringify(session));
+  }
+
+  getPlayerSession(): { gameCode: string; playerName: string; persistentId: string; timestamp: number } | null {
+    const session = localStorage.getItem('hitster_session');
+    if (!session) return null;
+
+    try {
+      const parsed = JSON.parse(session);
+      // Session expires after 2 hours
+      if (Date.now() - parsed.timestamp > 2 * 60 * 60 * 1000) {
+        this.clearPlayerSession();
+        return null;
+      }
+      return parsed;
+    } catch {
+      return null;
+    }
+  }
+
+  clearPlayerSession() {
+    localStorage.removeItem('hitster_session');
   }
 
   aiChat(message: string, callback: (response: AIResponse) => void) {
@@ -115,6 +169,11 @@ class SocketService {
   onError(callback: (message: string) => void) {
     if (!this.socket) return;
     this.socket.on('error', callback);
+  }
+
+  onPlayerDisconnected(callback: (data: { playerId: string; playerName: string }) => void) {
+    if (!this.socket) return;
+    this.socket.on('playerDisconnected', callback);
   }
 
   off(event: string) {

@@ -14,33 +14,39 @@ import type { GameState, Player, Song } from '@/types/game.types';
 
 export default function PlayerPage() {
   const params = useParams<{ gameCode?: string }>();
-  const [phase, setPhase] = useState<'join' | 'lobby' | 'playing'>('join');
+  const [phase, setPhase] = useState<'join' | 'reconnect' | 'lobby' | 'playing'>('join');
   const [playerName, setPlayerName] = useState('');
   const [gameCode, setGameCode] = useState(params.gameCode || '');
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [confirmedPlacement, setConfirmedPlacement] = useState(false);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
+  const [savedSession, setSavedSession] = useState<{ gameCode: string; playerName: string; persistentId: string } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
+    // Check for existing session on mount
+    const session = socketService.getPlayerSession();
+    if (session) {
+      setSavedSession(session);
+      setGameCode(session.gameCode);
+      setPlayerName(session.playerName);
+      setPhase('reconnect');
+    }
+
     return () => {
       socketService.disconnect();
     };
   }, []);
 
-  const handleJoin = () => {
-    if (!playerName || !gameCode) return;
-
-    const socket = socketService.connect();
-
+  const setupSocketListeners = (socket: any) => {
     socketService.onGameStateUpdate((newState) => {
       setGameState(newState);
       const player = newState.players.find(p => p.id === socket?.id);
       if (player) {
         setMyPlayer(player);
       }
-      
+
       if (newState.phase === 'playing' && phase !== 'playing') {
         setPhase('playing');
       }
@@ -69,6 +75,14 @@ export default function PlayerPage() {
       }
     });
 
+    socketService.onPlayerDisconnected((data) => {
+      toast({
+        title: 'Spelare frånkopplad',
+        description: `${data.playerName} tappade anslutningen`,
+        duration: 3000
+      });
+    });
+
     socketService.onError((message) => {
       toast({
         title: 'Fel',
@@ -76,6 +90,45 @@ export default function PlayerPage() {
         variant: 'destructive'
       });
     });
+  };
+
+  const handleReconnect = () => {
+    if (!savedSession) return;
+
+    const socket = socketService.connect();
+    setupSocketListeners(socket);
+
+    socketService.reconnectPlayer(savedSession.gameCode, savedSession.persistentId, (data) => {
+      setMyPlayer(data.player);
+      setGameState(data.gameState);
+
+      if (data.gameState.phase === 'lobby') {
+        setPhase('lobby');
+      } else if (data.gameState.phase === 'playing') {
+        setPhase('playing');
+      }
+
+      toast({
+        title: 'Återansluten! ✓',
+        description: 'Du är tillbaka i spelet',
+        duration: 3000
+      });
+    });
+  };
+
+  const handleStartNew = () => {
+    socketService.clearPlayerSession();
+    setSavedSession(null);
+    setPhase('join');
+    setPlayerName('');
+    setGameCode('');
+  };
+
+  const handleJoin = () => {
+    if (!playerName || !gameCode) return;
+
+    const socket = socketService.connect();
+    setupSocketListeners(socket);
 
     socketService.joinGame(gameCode.toUpperCase(), playerName, (data) => {
       setMyPlayer(data.player);
@@ -94,6 +147,45 @@ export default function PlayerPage() {
       duration: 3000
     });
   };
+
+  if (phase === 'reconnect') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
+        <Card className="w-full max-w-md p-8">
+          <div className="text-center mb-6">
+            <div className="text-5xl mb-4">🔄</div>
+            <h1 className="text-3xl font-bold mb-2">Välkommen Tillbaka!</h1>
+            <p className="text-muted-foreground">Vi hittade ditt senaste spel</p>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-muted rounded-lg p-4">
+              <p className="text-sm text-muted-foreground mb-1">Spelare</p>
+              <p className="text-lg font-bold">{savedSession?.playerName}</p>
+              <p className="text-sm text-muted-foreground mt-2 mb-1">Spelkod</p>
+              <p className="text-xl font-mono font-bold">{savedSession?.gameCode}</p>
+            </div>
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={handleReconnect}
+              data-testid="button-reconnect"
+            >
+              Återanslut till Spel
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full"
+              onClick={handleStartNew}
+              data-testid="button-start-new"
+            >
+              Starta Nytt Spel
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   if (phase === 'join') {
     return (

@@ -25,6 +25,8 @@ export interface Player {
   startYear: number;
   score: number;
   isReady: boolean;
+  connected: boolean;
+  persistentId?: string;
   currentPlacement?: { song: Song; position: number };
 }
 
@@ -60,30 +62,35 @@ export interface RoundResult {
 export interface SocketEvents {
   createGame: () => void;
   gameCreated: (data: { gameId: string; gameState: GameState }) => void;
-  
-  joinGame: (data: { gameCode: string; playerName: string }) => void;
+
+  joinGame: (data: { gameCode: string; playerName: string; persistentId?: string }) => void;
   playerJoined: (data: { player: Player; gameState: GameState }) => void;
-  
+
+  reconnectPlayer: (data: { gameCode: string; persistentId: string }) => void;
+  playerReconnected: (data: { player: Player; gameState: GameState }) => void;
+
+  playerDisconnected: (data: { playerId: string; playerName: string }) => void;
+
   aiChat: (message: string) => void;
   aiResponse: (response: AIResponse) => void;
-  
+
   confirmPreferences: (preferences: string) => void;
   preferencesConfirmed: (data: { songs: Song[]; gameState: GameState }) => void;
-  
+
   startGame: () => void;
   gameStarted: (gameState: GameState) => void;
-  
+
   placeCard: (position: number) => void;
   cardPlaced: (data: { playerId: string; position: number }) => void;
-  
+
   revealResults: () => void;
   resultsRevealed: (data: { results: RoundResult[]; gameState: GameState }) => void;
-  
+
   djCommentary: (audioData: string) => void;
-  
+
   nextRound: () => void;
   roundStarted: (gameState: GameState) => void;
-  
+
   gameStateUpdate: (gameState: GameState) => void;
   error: (message: string) => void;
 }

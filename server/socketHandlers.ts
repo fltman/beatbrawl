@@ -23,20 +23,20 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('joinGame', ({ gameCode, playerName }: { gameCode: string; playerName: string }) => {
+    socket.on('joinGame', ({ gameCode, playerName, persistentId }: { gameCode: string; playerName: string; persistentId?: string }) => {
       try {
         const game = gameManager.getGame(gameCode);
         if (!game) {
-          socket.emit('error', 'Game not found');
+          socket.emit('error', 'Spelet hittades inte');
           return;
         }
 
         if (game.getState().phase !== 'lobby') {
-          socket.emit('error', 'Game has already started');
+          socket.emit('error', 'Spelet har redan startat');
           return;
         }
 
-        const player = game.addPlayer(socket.id, playerName);
+        const player = game.addPlayer(socket.id, playerName, persistentId);
         gameManager.addPlayerToGame(gameCode, socket.id);
         socket.join(gameCode);
 
@@ -47,10 +47,42 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         io.to(gameCode).emit('gameStateUpdate', game.getState());
 
-        console.log(`Player ${playerName} joined game ${gameCode}`);
+        console.log(`Player ${playerName} joined game ${gameCode} with persistentId ${player.persistentId}`);
       } catch (error) {
         console.error('Error joining game:', error);
-        socket.emit('error', 'Failed to join game');
+        socket.emit('error', 'Kunde inte gå med i spelet');
+      }
+    });
+
+    socket.on('reconnectPlayer', ({ gameCode, persistentId }: { gameCode: string; persistentId: string }) => {
+      try {
+        const game = gameManager.getGame(gameCode);
+        if (!game) {
+          socket.emit('error', 'Spelet hittades inte');
+          return;
+        }
+
+        const player = game.reconnectPlayer(persistentId, socket.id);
+        if (!player) {
+          socket.emit('error', 'Kunde inte återansluta - spelaren hittades inte');
+          return;
+        }
+
+        // Update game manager mapping
+        gameManager.addPlayerToGame(gameCode, socket.id);
+        socket.join(gameCode);
+
+        socket.emit('playerReconnected', {
+          player,
+          gameState: game.getState()
+        });
+
+        io.to(gameCode).emit('gameStateUpdate', game.getState());
+
+        console.log(`Player ${player.name} (${persistentId}) reconnected to game ${gameCode}`);
+      } catch (error) {
+        console.error('Error reconnecting player:', error);
+        socket.emit('error', 'Kunde inte återansluta till spelet');
       }
     });
 
@@ -342,20 +374,29 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
     socket.on('disconnect', () => {
       try {
-        const result = gameManager.removePlayer(socket.id);
-        if (result) {
-          if (result.wasPlayer) {
-            io.to(result.game.getId()).emit('gameStateUpdate', result.game.getState());
-            console.log(`Player ${socket.id} left game ${result.game.getId()}`);
-          } else {
-            io.to(result.game.getId()).emit('error', 'Game master disconnected');
-            console.log(`Game master ${socket.id} disconnected, game ${result.game.getId()} ended`);
+        const game = gameManager.getGameBySocket(socket.id);
+        if (game) {
+          const player = game.markPlayerDisconnected(socket.id);
+
+          if (player) {
+            // Player disconnected - notify others but keep player in game
+            io.to(game.getId()).emit('playerDisconnected', {
+              playerId: socket.id,
+              playerName: player.name
+            });
+            io.to(game.getId()).emit('gameStateUpdate', game.getState());
+            console.log(`Player ${player.name} disconnected from game ${game.getId()}, can reconnect`);
+          } else if (game.getMasterSocketId() === socket.id) {
+            // Master disconnected - end game
+            io.to(game.getId()).emit('error', 'Spelledaren har kopplat från');
+            gameManager.removePlayer(socket.id);
+            console.log(`Game master ${socket.id} disconnected, game ${game.getId()} ended`);
           }
         }
       } catch (error) {
         console.error('Error handling disconnect:', error);
       }
-      
+
       console.log(`Client disconnected: ${socket.id}`);
     });
   });

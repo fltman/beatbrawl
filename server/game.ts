@@ -35,7 +35,7 @@ export class Game {
     return this.state.masterSocketId;
   }
 
-  addPlayer(socketId: string, name: string): Player {
+  addPlayer(socketId: string, name: string, persistentId?: string): Player {
     const range = this.state.startYearRange || { min: 1950, max: 2020 };
     const startYear = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
     const player: Player = {
@@ -44,10 +44,17 @@ export class Game {
       timeline: [],
       startYear,
       score: 0,
-      isReady: false
+      isReady: false,
+      connected: true,
+      persistentId: persistentId || this.generatePersistentId()
     };
     this.state.players.push(player);
     return player;
+  }
+
+  private generatePersistentId(): string {
+    return Math.random().toString(36).substring(2, 15) +
+           Math.random().toString(36).substring(2, 15);
   }
 
   removePlayer(socketId: string): void {
@@ -56,6 +63,30 @@ export class Game {
 
   getPlayer(socketId: string): Player | undefined {
     return this.state.players.find(p => p.id === socketId);
+  }
+
+  getPlayerByPersistentId(persistentId: string): Player | undefined {
+    return this.state.players.find(p => p.persistentId === persistentId);
+  }
+
+  markPlayerDisconnected(socketId: string): Player | undefined {
+    const player = this.state.players.find(p => p.id === socketId);
+    if (player) {
+      player.connected = false;
+    }
+    return player;
+  }
+
+  reconnectPlayer(persistentId: string, newSocketId: string): Player | null {
+    const player = this.state.players.find(p => p.persistentId === persistentId);
+    if (!player) {
+      return null;
+    }
+
+    player.id = newSocketId;
+    player.connected = true;
+
+    return player;
   }
 
   setMusicPreferences(preferences: string, searchQuery: string): void {
@@ -126,8 +157,9 @@ export class Game {
   }
 
   allPlayersReady(): boolean {
-    return this.state.players.length > 0 && 
-           this.state.players.every(p => p.isReady);
+    const connectedPlayers = this.state.players.filter(p => p.connected);
+    return connectedPlayers.length > 0 &&
+           connectedPlayers.every(p => p.isReady);
   }
 
   evaluateRound(): RoundResult[] | null {

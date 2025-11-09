@@ -16,6 +16,8 @@ export interface Player {
   startYear: number;
   score: number;
   isReady: boolean;
+  connected: boolean;
+  persistentId?: string;
   currentPlacement?: { song: Song; position: number };
 }
 
