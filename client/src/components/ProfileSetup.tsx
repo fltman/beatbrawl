@@ -181,7 +181,53 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
     onProfileReady(null);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const resizeImage = (file: File, maxSize: number): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          // Calculate new dimensions maintaining aspect ratio
+          if (width > height) {
+            if (width > maxSize) {
+              height = Math.round((height * maxSize) / width);
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = Math.round((width * maxSize) / height);
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'));
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Convert to JPEG with 0.85 quality for good balance between size and quality
+          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+          resolve(resizedBase64);
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -194,13 +240,19 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const base64 = e.target?.result as string;
-      setUploadedPhoto(base64);
+    try {
+      // Resize image to max 500px before uploading
+      const resizedBase64 = await resizeImage(file, 500);
+      setUploadedPhoto(resizedBase64);
       setShowAIOption(true);
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Image resize error:', error);
+      toast({
+        title: 'Fel vid bildbehandling',
+        description: 'Kunde inte bearbeta bilden. Försök med en annan bild.',
+        variant: 'destructive'
+      });
+    }
   };
 
   const handleGenerateAIProfile = async () => {
