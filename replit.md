@@ -4,6 +4,27 @@
 
 HITSTER AI is a real-time multiplayer music timeline game. Players compete by correctly placing songs on a chronological timeline. The game features AI-driven music selection and commentary. A master device controls gameplay, and player devices join via QR code. The objective is to be the first to correctly place 10 songs. The project aims to provide an engaging, fully automated, and dynamic music trivia experience, leveraging advanced AI for personalized content and commentary, with a vision to capture a niche in interactive digital board games.
 
+## Recent Changes
+
+### November 9, 2025 - AI-Generated Trivia System
+- **Contextual Trivia for Every Song**: AI chat now generates song-specific trivia/fun facts
+  - Each song gets 10-20 word trivia that matches the user's music context
+  - Trivia adapts to theme: filmmusik → film facts, 80-tal → decade context, svensk musik → Swedish pop culture
+  - DJ receives trivia as "Bakgrundsfakta" in prompt for richer, more accurate commentary
+  - Reduces risk of DJ "making up" incorrect facts
+  - Trivia field flows through entire pipeline: AI → Spotify → Game State → DJ
+
+### November 9, 2025 - Film Soundtrack Support & DJ Context Enhancement
+- **Film Soundtrack Support**: Added optional `movie` field to Song interface
+  - Songs can now include film/movie metadata (e.g., "My Heart Will Go On" from "Titanic")
+  - AI chat recognizes film soundtrack requests and includes movie information
+  - DJ commentary references the film when commenting on soundtracks
+- **DJ Context Enhancement**: DJ now receives actual music preferences as context
+  - Fixed bug where DJ received "AI-generated playlist" instead of user's real preferences
+  - Frontend passes `preference` field along with pre-generated songs
+  - DJ system prompt now includes the real music theme
+  - DJ prompt strengthening: System prompt refreshed every round, explicit film mention reminders, shorter history (6 rounds) for better LLM context retention
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
