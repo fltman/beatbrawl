@@ -29,7 +29,7 @@ const PRESET_COLORS = [
   '#F59E0B', // orange
   '#EF4444', // red
   '#14B8A6', // teal
-  '#8B5CF6', // violet
+  '#FBBF24', // yellow
 ];
 
 export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
