@@ -20,6 +20,15 @@ export default function QRCodeDisplay({ gameCode, playerCount, onStartGame }: QR
     >
       <div className="absolute inset-0 bg-black/40"></div>
 
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-6 left-6 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-16 w-auto"
+        />
+      </div>
+
       <div className="w-full max-w-3xl relative z-10">
         <div className="text-center mb-10">
           <h1 className="text-5xl font-black mb-3 text-white">Väntar på Spelare</h1>

@@ -3,7 +3,6 @@ import { Users, Sparkles, Music, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import logoUrl from "@assets/hitster logo_1762695517073.png";
 
 interface HomeProps {
   onSelectMaster?: () => void;
@@ -45,16 +44,18 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
     >
       <div className="absolute inset-0 bg-black/40"></div>
 
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-6 left-6 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-16 w-auto"
+          data-testid="img-logo"
+        />
+      </div>
+
       <div className="w-full max-w-5xl relative z-10">
         <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <img
-              src={logoUrl}
-              alt="HITSTER AI Logo"
-              className="w-80 h-auto"
-              data-testid="img-logo"
-            />
-          </div>
           <p className="text-2xl text-white font-bold tracking-wide">
             Musikspelet med AI-driven musikval
           </p>
@@ -66,7 +67,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
             <AlertDescription className="text-lg">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <span className="font-bold text-white text-xl">
-                  Spotify Premium krävs för att spela HITSTER AI
+                  Spotify Premium krävs för att spela BeatBrawl
                 </span>
                 <Button
                   onClick={handleConnectSpotify}
