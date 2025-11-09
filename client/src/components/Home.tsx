@@ -39,12 +39,12 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-violet-800 to-fuchsia-900 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Animated background elements */}
+    <div className="min-h-screen bg-gradient-to-br from-red-600 via-black to-red-900 flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Animated music wave elements */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-20 left-20 w-96 h-96 bg-red-500 rounded-full mix-blend-screen filter blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-500 rounded-full mix-blend-screen filter blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-yellow-500 rounded-full mix-blend-screen filter blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="w-full max-w-5xl relative z-10">
@@ -104,14 +104,14 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
 
         <div className="grid md:grid-cols-2 gap-8">
           <Card
-            className={`p-12 bg-gradient-to-br from-purple-600/40 to-pink-600/40 backdrop-blur-md border-2 border-white/20 shadow-2xl ${
-              spotifyConnected ? 'hover:scale-105 hover:shadow-purple-500/50 cursor-pointer transform transition-all duration-300' : 'opacity-60 cursor-not-allowed'
+            className={`p-12 bg-gradient-to-br from-red-600/60 to-orange-600/60 backdrop-blur-md border-2 border-red-400/30 shadow-2xl ${
+              spotifyConnected ? 'hover:scale-105 hover:shadow-red-500/50 cursor-pointer transform transition-all duration-300' : 'opacity-60 cursor-not-allowed'
             }`}
             data-testid="card-master"
             onClick={handleSelectMaster}
           >
             <div className="flex flex-col items-center text-center space-y-6">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center shadow-xl animate-pulse">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center shadow-xl animate-pulse">
                 <Sparkles className="w-12 h-12 text-white" />
               </div>
               <div>
@@ -122,7 +122,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
               </div>
               <Button
                 size="lg"
-                className="w-full text-xl py-7 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-white/30"
+                className="w-full text-xl py-7 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-white/30"
                 disabled={!spotifyConnected}
                 data-testid="button-start-master"
               >
@@ -131,9 +131,9 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
             </div>
           </Card>
 
-          <Card className="p-12 bg-gradient-to-br from-blue-600/40 to-cyan-600/40 backdrop-blur-md border-2 border-white/20 shadow-2xl hover:scale-105 hover:shadow-blue-500/50 cursor-pointer transform transition-all duration-300" data-testid="card-player" onClick={onSelectPlayer}>
+          <Card className="p-12 bg-gradient-to-br from-orange-600/60 to-yellow-600/60 backdrop-blur-md border-2 border-orange-400/30 shadow-2xl hover:scale-105 hover:shadow-orange-500/50 cursor-pointer transform transition-all duration-300" data-testid="card-player" onClick={onSelectPlayer}>
             <div className="flex flex-col items-center text-center space-y-6">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center shadow-xl animate-pulse" style={{ animationDelay: '0.5s' }}>
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center shadow-xl animate-pulse" style={{ animationDelay: '0.5s' }}>
                 <Users className="w-12 h-12 text-white" />
               </div>
               <div>
@@ -142,7 +142,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
                   👥 Anslut till ett spel och tävla med andra
                 </p>
               </div>
-              <Button size="lg" className="w-full text-xl py-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-white/30" data-testid="button-join-player">
+              <Button size="lg" className="w-full text-xl py-7 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-white/30" data-testid="button-join-player">
                 📱 Skanna QR-kod
               </Button>
             </div>
