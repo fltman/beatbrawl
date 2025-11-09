@@ -1,11 +1,5 @@
 import SpotifyWebApi from 'spotify-web-api-node';
-import type { Song } from '../shared/types';
-
-interface SongSuggestion {
-  title: string;
-  artist: string;
-  year: number;
-}
+import type { Song, SongSuggestion } from '../shared/types';
 
 class SpotifyService {
   private spotifyApi: SpotifyWebApi;
@@ -97,11 +91,11 @@ class SpotifyService {
     }
   }
 
-  async searchSpecificSong(title: string, artist: string, targetYear: number): Promise<Song | null> {
+  async searchSpecificSong(suggestion: SongSuggestion): Promise<Song | null> {
     await this.ensureAuthenticated();
 
-    const simpleQuery = `${title} ${artist}`;
-    console.log(`  Searching: "${simpleQuery}" (target year: ${targetYear})`);
+    const simpleQuery = `${suggestion.title} ${suggestion.artist}`;
+    console.log(`  Searching: "${simpleQuery}" (target year: ${suggestion.year})`);
     
     try {
       const response = await this.spotifyApi.searchTracks(simpleQuery, { 
@@ -119,13 +113,13 @@ class SpotifyService {
 
       const exactYearMatches = validTracks.filter((track: any) => {
         const year = parseInt(track.album.release_date.split('-')[0]);
-        return Math.abs(year - targetYear) <= 2;
+        return Math.abs(year - suggestion.year) <= 2;
       });
 
       const tracksToConsider = exactYearMatches.length > 0 ? exactYearMatches : validTracks;
       const tracksWithPreview = tracksToConsider.filter((t: any) => !!t.preview_url);
       
-      console.log(`  ${exactYearMatches.length} tracks matching year ${targetYear} (±2 years)`);
+      console.log(`  ${exactYearMatches.length} tracks matching year ${suggestion.year} (±2 years)`);
       console.log(`  ${tracksWithPreview.length} with preview URLs`);
 
       if (tracksToConsider.length === 0) {
@@ -142,10 +136,11 @@ class SpotifyService {
         artist: bestMatch.artists.map((a: any) => a.name).join(', '),
         year,
         albumCover: bestMatch.album.images[0]?.url || '',
-        previewUrl: bestMatch.preview_url || undefined
+        previewUrl: bestMatch.preview_url || undefined,
+        movie: suggestion.movie
       };
     } catch (error: any) {
-      console.error(`  Error searching "${title}" by ${artist}:`, error.message);
+      console.error(`  Error searching "${suggestion.title}" by ${suggestion.artist}:`, error.message);
       return null;
     }
   }
@@ -158,9 +153,10 @@ class SpotifyService {
     for (const suggestion of suggestions) {
       if (songs.length >= targetCount) break;
       
-      const song = await this.searchSpecificSong(suggestion.title, suggestion.artist, suggestion.year);
+      const song = await this.searchSpecificSong(suggestion);
       if (song) {
-        console.log(`  ✓ Found: "${song.title}" by ${song.artist} (${song.year})`);
+        const movieInfo = song.movie ? ` från ${song.movie}` : '';
+        console.log(`  ✓ Found: "${song.title}" by ${song.artist} (${song.year})${movieInfo}`);
         songs.push(song);
       } else {
         console.log(`  ✗ Not found: "${suggestion.title}" by ${suggestion.artist} (${suggestion.year})`);

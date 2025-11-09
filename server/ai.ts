@@ -1,10 +1,5 @@
 import OpenAI from 'openai';
-
-interface SongSuggestion {
-  title: string;
-  artist: string;
-  year: number;
-}
+import { SongSuggestion } from '../shared/types';
 
 interface AIResponse {
   songs: SongSuggestion[];

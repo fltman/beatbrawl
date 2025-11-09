@@ -9,6 +9,13 @@ export interface Song {
   movie?: string;
 }
 
+export interface SongSuggestion {
+  title: string;
+  artist: string;
+  year: number;
+  movie?: string;
+}
+
 export interface Player {
   id: string;
   name: string;
