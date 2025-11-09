@@ -6,6 +6,7 @@ import { setupSocketHandlers } from "./socketHandlers";
 import { spotifyAuthService } from "./spotifyAuth";
 import { storage } from "./storage";
 import { insertPlayerProfileSchema, updatePlayerProfileSchema } from "@shared/schema";
+import { aiProfileGenerator } from "./aiProfileGenerator";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Spotify OAuth endpoints
@@ -272,6 +273,29 @@ VIKTIGT:
     } catch (error) {
       console.error('Mark profile used error:', error);
       res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // AI Profile Generation endpoint
+  app.post('/api/profiles/generate-ai', async (req: Request, res: Response) => {
+    try {
+      const { name, photoBase64 } = req.body;
+
+      if (!name || !photoBase64) {
+        return res.status(400).json({ error: 'Name and photo are required' });
+      }
+
+      console.log(`Generating AI profile for: ${name}`);
+
+      const result = await aiProfileGenerator.generateProfile(name, photoBase64);
+
+      res.json(result);
+    } catch (error: any) {
+      console.error('AI profile generation error:', error);
+      res.status(500).json({
+        error: 'Failed to generate AI profile',
+        details: error.message
+      });
     }
   });
 

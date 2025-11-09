@@ -21,6 +21,10 @@ export const playerProfiles = pgTable("player_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   displayName: text("display_name").notNull(),
   avatarColor: varchar("avatar_color", { length: 7 }).notNull().default('#8B5CF6'),
+  artistName: text("artist_name"),
+  musicStyle: text("music_style"),
+  profileImage: text("profile_image"), // Base64 encoded Pixar-style generated image
+  originalPhoto: text("original_photo"), // Base64 encoded uploaded photo
   createdAt: timestamp("created_at").notNull().defaultNow(),
   lastUsedAt: timestamp("last_used_at").notNull().defaultNow(),
 });
