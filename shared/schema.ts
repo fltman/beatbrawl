@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, bigint } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -16,3 +16,17 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+export const spotifyCredentials = pgTable("spotify_credentials", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  refreshToken: text("refresh_token").notNull(),
+  accessToken: text("access_token"),
+  expiresAt: bigint("expires_at", { mode: "number" }),
+});
+
+export const insertSpotifyCredentialsSchema = createInsertSchema(spotifyCredentials).omit({
+  id: true,
+});
+
+export type InsertSpotifyCredentials = z.infer<typeof insertSpotifyCredentialsSchema>;
+export type SpotifyCredentials = typeof spotifyCredentials.$inferSelect;
