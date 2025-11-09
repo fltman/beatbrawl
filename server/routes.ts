@@ -145,7 +145,6 @@ VIKTIGT: Lägg BARA till låtar och startYearRange när användaren har gett til
         body: JSON.stringify({
           model: 'google/gemini-2.5-pro',
           messages,
-          max_tokens: 2500,
           temperature: 0.8
         })
       });
@@ -162,9 +161,12 @@ VIKTIGT: Lägg BARA till låtar och startYearRange när användaren har gett til
         return res.status(500).json({ error: 'No response from AI' });
       }
 
-      // Parse JSON response
+      // Parse JSON response - remove markdown code blocks if present
       try {
-        const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
+        // Remove markdown code blocks (```json and ```)
+        let cleanedContent = aiContent.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+        
+        const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
           // Fallback if no JSON
           return res.json({ 
