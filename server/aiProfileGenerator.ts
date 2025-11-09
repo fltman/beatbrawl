@@ -117,24 +117,32 @@ Bakgrund: Enkel gradient eller enfärgad bakgrund.`;
     let generatedImageBase64: string | null = null;
 
     const message = imageResponse.choices[0]?.message;
+    console.log('AI Profile: Image response structure:', JSON.stringify(message, null, 2).substring(0, 500));
+    
     if (message) {
       // Check if there are images in the message
       if ((message as any).images && Array.isArray((message as any).images)) {
+        console.log(`AI Profile: Found ${(message as any).images.length} images in response`);
         for (const imageData of (message as any).images) {
+          console.log('AI Profile: Image data type:', imageData.type);
           if (imageData.type === "image_url" && imageData.image_url?.url?.startsWith("data:image")) {
             const dataUrl = imageData.image_url.url;
             // Extract base64 data from data URL (format: data:image/png;base64,<base64_data>)
             const parts = dataUrl.split(',');
             if (parts.length > 1) {
               generatedImageBase64 = parts[1];
+              console.log('AI Profile: Successfully extracted base64 image data');
             }
             break;
           }
         }
+      } else {
+        console.log('AI Profile: No images array found in message. Message keys:', Object.keys(message));
       }
     }
 
     if (!generatedImageBase64) {
+      console.error('AI Profile: Failed to extract image. Full response:', JSON.stringify(imageResponse, null, 2).substring(0, 1000));
       throw new Error('Failed to generate profile image');
     }
 
