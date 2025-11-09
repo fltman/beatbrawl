@@ -120,7 +120,13 @@ Du ska returnera JSON i detta exakta format:
 {
   "message": "Ditt chattsvar här (som användaren ser)",
   "songs": [
-    {"title": "Song Name", "artist": "Artist Name", "year": 1985, "movie": "Film Title (om filmmusik)"},
+    {
+      "title": "Song Name", 
+      "artist": "Artist Name", 
+      "year": 1985, 
+      "movie": "Film Title (om filmmusik)",
+      "trivia": "En intressant fakta om låten som passar musiktemat"
+    },
     ...
   ],
   "startYearRange": {"min": 1980, "max": 1989}
@@ -128,10 +134,12 @@ Du ska returnera JSON i detta exakta format:
 
 I "songs"-arrayen ska du baserat på konversationen välja 20 populära låtar som matchar vad användaren verkar vilja ha.
 I "startYearRange" ska du välja ett lämpligt årsintervall för spelarnas startår baserat på musikvalet (t.ex. om de vill ha 80-talsmusik: min: 1980, max: 1989).
+
 VIKTIGT: 
 - Lägg BARA till låtar och startYearRange när användaren har gett tillräckligt med kontext. Vid första svaret kan du ha en tom array och null för startYearRange om användaren inte varit specifik nog ännu.
 - Alla låtar måste vara UNIKA - ingen låt får förekomma två gånger i listan. Kontrollera att varje kombination av titel och artist är unik.
-- Om det är filmmusik eller soundtracks: lägg till "movie"-fältet med filmens titel (t.ex. "movie": "Livet är en schlager"). Detta är FRIVILLIGT och ska endast inkluderas för filmmusik.`
+- Om det är filmmusik eller soundtracks: lägg till "movie"-fältet med filmens titel (t.ex. "movie": "Livet är en schlager"). Detta är FRIVILLIGT och ska endast inkluderas för filmmusik.
+- För VARJE låt: lägg till "trivia"-fält med en kort (10-20 ord) intressant fakta/kuriosa om låten som tar hänsyn till användarens kontext. Till exempel: om de vill ha filmmusik, fokusera på filmen; om de vill ha 80-tal, nämn 80-talskontext; om svensk musik, nämn svensk popkultur osv. Var specifik och relevant för just den låten.`
         },
         ...(conversationHistory || []),
         { role: 'user' as const, content: message }

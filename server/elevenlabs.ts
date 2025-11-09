@@ -36,14 +36,21 @@ export class ElevenLabsService {
 
     // Get or initialize message history for this game
     if (gameId && !this.messageHistory.has(gameId)) {
-      const systemPrompt = `Du är en energisk svensk radio-DJ som kommenterar ett musikspel där spelare gissar årtal på låtar.${musicContext ? `\n\nMusiktema för denna spelomgång: ${musicContext}` : ''} 
+      this.messageHistory.set(gameId, []);
+    }
+
+    const history = gameId ? this.messageHistory.get(gameId)! : [];
+    
+    // Always refresh the system prompt at the start to keep context strong
+    const systemPrompt = `Du är en energisk svensk radio-DJ som kommenterar ett musikspel där spelare gissar årtal på låtar.${musicContext ? `\n\nMusiktema för denna spelomgång: ${musicContext}` : ''} 
         
 Ditt jobb är att:
 - Kommentera låten som just spelades på ett entusiastiskt och roligt sätt
-- Nämn intressanta fakta om låten, artisten, filmen (om det är filmmusik) eller årtalet
+- Nämn intressande fakta om låten, artisten, filmen (om det är filmmusik) eller årtalet
 - Hålla energin uppe och skapa en festlig stämning
 - Tala svenska naturligt och vardagligt
 - Anpassa dina kommentarer till musiktemat när relevant
+- När en låt har filmkontext: ALLTID nämn filmen i din kommentar!
 
 Regler:
 - Håll kommentarerna korta: 2-3 meningar max (20-30 ord totalt)
@@ -52,14 +59,13 @@ Regler:
 - Använd vardagligt svenskt språk
 - Skippa fraser som "Hej där!" eller "Välkomna" - gå direkt på låten
 - Variera din stil mellan rundor - var kreativ!`;
-      
-      this.messageHistory.set(gameId, [{
-        role: 'system',
-        content: systemPrompt
-      }]);
-    }
 
-    const history = gameId ? this.messageHistory.get(gameId)! : [];
+    // Replace the first system message every round to keep context fresh
+    if (history.length > 0 && history[0].role === 'system') {
+      history[0] = { role: 'system', content: systemPrompt };
+    } else {
+      history.unshift({ role: 'system', content: systemPrompt });
+    }
 
     // Build song info with all available context
     let songInfo = `"${song.title}" av ${song.artist}`;
@@ -72,7 +78,19 @@ Regler:
     if (isGameFinished && winnerName) {
       userPrompt = `Sista låten var ${songInfo}. ${winnerName} har vunnit spelet med 10 poäng! Grattulera vinnaren kort och avsluta spelet på ett festligt sätt. Max 30 ord.`;
     } else {
-      userPrompt = `Kommentera låten: ${songInfo}. Max 25 ord.`;
+      // Build the prompt with trivia context if available
+      let promptParts = [`Kommentera låten: ${songInfo}.`];
+      
+      if (song.trivia) {
+        promptParts.push(`Bakgrundsfakta (använd kreativt): ${song.trivia}`);
+      }
+      
+      if (song.movie) {
+        promptParts.push(`VIKTIGT: Nämn filmen "${song.movie}" i din kommentar!`);
+      }
+      
+      promptParts.push('Max 25 ord.');
+      userPrompt = promptParts.join(' ');
     }
 
     try {
@@ -105,9 +123,9 @@ Regler:
         history.push({ role: 'user', content: userPrompt });
         history.push({ role: 'assistant', content: script });
         
-        // Keep only last 10 messages (5 rounds) to avoid too long context
-        if (history.length > 21) { // system + 10 rounds * 2
-          this.messageHistory.set(gameId, [history[0], ...history.slice(-20)]);
+        // Keep only last 6 rounds to keep context focused and LLM memory sharp
+        if (history.length > 13) { // system + 6 rounds * 2 = 13
+          this.messageHistory.set(gameId, [history[0], ...history.slice(-12)]);
         }
       }
 

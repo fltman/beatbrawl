@@ -137,7 +137,8 @@ class SpotifyService {
         year,
         albumCover: bestMatch.album.images[0]?.url || '',
         previewUrl: bestMatch.preview_url || undefined,
-        movie: suggestion.movie
+        movie: suggestion.movie,
+        trivia: suggestion.trivia
       };
     } catch (error: any) {
       console.error(`  Error searching "${suggestion.title}" by ${suggestion.artist}:`, error.message);

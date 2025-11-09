@@ -7,6 +7,7 @@ export interface Song {
   previewUrl?: string;
   albumCover?: string;
   movie?: string;
+  trivia?: string;
 }
 
 export interface SongSuggestion {
@@ -14,6 +15,7 @@ export interface SongSuggestion {
   artist: string;
   year: number;
   movie?: string;
+  trivia?: string;
 }
 
 export interface Player {
