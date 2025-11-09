@@ -51,6 +51,25 @@ export default function PlayerPage() {
       setSavedSession(session);
       setGameCode(session.gameCode);
       setPhase('reconnect');
+      return;
+    }
+
+    // If QR code was scanned (gameCode in URL) and we have a name, join directly
+    if (params.gameCode && loadedProfile?.displayName) {
+      const socket = socketService.connect();
+      setupSocketListeners(socket);
+
+      setGameCode(params.gameCode.toUpperCase());
+      socketService.joinGame(
+        params.gameCode.toUpperCase(),
+        loadedProfile.displayName,
+        loadedProfile.id,
+        (data) => {
+          setMyPlayer(data.player);
+          setGameState(data.gameState);
+          setPhase('lobby');
+        }
+      );
     } else {
       setPhase('join');
     }
