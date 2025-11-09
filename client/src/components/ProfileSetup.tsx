@@ -364,7 +364,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               onClick={handleRecreateProfile}
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              Uppdatera med AI & Pixar-Avatar
+              Uppdatera med AI-Avatar
             </Button>
 
             <Button
@@ -393,7 +393,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           </h1>
           <p className="text-muted-foreground">
             {showRecreateOptions
-              ? 'Ladda upp ett foto för att få en AI-genererad Pixar-avatar'
+              ? 'Ladda upp ett foto för att få en AI-genererad tecknad avatar'
               : 'Din profil sparas på enheten för snabbare uppkoppling'}
           </p>
         </div>
@@ -479,7 +479,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  Generera AI-profil med Pixar-stil
+                  Generera AI-profil
                 </>
               )}
             </Button>
