@@ -27,7 +27,15 @@ export default function PlayerPage() {
   useEffect(() => {
     // Check for existing session on mount
     const session = socketService.getPlayerSession();
-    if (session) {
+
+    // If user is trying to join a different game via URL, clear old session
+    if (session && params.gameCode && params.gameCode.toUpperCase() !== session.gameCode) {
+      socketService.clearPlayerSession();
+      return;
+    }
+
+    // Only show reconnect if no URL gameCode, or if URL matches saved session
+    if (session && (!params.gameCode || params.gameCode.toUpperCase() === session.gameCode)) {
       setSavedSession(session);
       setGameCode(session.gameCode);
       setPlayerName(session.playerName);
@@ -37,7 +45,7 @@ export default function PlayerPage() {
     return () => {
       socketService.disconnect();
     };
-  }, []);
+  }, [params.gameCode]);
 
   const setupSocketListeners = (socket: any) => {
     socketService.onGameStateUpdate((newState) => {
@@ -120,12 +128,18 @@ export default function PlayerPage() {
     socketService.clearPlayerSession();
     setSavedSession(null);
     setPhase('join');
-    setPlayerName('');
+    // Keep name but clear game code so user can enter new one
     setGameCode('');
   };
 
   const handleJoin = () => {
     if (!playerName || !gameCode) return;
+
+    // If user manually enters different game code, clear old session
+    const session = socketService.getPlayerSession();
+    if (session && gameCode.toUpperCase() !== session.gameCode) {
+      socketService.clearPlayerSession();
+    }
 
     const socket = socketService.connect();
     setupSocketListeners(socket);
