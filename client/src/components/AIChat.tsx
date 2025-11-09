@@ -95,75 +95,75 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-3xl mx-auto">
-      <div className="mb-6 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-          <Sparkles className="w-8 h-8 text-primary" />
+    <div className="flex flex-col h-full max-w-4xl mx-auto">
+      <div className="mb-10 text-center">
+        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mb-6 shadow-xl animate-pulse">
+          <Sparkles className="w-12 h-12 text-white" />
         </div>
-        <h2 className="text-3xl font-bold">AI Spelledare</h2>
-        <p className="text-muted-foreground mt-2">Berätta vilken musik ni vill ha</p>
+        <h2 className="text-5xl font-black text-white drop-shadow-lg mb-3">✨ AI Spelledare</h2>
+        <p className="text-white/80 text-2xl font-bold">Berätta vilken musik ni vill ha</p>
       </div>
 
-      <div className="flex-1 overflow-auto mb-6 space-y-4">
+      <div className="flex-1 overflow-auto mb-8 space-y-5">
         {messages.map((msg, idx) => (
           <div
             key={idx}
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] p-4 rounded-2xl ${
+              className={`max-w-[85%] p-6 rounded-3xl shadow-xl ${
                 msg.role === 'user'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-gradient-to-br from-accent to-accent/70'
+                  ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-2 border-white/30'
+                  : 'bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-md text-white border-2 border-white/20'
               }`}
               data-testid={`message-${msg.role}-${idx}`}
             >
-              <p className="text-lg">{msg.content}</p>
+              <p className="text-xl font-semibold">{msg.content}</p>
             </div>
           </div>
         ))}
         {isThinking && (
           <div className="flex justify-start">
-            <div className="max-w-[80%] p-4 rounded-2xl bg-gradient-to-br from-accent to-accent/70">
-              <Loader2 className="w-5 h-5 animate-spin" />
+            <div className="max-w-[85%] p-6 rounded-3xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-md border-2 border-white/20 shadow-xl">
+              <Loader2 className="w-6 h-6 animate-spin text-white" />
             </div>
           </div>
         )}
       </div>
 
-      <Card className="p-4">
-        <div className="flex gap-2">
+      <Card className="p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border-2 border-white/20 shadow-2xl">
+        <div className="flex gap-3">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="T.ex. '80-tals rock' eller 'svensk pop'"
-            className="text-lg"
+            className="text-xl py-6 bg-white/90 border-2 border-white/50 font-semibold"
             data-testid="input-music-preference"
           />
-          <Button 
-            size="lg" 
-            onClick={handleSend} 
+          <Button
+            size="lg"
+            onClick={handleSend}
             disabled={isThinking}
+            className="px-8 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white border-2 border-white/30 shadow-xl"
             data-testid="button-send"
           >
             {isThinking ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-6 h-6 animate-spin" />
             ) : (
-              <Send className="w-5 h-5" />
+              <Send className="w-6 h-6" />
             )}
           </Button>
         </div>
-        <div className="mt-4">
-          <Button 
-            size="lg" 
-            className="w-full" 
-            variant="secondary"
+        <div className="mt-5">
+          <Button
+            size="lg"
+            className="w-full text-xl py-7 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-white/30"
             onClick={() => {
               setIsConfirming(true);
               // Pass preference and pre-generated songs + start year range
-              const dataToSend = generatedSongs.length > 0 
-                ? JSON.stringify({ 
+              const dataToSend = generatedSongs.length > 0
+                ? JSON.stringify({
                     preference: lastPreference,
                     songs: generatedSongs,
                     startYearRange: startYearRange || { min: 1950, max: 2020 }
@@ -176,11 +176,11 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
           >
             {isConfirming ? (
               <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Söker låtar...
+                <Loader2 className="w-6 h-6 mr-2 animate-spin" />
+                🎵 Söker låtar...
               </>
             ) : (
-              'Bekräfta & Fortsätt'
+              '✓ Bekräfta & Fortsätt'
             )}
           </Button>
         </div>
