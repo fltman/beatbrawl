@@ -87,8 +87,10 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
       {/* Two Buttons - Left Side in Red Area */}
       <div className="absolute left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-6">
         <button
-          className={`text-4xl py-10 px-16 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-2xl uppercase tracking-wider ${
-            spotifyConnected ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'
+          className={`text-4xl py-10 px-16 bg-yellow-400 text-black font-black shadow-2xl uppercase tracking-wider transition-all duration-200 ${
+            spotifyConnected
+              ? 'cursor-pointer hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-2'
+              : 'opacity-40 cursor-not-allowed'
           }`}
           style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
           disabled={!spotifyConnected}
@@ -99,7 +101,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
         </button>
 
         <button
-          className="text-4xl py-10 px-16 bg-orange-500 hover:bg-orange-400 text-white font-black shadow-2xl uppercase tracking-wider"
+          className="text-4xl py-10 px-16 bg-orange-500 text-white font-black shadow-2xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-2"
           style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
           onClick={onSelectPlayer}
           data-testid="button-join-player"
