@@ -110,6 +110,7 @@ Bakgrund: Enkel gradient eller enfärgad bakgrund.`;
           ]
         }
       ],
+      modalities: ['image', 'text'] as any
     });
 
     // Extract image from response
@@ -123,7 +124,10 @@ Bakgrund: Enkel gradient eller enfärgad bakgrund.`;
           if (imageData.type === "image_url" && imageData.image_url?.url?.startsWith("data:image")) {
             const dataUrl = imageData.image_url.url;
             // Extract base64 data from data URL (format: data:image/png;base64,<base64_data>)
-            generatedImageBase64 = dataUrl.split(',', 1)[1];
+            const parts = dataUrl.split(',');
+            if (parts.length > 1) {
+              generatedImageBase64 = parts[1];
+            }
             break;
           }
         }
