@@ -1,6 +1,7 @@
 import { Trophy, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import WinnerConfetti from './WinnerConfetti';
 import type { Player } from '@/types/game.types';
 
 interface WinnerScreenProps {
@@ -12,6 +13,7 @@ interface WinnerScreenProps {
 export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerScreenProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/20 via-background to-accent/20 flex items-center justify-center p-6">
+      <WinnerConfetti trigger={true} />
       <div className="w-full max-w-3xl">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 mb-6">

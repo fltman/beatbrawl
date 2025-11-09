@@ -8,6 +8,7 @@ import Timeline from '@/components/Timeline';
 import CardPlacement from '@/components/CardPlacement';
 import ScoreDisplay from '@/components/ScoreDisplay';
 import WinnerScreen from '@/components/WinnerScreen';
+import MusicEqualizer from '@/components/MusicEqualizer';
 import { socketService } from '@/lib/socket';
 import type { GameState, Player, Song } from '@/types/game.types';
 
@@ -163,6 +164,8 @@ export default function PlayerPage() {
     year: 0
   };
 
+  const isPlayingMusic = gameState?.phase === 'playing';
+
   return (
     <div className="min-h-screen bg-background pb-80">
       <div className="p-6">
@@ -171,6 +174,12 @@ export default function PlayerPage() {
           score={myPlayer.score}
           timelineLength={myPlayer.timeline.length}
         />
+        
+        {isPlayingMusic && (
+          <div className="mt-4 flex justify-center">
+            <MusicEqualizer isPlaying={true} barCount={9} />
+          </div>
+        )}
       </div>
 
       <Timeline

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
+import MusicEqualizer from './MusicEqualizer';
 import type { Player, Song } from '@/types/game.types';
 
 interface GameControlProps {
@@ -104,12 +105,15 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                   <div className={`text-9xl font-bold mb-4 ${spotify.isPlaying ? 'text-primary animate-pulse' : 'text-primary/30'}`}>?</div>
                   {spotify.isConnected && spotify.isReady ? (
                     <>
-                      <div className="flex items-center gap-3 mb-2">
+                      <div className="flex items-center gap-4 mb-2">
                         <Disc3 className={`w-6 h-6 ${spotify.isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
                         <p className="text-2xl font-semibold text-muted-foreground">
                           Spelar via Spotify
                         </p>
                         <Badge variant="secondary" className="ml-2">Premium</Badge>
+                      </div>
+                      <div className="mb-3">
+                        <MusicEqualizer isPlaying={spotify.isPlaying} barCount={7} />
                       </div>
                       <Button
                         variant="outline"
