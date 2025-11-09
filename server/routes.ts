@@ -100,7 +100,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           role: 'system' as const,
           content: `Du är en entusiastisk och hjälpsam AI-spelledare för musikspelet HITSTER. Din uppgift är att hjälpa spelarna formulera sina musikpreferenser genom en trevlig konversation.
 
-VIKTIGT: Du ska ALDRIG nämna eller avslöja vilka låtar som kommer att spelas. Du hjälper bara användaren att beskriva vad de vill ha.
+VIKTIGT: Du ska ALDRIG nämna eller avslöja vilka låtar som kommer att spelas i ditt chattsvar. Du hjälper bara användaren att beskriva vad de vill ha.
 
 Beteende:
 - Var vänlig, kort och entusiastisk
@@ -113,11 +113,22 @@ Beteende:
 Exempel på bra interaktioner:
 - Om de säger "80-tal" → "Coolt! Vill ni ha rock, pop, eller disco från 80-talet?"
 - Om de säger "svensk musik" → "Nice! Vilken period eller genre kör vi? 90-talets pop eller kanske moderna hits?"
-- Ge konkreta förslag: "Ska vi fokusera på klassisk svensk pop eller vill ni ha mer blandning?"
 
-När de verkar nöjda med valet, säg något som "Perfekt! Klicka på Bekräfta så fixar jag resten!" 
+När de verkar nöjda med valet, säg något som "Perfekt! Klicka på Bekräfta så fixar jag resten!"
 
-Använd ALDRIG fraser som "jag har valt", "jag har förberett", "låtarna är klara" eller liknande.`
+Du ska returnera JSON i detta exakta format:
+{
+  "message": "Ditt chattsvar här (som användaren ser)",
+  "songs": [
+    {"title": "Song Name", "artist": "Artist Name", "year": 1985},
+    ...
+  ],
+  "startYearRange": {"min": 1980, "max": 1989}
+}
+
+I "songs"-arrayen ska du baserat på konversationen välja 20 populära låtar som matchar vad användaren verkar vilja ha.
+I "startYearRange" ska du välja ett lämpligt årsintervall för spelarnas startår baserat på musikvalet (t.ex. om de vill ha 80-talsmusik: min: 1980, max: 1989).
+VIKTIGT: Lägg BARA till låtar och startYearRange när användaren har gett tillräckligt med kontext. Vid första svaret kan du ha en tom array och null för startYearRange om användaren inte varit specifik nog ännu.`
         },
         ...(conversationHistory || []),
         { role: 'user' as const, content: message }
@@ -134,7 +145,7 @@ Använd ALDRIG fraser som "jag har valt", "jag har förberett", "låtarna är kl
         body: JSON.stringify({
           model: 'anthropic/claude-sonnet-4.5',
           messages,
-          max_tokens: 200,
+          max_tokens: 2500,
           temperature: 0.8
         })
       });
@@ -145,13 +156,37 @@ Använd ALDRIG fraser som "jag har valt", "jag har förberett", "låtarna är kl
       }
 
       const data = await response.json();
-      const aiResponse = data.choices[0]?.message?.content;
+      const aiContent = data.choices[0]?.message?.content;
 
-      if (!aiResponse) {
+      if (!aiContent) {
         return res.status(500).json({ error: 'No response from AI' });
       }
 
-      res.json({ response: aiResponse });
+      // Parse JSON response
+      try {
+        const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+          // Fallback if no JSON
+          return res.json({ 
+            response: aiContent,
+            songs: []
+          });
+        }
+
+        const parsed = JSON.parse(jsonMatch[0]);
+        res.json({ 
+          response: parsed.message || aiContent,
+          songs: parsed.songs || [],
+          startYearRange: parsed.startYearRange || null
+        });
+      } catch (parseError) {
+        // Fallback if JSON parsing fails
+        console.error('Failed to parse AI JSON:', parseError);
+        res.json({ 
+          response: aiContent,
+          songs: []
+        });
+      }
     } catch (error) {
       console.error('Chat error:', error);
       res.status(500).json({ error: 'Internal server error' });

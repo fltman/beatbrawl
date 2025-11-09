@@ -9,6 +9,17 @@ interface Message {
   content: string;
 }
 
+interface Song {
+  title: string;
+  artist: string;
+  year: number;
+}
+
+interface StartYearRange {
+  min: number;
+  max: number;
+}
+
 interface AIChatProps {
   onPreferencesConfirmed?: (preferences: string) => void;
 }
@@ -21,6 +32,8 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   const [lastPreference, setLastPreference] = useState('');
   const [isConfirming, setIsConfirming] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const [generatedSongs, setGeneratedSongs] = useState<Song[]>([]);
+  const [startYearRange, setStartYearRange] = useState<StartYearRange | null>(null);
 
   const handleSend = async () => {
     if (!input.trim() || isThinking) return;
@@ -57,6 +70,18 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         content: data.response
       };
       setMessages(prev => [...prev, aiMessage]);
+      
+      // Save songs if AI generated any
+      if (data.songs && data.songs.length > 0) {
+        setGeneratedSongs(data.songs);
+        console.log(`AI generated ${data.songs.length} songs`);
+      }
+      
+      // Save start year range if provided
+      if (data.startYearRange) {
+        setStartYearRange(data.startYearRange);
+        console.log(`AI suggested start year range: ${data.startYearRange.min}-${data.startYearRange.max}`);
+      }
     } catch (error) {
       console.error('Chat error:', error);
       const fallbackMessage: Message = { 
@@ -136,7 +161,14 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             variant="secondary"
             onClick={() => {
               setIsConfirming(true);
-              onPreferencesConfirmed?.(lastPreference);
+              // Pass preference and pre-generated songs + start year range
+              const dataToSend = generatedSongs.length > 0 
+                ? JSON.stringify({ 
+                    songs: generatedSongs,
+                    startYearRange: startYearRange || { min: 1950, max: 2020 }
+                  })
+                : lastPreference;
+              onPreferencesConfirmed?.(dataToSend);
             }}
             disabled={!lastPreference || isConfirming}
             data-testid="button-confirm-preferences"

@@ -22,9 +22,11 @@ HITSTER AI is a real-time multiplayer music timeline game where players compete 
 - **Fully Automatic Flow**: Removed manual "Visa Resultat" button - game auto-reveals when all players ready
 - **Auto-Advance**: After DJ commentary, game automatically starts next round (unless finished)
 - **No Manual Clicks**: Players just place cards, everything else happens automatically
-- **LLM-Powered AI Chat**: Initial music preference chat now uses Claude Sonnet 4.5 for natural conversation
+- **LLM-Powered AI Chat with Pre-generation**: Initial music preference chat now uses Claude Sonnet 4.5 for natural conversation
   - AI asks follow-up questions and gives suggestions based on user input
   - Conversation history maintained for context
+  - **Songs generated in background**: AI generates 20 song suggestions + start year range with each chat response (hidden from user)
+  - When user clicks "Bekräfta", songs are already ready - no waiting!
   - Falls back to simple template if API fails
 - **Visual Enhancements**: Added dynamic visuals during gameplay
   - Pulsating gradient backgrounds when music plays

@@ -84,26 +84,48 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        const searchQuery = preferences?.trim() || game.getState().searchQuery?.trim() || '';
-        
-        if (!searchQuery) {
+        // Check if preferences is a JSON object with pre-generated songs
+        let suggestions: any[] = [];
+        let startYearRange: { min: number; max: number } | null = null;
+        let searchQuery = '';
+
+        try {
+          const parsed = JSON.parse(preferences);
+          if (parsed.songs && Array.isArray(parsed.songs)) {
+            // Pre-generated songs from AI chat
+            suggestions = parsed.songs;
+            startYearRange = parsed.startYearRange || { min: 1950, max: 2020 };
+            searchQuery = 'AI-generated playlist';
+            console.log(`Using ${suggestions.length} pre-generated songs from AI chat`);
+          }
+        } catch {
+          // Not JSON, treat as regular search query
+          searchQuery = preferences?.trim() || game.getState().searchQuery?.trim() || '';
+        }
+
+        if (!searchQuery && suggestions.length === 0) {
           socket.emit('error', 'Please provide music preferences');
           return;
         }
 
-        console.log(`Confirming preferences with query: "${searchQuery}"`);
         game.setMusicPreferences(searchQuery, searchQuery);
-        
-        const { aiService } = await import('./ai');
-        const { spotifyService } = await import('./spotify');
 
-        const { songs: suggestions, startYearRange } = await aiService.generateSongSuggestions(searchQuery);
-        
+        // If no pre-generated songs, use AI service to generate them
         if (suggestions.length === 0) {
-          socket.emit('error', 'Could not generate song suggestions. Please try again.');
-          return;
+          console.log(`Confirming preferences with query: "${searchQuery}"`);
+          const { aiService } = await import('./ai');
+          const result = await aiService.generateSongSuggestions(searchQuery);
+          suggestions = result.songs;
+          startYearRange = result.startYearRange;
+          
+          if (suggestions.length === 0) {
+            socket.emit('error', 'Could not generate song suggestions. Please try again.');
+            return;
+          }
         }
 
+        // Search Spotify for the songs
+        const { spotifyService } = await import('./spotify');
         const songs = await spotifyService.searchFromSuggestions(suggestions, 15);
 
         if (songs.length < 10) {
@@ -112,7 +134,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         }
 
         game.setSongs(songs);
-        game.setStartYearRange(startYearRange);
+        game.setStartYearRange(startYearRange || { min: 1950, max: 2020 });
         game.setPhase('lobby');
 
         socket.emit('preferencesConfirmed', {
