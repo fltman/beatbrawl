@@ -120,7 +120,7 @@ Du ska returnera JSON i detta exakta format:
 {
   "message": "Ditt chattsvar här (som användaren ser)",
   "songs": [
-    {"title": "Song Name", "artist": "Artist Name", "year": 1985},
+    {"title": "Song Name", "artist": "Artist Name", "year": 1985, "movie": "Film Title (om filmmusik)"},
     ...
   ],
   "startYearRange": {"min": 1980, "max": 1989}
@@ -130,7 +130,8 @@ I "songs"-arrayen ska du baserat på konversationen välja 20 populära låtar s
 I "startYearRange" ska du välja ett lämpligt årsintervall för spelarnas startår baserat på musikvalet (t.ex. om de vill ha 80-talsmusik: min: 1980, max: 1989).
 VIKTIGT: 
 - Lägg BARA till låtar och startYearRange när användaren har gett tillräckligt med kontext. Vid första svaret kan du ha en tom array och null för startYearRange om användaren inte varit specifik nog ännu.
-- Alla låtar måste vara UNIKA - ingen låt får förekomma två gånger i listan. Kontrollera att varje kombination av titel och artist är unik.`
+- Alla låtar måste vara UNIKA - ingen låt får förekomma två gånger i listan. Kontrollera att varje kombination av titel och artist är unik.
+- Om det är filmmusik eller soundtracks: lägg till "movie"-fältet med filmens titel (t.ex. "movie": "Livet är en schlager"). Detta är FRIVILLIGT och ska endast inkluderas för filmmusik.`
         },
         ...(conversationHistory || []),
         { role: 'user' as const, content: message }

@@ -6,6 +6,7 @@ export interface Song {
   spotifyUri?: string;
   previewUrl?: string;
   albumCover?: string;
+  movie?: string;
 }
 
 export interface Player {

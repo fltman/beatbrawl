@@ -209,13 +209,15 @@ export function setupSocketHandlers(io: SocketIOServer) {
             const isGameFinished = !!winner;
 
             const currentSong = game.getState().currentSong;
+            const musicContext = game.getState().musicPreferences;
             if (currentSong) {
               const { elevenLabsService } = await import('./elevenlabs');
               const audioBuffer = await elevenLabsService.generateDJCommentary(
                 currentSong, 
                 isGameFinished, 
                 winner?.name,
-                game.getId()
+                game.getId(),
+                musicContext
               );
               
               if (audioBuffer) {
@@ -270,13 +272,15 @@ export function setupSocketHandlers(io: SocketIOServer) {
         const isGameFinished = !!winner;
 
         const currentSong = game.getState().currentSong;
+        const musicContext = game.getState().musicPreferences;
         if (currentSong) {
           const { elevenLabsService } = await import('./elevenlabs');
           const audioBuffer = await elevenLabsService.generateDJCommentary(
             currentSong, 
             isGameFinished, 
             winner?.name,
-            game.getId()
+            game.getId(),
+            musicContext
           );
           
           if (audioBuffer) {

@@ -27,7 +27,8 @@ export class ElevenLabsService {
     song: Song, 
     isGameFinished: boolean, 
     winnerName?: string,
-    gameId?: string
+    gameId?: string,
+    musicContext?: string
   ): Promise<string> {
     if (!this.openRouterKey) {
       return this.generateFallbackScript(song, isGameFinished, winnerName);
@@ -35,15 +36,14 @@ export class ElevenLabsService {
 
     // Get or initialize message history for this game
     if (gameId && !this.messageHistory.has(gameId)) {
-      this.messageHistory.set(gameId, [{
-        role: 'system',
-        content: `Du är en energisk svensk radio-DJ som kommenterar ett musikspel där spelare gissar årtal på låtar. 
+      const systemPrompt = `Du är en energisk svensk radio-DJ som kommenterar ett musikspel där spelare gissar årtal på låtar.${musicContext ? `\n\nMusiktema för denna spelomgång: ${musicContext}` : ''} 
         
 Ditt jobb är att:
 - Kommentera låten som just spelades på ett entusiastiskt och roligt sätt
-- Nämn intressanta fakta om låten, artisten eller årtalet
+- Nämn intressanta fakta om låten, artisten, filmen (om det är filmmusik) eller årtalet
 - Hålla energin uppe och skapa en festlig stämning
 - Tala svenska naturligt och vardagligt
+- Anpassa dina kommentarer till musiktemat när relevant
 
 Regler:
 - Håll kommentarerna korta: 2-3 meningar max (20-30 ord totalt)
@@ -51,17 +51,28 @@ Regler:
 - Aldrig längre än 40 ord
 - Använd vardagligt svenskt språk
 - Skippa fraser som "Hej där!" eller "Välkomna" - gå direkt på låten
-- Variera din stil mellan rundor - var kreativ!`
+- Variera din stil mellan rundor - var kreativ!`;
+      
+      this.messageHistory.set(gameId, [{
+        role: 'system',
+        content: systemPrompt
       }]);
     }
 
     const history = gameId ? this.messageHistory.get(gameId)! : [];
 
+    // Build song info with all available context
+    let songInfo = `"${song.title}" av ${song.artist}`;
+    if (song.movie) {
+      songInfo += ` från filmen "${song.movie}"`;
+    }
+    songInfo += ` (${song.year})`;
+    
     let userPrompt: string;
     if (isGameFinished && winnerName) {
-      userPrompt = `Sista låten var "${song.title}" av ${song.artist} (${song.year}). ${winnerName} har vunnit spelet med 10 poäng! Grattulera vinnaren kort och avsluta spelet på ett festligt sätt. Max 30 ord.`;
+      userPrompt = `Sista låten var ${songInfo}. ${winnerName} har vunnit spelet med 10 poäng! Grattulera vinnaren kort och avsluta spelet på ett festligt sätt. Max 30 ord.`;
     } else {
-      userPrompt = `Kommentera låten: "${song.title}" av ${song.artist} (${song.year}). Max 25 ord.`;
+      userPrompt = `Kommentera låten: ${songInfo}. Max 25 ord.`;
     }
 
     try {
@@ -128,14 +139,15 @@ Regler:
     song: Song, 
     isGameFinished: boolean = false, 
     winnerName?: string,
-    gameId?: string
+    gameId?: string,
+    musicContext?: string
   ): Promise<Buffer | null> {
     if (!this.apiKey) {
       console.log('ElevenLabs: API key not set, skipping DJ commentary');
       return null;
     }
 
-    const script = await this.generateDJScriptWithLLM(song, isGameFinished, winnerName, gameId);
+    const script = await this.generateDJScriptWithLLM(song, isGameFinished, winnerName, gameId, musicContext);
     console.log(`ElevenLabs: Generating DJ commentary: "${script}"`);
 
     try {
