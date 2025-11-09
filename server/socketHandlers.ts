@@ -1,5 +1,6 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { gameManager } from './gameManager';
+import { storage } from './storage';
 import type { SocketEvents } from '../shared/types';
 
 export function setupSocketHandlers(io: SocketIOServer) {
@@ -23,7 +24,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('joinGame', ({ gameCode, playerName, persistentId, profileId }: { gameCode: string; playerName: string; persistentId?: string; profileId?: string }) => {
+    socket.on('joinGame', async ({ gameCode, playerName, persistentId, profileId }: { gameCode: string; playerName: string; persistentId?: string; profileId?: string }) => {
       try {
         const game = gameManager.getGame(gameCode);
         if (!game) {
@@ -36,7 +37,25 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        const player = game.addPlayer(socket.id, playerName, persistentId, profileId);
+        // Fetch profile data if profileId is provided
+        let profileData: { artistName?: string; avatarColor?: string; profileImage?: string } | undefined;
+        if (profileId) {
+          try {
+            const profile = await storage.getPlayerProfile(profileId);
+            if (profile) {
+              profileData = {
+                artistName: profile.artistName || undefined,
+                avatarColor: profile.avatarColor,
+                profileImage: profile.profileImage || undefined
+              };
+            }
+          } catch (error) {
+            console.error(`Failed to fetch profile ${profileId}:`, error);
+            // Continue without profile data
+          }
+        }
+
+        const player = game.addPlayer(socket.id, playerName, persistentId, profileId, profileData);
         gameManager.addPlayerToGame(gameCode, socket.id);
         socket.join(gameCode);
 

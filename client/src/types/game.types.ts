@@ -18,6 +18,10 @@ export interface Player {
   isReady: boolean;
   connected: boolean;
   persistentId?: string;
+  profileId?: string;
+  artistName?: string;
+  avatarColor?: string;
+  profileImage?: string;
   currentPlacement?: { song: Song; position: number };
 }
 

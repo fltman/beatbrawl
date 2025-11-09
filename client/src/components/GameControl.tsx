@@ -192,12 +192,38 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                 data-testid={`player-score-${idx}`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                    idx === 0 ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                  }`}>
-                    {idx + 1}
+                  {player.profileImage ? (
+                    <div className="relative">
+                      <img
+                        src={`data:image/png;base64,${player.profileImage}`}
+                        alt={player.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                        style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
+                      />
+                      {idx === 0 && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold">
+                          1
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
+                        idx === 0 ? 'ring-2 ring-primary ring-offset-2' : ''
+                      }`}
+                      style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
+                    >
+                      {idx + 1}
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-lg">{player.name}</span>
+                    {player.artistName && (
+                      <span className="text-sm text-muted-foreground italic">
+                        "{player.artistName}"
+                      </span>
+                    )}
                   </div>
-                  <span className="font-semibold text-lg">{player.name}</span>
                   {!player.connected && (
                     <Badge variant="destructive" className="text-xs flex items-center gap-1">
                       <WifiOff className="w-3 h-3" />

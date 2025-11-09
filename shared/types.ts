@@ -28,6 +28,9 @@ export interface Player {
   connected: boolean;
   persistentId?: string;
   profileId?: string;
+  artistName?: string;
+  avatarColor?: string;
+  profileImage?: string;
   currentPlacement?: { song: Song; position: number };
 }
 
