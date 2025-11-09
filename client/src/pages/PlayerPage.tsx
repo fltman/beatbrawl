@@ -9,43 +9,51 @@ import CardPlacement from '@/components/CardPlacement';
 import ScoreDisplay from '@/components/ScoreDisplay';
 import WinnerScreen from '@/components/WinnerScreen';
 import MusicEqualizer from '@/components/MusicEqualizer';
+import ProfileSetup from '@/components/ProfileSetup';
 import { socketService } from '@/lib/socket';
 import type { GameState, Player, Song } from '@/types/game.types';
 
+interface PlayerProfile {
+  id: string;
+  displayName: string;
+  avatarColor: string;
+  createdAt: string;
+  lastUsedAt: string;
+}
+
 export default function PlayerPage() {
   const params = useParams<{ gameCode?: string }>();
-  const [phase, setPhase] = useState<'join' | 'reconnect' | 'lobby' | 'playing'>('join');
+  const [phase, setPhase] = useState<'profile' | 'join' | 'reconnect' | 'lobby' | 'playing'>('profile');
+  const [profile, setProfile] = useState<PlayerProfile | null>(null);
   const [playerName, setPlayerName] = useState('');
   const [gameCode, setGameCode] = useState(params.gameCode || '');
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [confirmedPlacement, setConfirmedPlacement] = useState(false);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
-  const [savedSession, setSavedSession] = useState<{ gameCode: string; playerName: string; persistentId: string } | null>(null);
+  const [savedSession, setSavedSession] = useState<{ gameCode: string; playerName: string; persistentId: string; profileId?: string } | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Check for existing session on mount
+  const handleProfileReady = (loadedProfile: PlayerProfile) => {
+    setProfile(loadedProfile);
+    setPlayerName(loadedProfile.displayName);
+    
+    // Check for existing session after profile is loaded
     const session = socketService.getPlayerSession();
-
-    // If user is trying to join a different game via URL, clear old session
-    if (session && params.gameCode && params.gameCode.toUpperCase() !== session.gameCode) {
-      socketService.clearPlayerSession();
-      return;
-    }
-
-    // Only show reconnect if no URL gameCode, or if URL matches saved session
     if (session && (!params.gameCode || params.gameCode.toUpperCase() === session.gameCode)) {
       setSavedSession(session);
       setGameCode(session.gameCode);
-      setPlayerName(session.playerName);
       setPhase('reconnect');
+    } else {
+      setPhase('join');
     }
+  };
 
+  useEffect(() => {
     return () => {
       socketService.disconnect();
     };
-  }, [params.gameCode]);
+  }, []);
 
   const setupSocketListeners = (socket: any) => {
     socketService.onGameStateUpdate((newState) => {
@@ -106,22 +114,27 @@ export default function PlayerPage() {
     const socket = socketService.connect();
     setupSocketListeners(socket);
 
-    socketService.reconnectPlayer(savedSession.gameCode, savedSession.persistentId, (data) => {
-      setMyPlayer(data.player);
-      setGameState(data.gameState);
+    socketService.reconnectPlayer(
+      savedSession.gameCode,
+      savedSession.persistentId,
+      savedSession.profileId,
+      (data) => {
+        setMyPlayer(data.player);
+        setGameState(data.gameState);
 
-      if (data.gameState.phase === 'lobby') {
-        setPhase('lobby');
-      } else if (data.gameState.phase === 'playing') {
-        setPhase('playing');
+        if (data.gameState.phase === 'lobby') {
+          setPhase('lobby');
+        } else if (data.gameState.phase === 'playing') {
+          setPhase('playing');
+        }
+
+        toast({
+          title: 'Återansluten! ✓',
+          description: 'Du är tillbaka i spelet',
+          duration: 3000
+        });
       }
-
-      toast({
-        title: 'Återansluten! ✓',
-        description: 'Du är tillbaka i spelet',
-        duration: 3000
-      });
-    });
+    );
   };
 
   const handleStartNew = () => {
@@ -144,11 +157,16 @@ export default function PlayerPage() {
     const socket = socketService.connect();
     setupSocketListeners(socket);
 
-    socketService.joinGame(gameCode.toUpperCase(), playerName, (data) => {
-      setMyPlayer(data.player);
-      setGameState(data.gameState);
-      setPhase('lobby');
-    });
+    socketService.joinGame(
+      gameCode.toUpperCase(),
+      playerName,
+      profile?.id,
+      (data) => {
+        setMyPlayer(data.player);
+        setGameState(data.gameState);
+        setPhase('lobby');
+      }
+    );
   };
 
   const handleConfirmPlacement = () => {
@@ -161,6 +179,10 @@ export default function PlayerPage() {
       duration: 3000
     });
   };
+
+  if (phase === 'profile') {
+    return <ProfileSetup onProfileReady={handleProfileReady} />;
+  }
 
   if (phase === 'reconnect') {
     return (

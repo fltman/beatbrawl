@@ -44,7 +44,7 @@ class SocketService {
     this.socket.once('gameCreated', callback);
   }
 
-  joinGame(gameCode: string, playerName: string, callback: (data: { player: Player; gameState: GameState }) => void) {
+  joinGame(gameCode: string, playerName: string, profileId?: string, callback?: (data: { player: Player; gameState: GameState }) => void) {
     if (!this.socket) return;
 
     // Get or create persistent ID
@@ -54,18 +54,20 @@ class SocketService {
       localStorage.setItem('hitster_player_id', persistentId);
     }
 
-    this.socket.emit('joinGame', { gameCode, playerName, persistentId });
+    this.socket.emit('joinGame', { gameCode, playerName, persistentId, profileId });
     this.socket.once('playerJoined', (data) => {
       // Save session info for reconnection
-      this.savePlayerSession(gameCode, playerName, data.player.persistentId || persistentId);
-      callback(data);
+      this.savePlayerSession(gameCode, playerName, data.player.persistentId || persistentId, profileId);
+      if (callback) callback(data);
     });
   }
 
-  reconnectPlayer(gameCode: string, persistentId: string, callback: (data: { player: Player; gameState: GameState }) => void) {
+  reconnectPlayer(gameCode: string, persistentId: string, profileId?: string, callback?: (data: { player: Player; gameState: GameState }) => void) {
     if (!this.socket) return;
-    this.socket.emit('reconnectPlayer', { gameCode, persistentId });
-    this.socket.once('playerReconnected', callback);
+    this.socket.emit('reconnectPlayer', { gameCode, persistentId, profileId });
+    if (callback) {
+      this.socket.once('playerReconnected', callback);
+    }
   }
 
   private generatePersistentId(): string {
@@ -73,17 +75,18 @@ class SocketService {
            Math.random().toString(36).substring(2, 15);
   }
 
-  savePlayerSession(gameCode: string, playerName: string, persistentId: string) {
+  savePlayerSession(gameCode: string, playerName: string, persistentId: string, profileId?: string) {
     const session = {
       gameCode,
       playerName,
       persistentId,
+      profileId,
       timestamp: Date.now()
     };
     localStorage.setItem('hitster_session', JSON.stringify(session));
   }
 
-  getPlayerSession(): { gameCode: string; playerName: string; persistentId: string; timestamp: number } | null {
+  getPlayerSession(): { gameCode: string; playerName: string; persistentId: string; profileId?: string; timestamp: number } | null {
     const session = localStorage.getItem('hitster_session');
     if (!session) return null;
 

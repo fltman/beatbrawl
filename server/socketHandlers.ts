@@ -23,7 +23,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('joinGame', ({ gameCode, playerName, persistentId }: { gameCode: string; playerName: string; persistentId?: string }) => {
+    socket.on('joinGame', ({ gameCode, playerName, persistentId, profileId }: { gameCode: string; playerName: string; persistentId?: string; profileId?: string }) => {
       try {
         const game = gameManager.getGame(gameCode);
         if (!game) {
@@ -36,7 +36,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        const player = game.addPlayer(socket.id, playerName, persistentId);
+        const player = game.addPlayer(socket.id, playerName, persistentId, profileId);
         gameManager.addPlayerToGame(gameCode, socket.id);
         socket.join(gameCode);
 
@@ -47,7 +47,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         io.to(gameCode).emit('gameStateUpdate', game.getState());
 
-        console.log(`Player ${playerName} joined game ${gameCode} with persistentId ${player.persistentId}`);
+        console.log(`Player ${playerName} joined game ${gameCode} with persistentId ${player.persistentId} and profileId ${profileId}`);
       } catch (error) {
         console.error('Error joining game:', error);
         socket.emit('error', 'Kunde inte gå med i spelet');

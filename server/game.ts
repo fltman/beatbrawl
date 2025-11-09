@@ -35,7 +35,7 @@ export class Game {
     return this.state.masterSocketId;
   }
 
-  addPlayer(socketId: string, name: string, persistentId?: string): Player {
+  addPlayer(socketId: string, name: string, persistentId?: string, profileId?: string): Player {
     const range = this.state.startYearRange || { min: 1950, max: 2020 };
     const startYear = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
     const player: Player = {
@@ -46,7 +46,8 @@ export class Game {
       score: 0,
       isReady: false,
       connected: true,
-      persistentId: persistentId || this.generatePersistentId()
+      persistentId: persistentId || this.generatePersistentId(),
+      profileId
     };
     this.state.players.push(player);
     return player;

@@ -6,6 +6,18 @@ HITSTER AI is a real-time multiplayer music timeline game. Players compete by co
 
 ## Recent Changes
 
+### November 9, 2025 - Player Profile System
+- **Persistent Player Profiles**: Players now create persistent profiles stored in database
+  - PostgreSQL database integration via Neon serverless
+  - Profiles include displayName, avatarColor, and usage tracking
+  - Profile UUID stored in localStorage for automatic recognition
+  - API endpoints: GET/POST/PATCH /api/profiles
+- **Profile Integration with Game Flow**:
+  - ProfileSetup component handles first-time setup and returning users
+  - Profile ID flows through socket events (joinGame, reconnectPlayer)
+  - Stored in Player object and game session for future use
+  - Eliminates need to re-enter name when rejoining games
+
 ### November 9, 2025 - AI-Generated Trivia System
 - **Contextual Trivia for Every Song**: AI chat now generates song-specific trivia/fun facts
   - Each song gets 10-20 word trivia that matches the user's music context
