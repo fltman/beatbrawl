@@ -120,8 +120,8 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+        <div className="absolute top-12 left-12 z-0">
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto opacity-30" />
         </div>
 
         {/* Large animated loading bubble */}
@@ -145,11 +145,11 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* BeatBrawl Logo - Upper Left */}
-      <div className="absolute top-12 left-12 z-20">
+      <div className="absolute top-12 left-12 z-0">
         <img
           src="/beatbrawl.png"
           alt="BeatBrawl Logo"
-          className="h-48 w-auto"
+          className="h-48 w-auto opacity-30"
         />
       </div>
 
