@@ -374,15 +374,6 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
             </Button>
 
             <Button
-              size="lg"
-              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white"
-              onClick={handleRecreateProfile}
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Uppdatera med AI-Avatar
-            </Button>
-
-            <Button
               size="sm"
               className="w-full text-white/60 hover:text-white bg-transparent hover:bg-white/10"
               onClick={handleDeleteProfile}
