@@ -1,9 +1,10 @@
 import OpenAI from 'openai';
+import { imageStorage } from './imageStorage';
 
 interface AIProfileResult {
   artistName: string;
   musicStyle: string;
-  profileImage: string; // base64
+  profileImageUrl: string; // URL to the saved image
 }
 
 export class AIProfileGenerator {
@@ -148,10 +149,14 @@ Bakgrund: Enkel gradient eller enfärgad bakgrund.`;
 
     console.log('AI Profile: Image generated successfully');
 
+    // Save image to disk and get filename
+    const filename = imageStorage.saveImage(generatedImageBase64, 'png');
+    const imageUrl = `/api/profiles/images/${filename}`;
+
     return {
       artistName: analysis.artistName,
       musicStyle: analysis.musicStyle,
-      profileImage: generatedImageBase64
+      profileImageUrl: imageUrl
     };
   }
 }

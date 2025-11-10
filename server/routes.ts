@@ -7,6 +7,7 @@ import { spotifyAuthService } from "./spotifyAuth";
 import { storage } from "./storage";
 import { insertPlayerProfileSchema, updatePlayerProfileSchema } from "@shared/schema";
 import { aiProfileGenerator } from "./aiProfileGenerator";
+import { imageStorage } from "./imageStorage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Spotify OAuth endpoints
@@ -296,6 +297,28 @@ VIKTIGT:
         error: 'Failed to generate AI profile',
         details: error.message
       });
+    }
+  });
+
+  // Serve profile images
+  app.get('/api/profiles/images/:filename', (req: Request, res: Response) => {
+    try {
+      const { filename } = req.params;
+
+      // Validate filename (prevent directory traversal)
+      if (filename.includes('..') || filename.includes('/')) {
+        return res.status(400).json({ error: 'Invalid filename' });
+      }
+
+      if (!imageStorage.imageExists(filename)) {
+        return res.status(404).json({ error: 'Image not found' });
+      }
+
+      const imagePath = imageStorage.getImagePath(filename);
+      res.sendFile(imagePath);
+    } catch (error) {
+      console.error('Serve image error:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   });
 

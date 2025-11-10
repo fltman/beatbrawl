@@ -280,7 +280,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
       setAiGeneratedProfile({
         artistName: result.artistName,
         musicStyle: result.musicStyle,
-        profileImage: result.profileImage
+        profileImage: result.profileImageUrl
       });
 
       toast({
