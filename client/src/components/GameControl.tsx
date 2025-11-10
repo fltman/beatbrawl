@@ -121,12 +121,12 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
         </div>
       </Card>
 
-      {/* HÖGER KOLUMN: Spelkort och kontroller */}
+      {/* RIGHT COLUMN: Game card and controls */}
       <div className="space-y-6">
         <Card className="p-8 bg-black border-4 border-white shadow-2xl">
           <div className="flex items-center justify-end mb-6">
             <Badge className="text-2xl font-mono font-black px-8 py-4 bg-red-500 text-white border-4 border-white">
-              {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
+              {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} ready
             </Badge>
           </div>
 
@@ -161,7 +161,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="w-6 h-6 text-green-500" />
                           <span className="text-xl font-black text-white">
-                            {results.filter(r => r.correct).length}/{results.length} rätt
+                            {results.filter(r => r.correct).length}/{results.length} correct
                           </span>
                         </div>
                       )}

@@ -34,7 +34,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
       <div className="w-full max-w-7xl relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {/* VÄNSTER KOLUMN: QR-kod och Start-knapp */}
+          {/* LEFT COLUMN: QR code and Start button */}
           <Card className="p-10 text-center bg-black border-4 border-white shadow-2xl">
             <div className="inline-block p-8 bg-white rounded-3xl shadow-2xl mb-8">
               <QRCodeSVG
@@ -47,7 +47,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
 
             <div className="space-y-6">
               <div>
-                <p className="text-xl text-white/80 font-bold mb-3">Spelkod</p>
+                <p className="text-xl text-white/80 font-bold mb-3">Game Code</p>
                 <Badge className="text-6xl font-mono font-black px-12 py-4 bg-yellow-400 text-black border-4 border-white shadow-2xl">
                   {gameCode}
                 </Badge>
@@ -61,27 +61,27 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
                   disabled={playerCount === 0}
                   data-testid="button-start-game"
                 >
-                  Starta Spel
+                  Start Game
                 </Button>
               </div>
 
               <p className="text-base text-white/60 font-medium mt-4">
-                Eller gå till {window.location.origin} och ange koden
+                Or go to {window.location.origin} and enter the code
               </p>
             </div>
           </Card>
 
-          {/* HÖGER KOLUMN: Spellarlista */}
+          {/* RIGHT COLUMN: Player list */}
           <Card className="p-10 bg-black border-4 border-white shadow-2xl">
             <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
               {players.length === 0 ? (
                 <div className="text-center py-16">
                   <User className="w-20 h-20 text-white/30 mx-auto mb-4" />
                   <p className="text-2xl text-white/50 font-bold">
-                    Väntar på spelare...
+                    Waiting for players...
                   </p>
                   <p className="text-lg text-white/40 mt-2">
-                    Skanna QR-koden för att gå med
+                    Scan the QR code to join
                   </p>
                 </div>
               ) : (
@@ -113,7 +113,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
                       )}
                     </div>
 
-                    {/* Spelarinfo */}
+                    {/* Player info */}
                     <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-black text-white truncate">
                         {player.name}
