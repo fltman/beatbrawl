@@ -168,6 +168,7 @@ export default function MasterPage() {
       <QRCodeDisplay
         gameCode={gameState.id}
         playerCount={gameState.players.length}
+        players={gameState.players}
         onStartGame={handleStartGame}
       />
     );
