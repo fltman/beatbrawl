@@ -12,51 +12,65 @@ interface WinnerScreenProps {
 
 export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerScreenProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/20 via-background to-accent/20 flex items-center justify-center p-6">
+    <div
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
       <WinnerConfetti trigger={true} />
-      <div className="w-full max-w-3xl">
+
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-8 left-8 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-24 w-auto"
+        />
+      </div>
+
+      <div className="w-full max-w-4xl relative z-30">
         <div className="text-center mb-8">
           {winner.profileImage ? (
             <div className="inline-block mb-6 relative">
               <img
                 src={winner.profileImage}
                 alt={winner.name}
-                className="w-32 h-32 rounded-full object-cover ring-4 ring-primary"
+                className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-2xl"
                 style={{ backgroundColor: winner.avatarColor || '#8B5CF6' }}
               />
-              <div className="absolute -top-2 -right-2 w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                <Trophy className="w-6 h-6" />
+              <div className="absolute -top-2 -right-2 w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center border-4 border-white shadow-xl">
+                <Trophy className="w-8 h-8" />
               </div>
             </div>
           ) : (
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 mb-6">
-              <Trophy className="w-12 h-12 text-primary" />
+            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-red-500 border-4 border-white mb-6 shadow-2xl">
+              <Trophy className="w-16 h-16 text-white" />
             </div>
           )}
-          <h1 className="text-6xl font-bold mb-4">Grattis!</h1>
-          <div className="inline-flex items-center gap-2 mb-2">
-            <Sparkles className="w-6 h-6 text-primary" />
-            <h2 className="text-4xl font-bold" data-testid="text-winner-name">{winner.name}</h2>
-            <Sparkles className="w-6 h-6 text-primary" />
+          <h1 className="text-8xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>GRATTIS!</h1>
+          <div className="inline-flex items-center gap-3 mb-3">
+            <Sparkles className="w-8 h-8 text-red-500" />
+            <h2 className="text-5xl font-black text-white" data-testid="text-winner-name">{winner.name}</h2>
+            <Sparkles className="w-8 h-8 text-red-500" />
           </div>
           {winner.artistName && (
-            <p className="text-2xl text-muted-foreground italic mb-2">
+            <p className="text-3xl text-white/80 italic mb-3">
               "{winner.artistName}"
             </p>
           )}
-          <p className="text-xl text-muted-foreground">vann spelet!</p>
+          <p className="text-2xl text-white/70 font-bold">vann spelet!</p>
         </div>
 
-        <Card className="p-8 mb-6">
-          <h3 className="text-2xl font-bold mb-4">Slutställning</h3>
-          <div className="space-y-3">
+        <Card className="p-8 mb-6 bg-black border-4 border-white shadow-2xl">
+          <h3 className="text-3xl font-black mb-6 text-white">Slutställning</h3>
+          <div className="space-y-4">
             {allPlayers
               .sort((a, b) => b.score - a.score)
               .map((player, idx) => (
                 <div
                   key={player.id}
-                  className={`flex items-center justify-between p-4 rounded-xl ${
-                    idx === 0 ? 'bg-primary/10' : 'bg-muted/50'
+                  className={`flex items-center justify-between p-4 rounded-2xl border-2 ${
+                    idx === 0 ? 'border-red-500 bg-red-500/10' : 'border-white/20 bg-white/5'
                   }`}
                   data-testid={`final-score-${idx}`}
                 >
@@ -66,35 +80,35 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
                         <img
                           src={player.profileImage}
                           alt={player.name}
-                          className="w-14 h-14 rounded-full object-cover"
+                          className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
                           style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
                         />
                         {idx === 0 && (
-                          <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm">
+                          <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center text-sm border-2 border-white font-bold">
                             🏆
                           </div>
                         )}
                       </div>
                     ) : (
                       <div
-                        className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-lg ${
-                          idx === 0 ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                        className={`w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl border-4 border-white shadow-lg ${
+                          idx === 0 ? 'bg-red-500 text-white' : 'bg-white/20 text-white'
                         }`}
-                        style={!player.profileImage && player.avatarColor ? { backgroundColor: player.avatarColor } : {}}
+                        style={!player.profileImage && player.avatarColor && idx !== 0 ? { backgroundColor: player.avatarColor } : {}}
                       >
                         {idx === 0 ? '🏆' : idx + 1}
                       </div>
                     )}
                     <div className="flex flex-col">
-                      <span className="font-semibold text-xl">{player.name}</span>
+                      <span className="font-black text-2xl text-white">{player.name}</span>
                       {player.artistName && (
-                        <span className="text-sm text-muted-foreground italic">
+                        <span className="text-sm text-white/70 italic">
                           "{player.artistName}"
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="text-4xl font-mono font-black">
+                  <div className="text-5xl font-mono font-black text-white">
                     {player.score}
                   </div>
                 </div>
@@ -104,7 +118,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
 
         <Button
           size="lg"
-          className="w-full text-xl"
+          className="w-full text-2xl py-8 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white shadow-2xl"
           onClick={onNewGame}
           data-testid="button-new-game"
         >
