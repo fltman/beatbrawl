@@ -142,13 +142,24 @@ export default function MasterPage() {
 
   if (!gameState) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-xl">Skapar spel...</p>
+      <div
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute top-12 left-12 z-20">
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+        </div>
+        <p className="text-3xl text-white font-black relative z-10">Skapar spel...</p>
       </div>
     );
   }
 
   if (gameState.phase === 'setup') {
+    if (!spotifyConnected) {
+      window.location.href = '/?spotify_required=true';
+      return null;
+    }
     return <AIChat onPreferencesConfirmed={handleAIChatConfirm} />;
   }
 
