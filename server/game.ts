@@ -44,13 +44,17 @@ export class Game {
   ): Player {
     const range = this.state.startYearRange || { min: 1950, max: 2020 };
     const startYear = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+
+    // If joining during 'playing' phase, mark as ready so they don't block the round
+    const isReady = this.state.phase === 'playing';
+
     const player: Player = {
       id: socketId,
       name,
       timeline: [],
       startYear,
       score: 0,
-      isReady: false,
+      isReady,
       connected: true,
       persistentId: persistentId || this.generatePersistentId(),
       profileId,

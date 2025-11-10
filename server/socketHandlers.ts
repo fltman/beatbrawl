@@ -32,8 +32,9 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        if (game.getState().phase !== 'lobby') {
-          socket.emit('error', 'Spelet har redan startat');
+        // Allow joining during any phase except 'finished'
+        if (game.getState().phase === 'finished') {
+          socket.emit('error', 'Spelet är slut');
           return;
         }
 
