@@ -68,7 +68,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
             ) : (
               <Music className="w-3 h-3 text-red-500" />
             )}
-            Anslut till Spotify
+            Connect Spotify
           </Button>
         )}
 
@@ -79,7 +79,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
             data-testid="button-spotify-connected"
           >
             <CheckCircle2 className="w-3 h-3 text-green-400" />
-            Ansluten till Spotify
+            Connected to Spotify
           </Button>
         )}
       </div>
@@ -97,7 +97,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
           onClick={handleSelectMaster}
           data-testid="button-start-master"
         >
-          Starta Spel
+          Start Game
         </button>
 
         <button
@@ -106,7 +106,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
           onClick={onSelectPlayer}
           data-testid="button-join-player"
         >
-          Gå Med i Spel
+          Join Game
         </button>
       </div>
     </div>
