@@ -73,16 +73,6 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
 
           {/* HÖGER KOLUMN: Spellarlista */}
           <Card className="p-10 bg-black border-4 border-white shadow-2xl">
-            <div className="mb-6 flex items-center gap-3">
-              <Users className="w-8 h-8 text-yellow-400" />
-              <h2 className="text-3xl font-black text-white">
-                Anslutna Spelare
-              </h2>
-              <Badge className="ml-auto text-2xl font-mono font-black px-6 py-2 bg-yellow-400 text-black border-4 border-white">
-                {playerCount}
-              </Badge>
-            </div>
-
             <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
               {players.length === 0 ? (
                 <div className="text-center py-16">

@@ -53,10 +53,6 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
     <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-6">
       {/* VÄNSTER KOLUMN: Spelare */}
       <Card className="p-6 h-fit">
-        <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <Trophy className="w-6 h-6 text-primary" />
-          Anslutna Spelare
-        </h3>
         <div className="space-y-3">
           {players
             .sort((a, b) => b.score - a.score)
