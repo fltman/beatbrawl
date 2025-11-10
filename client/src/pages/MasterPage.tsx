@@ -3,7 +3,6 @@ import { useToast } from '@/hooks/use-toast';
 import AIChat from '@/components/AIChat';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
 import GameControl from '@/components/GameControl';
-import RevealScreen from '@/components/RevealScreen';
 import WinnerScreen from '@/components/WinnerScreen';
 import { socketService } from '@/lib/socket';
 import type { GameState, RoundResult } from '@/types/game.types';
@@ -215,15 +214,9 @@ export default function MasterPage() {
           onNextRound={handleNextRound}
           spotifyConnected={spotifyConnected}
           isDJPlaying={isDJPlaying}
+          results={results}
         />
 
-        {gameState.phase === 'reveal' && gameState.currentSong && !isDJPlaying && (
-          <RevealScreen
-            song={gameState.currentSong}
-            results={results}
-            onContinue={handleNextRound}
-          />
-        )}
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { Play, SkipForward, Trophy, Disc3, AlertCircle, Radio, WifiOff } from 'lucide-react';
+import { Play, SkipForward, Trophy, Disc3, AlertCircle, Radio, WifiOff, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
 import MusicEqualizer from './MusicEqualizer';
-import type { Player, Song } from '@/types/game.types';
+import type { Player, Song, RoundResult } from '@/types/game.types';
 
 interface GameControlProps {
   currentSong: Song | null;
@@ -15,9 +15,10 @@ interface GameControlProps {
   phase: 'playing' | 'reveal' | 'finished';
   spotifyConnected?: boolean;
   isDJPlaying?: boolean;
+  results?: RoundResult[];
 }
 
-export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase, isDJPlaying = false }: GameControlProps) {
+export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase, isDJPlaying = false, results = [] }: GameControlProps) {
   const spotify = useSpotifyPlayer();
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
               <div
                 key={player.id}
                 className={`flex items-center justify-between p-4 rounded-2xl border-2 ${
-                  idx === 0 ? 'border-yellow-400 bg-yellow-400/10' : 'border-white/20 bg-white/5'
+                  idx === 0 ? 'border-red-500 bg-red-500/10' : 'border-white/20 bg-white/5'
                 } ${!player.connected ? 'opacity-60' : ''} hover:bg-white/10 transition-colors`}
                 data-testid={`player-score-${idx}`}
               >
@@ -74,7 +75,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                         style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
                       />
                       {idx === 0 && (
-                        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-yellow-400 text-black flex items-center justify-center text-xs font-bold border-2 border-white">
+                        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xs font-bold border-2 border-white">
                           1
                         </div>
                       )}
@@ -82,7 +83,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                   ) : (
                     <div
                       className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-xl border-3 border-white shadow-lg ${
-                        idx === 0 ? 'ring-2 ring-yellow-400' : ''
+                        idx === 0 ? 'ring-2 ring-red-500' : ''
                       }`}
                       style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
                     >
@@ -128,7 +129,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
               <h2 className="text-4xl font-black text-white">Runda {Math.min(roundNumber, 10)}/10</h2>
               <p className="text-white/70 text-xl font-medium">Spelare placerar sina kort</p>
             </div>
-            <Badge className="text-2xl font-mono font-black px-8 py-4 bg-yellow-400 text-black border-4 border-white">
+            <Badge className="text-2xl font-mono font-black px-8 py-4 bg-red-500 text-white border-4 border-white">
               {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
             </Badge>
           </div>
@@ -137,10 +138,13 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
           <div className="bg-black/80 border-4 border-white rounded-3xl p-10 mb-6 shadow-2xl">
             {isDJPlaying ? (
               <div className="space-y-6">
-                <div className="flex flex-col items-center justify-center py-6">
-                  <Radio className="w-20 h-20 text-yellow-400 mb-4 animate-pulse" />
-                  <p className="text-4xl font-black text-yellow-400 mb-2">DJ ON AIR</p>
-                  <p className="text-xl text-white/80 font-medium">Din energiska radio-DJ kommenterar...</p>
+                <div className="flex flex-col items-center justify-center py-6 relative">
+                  {/* Red sound wave behind text */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-30 scale-150">
+                    <MusicEqualizer isPlaying={true} barCount={15} color="#ef4444" />
+                  </div>
+                  <Radio className="w-20 h-20 text-red-500 mb-4 animate-pulse relative z-10" />
+                  <p className="text-4xl font-black text-red-500 mb-2 relative z-10">DJ ON AIR</p>
                 </div>
                 <div className="flex items-center gap-6 bg-white/10 rounded-2xl p-6 border-2 border-white/20">
                   {currentSong.albumCover && (
@@ -153,9 +157,19 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                   <div className="flex-1">
                     <h3 className="text-2xl font-black text-white mb-2">{currentSong.title}</h3>
                     <p className="text-xl text-white/70 mb-3">{currentSong.artist}</p>
-                    <Badge className="text-2xl font-mono font-black px-6 py-2 bg-yellow-400 text-black border-4 border-white">
-                      {currentSong.year}
-                    </Badge>
+                    <div className="flex items-center gap-4">
+                      <Badge className="text-2xl font-mono font-black px-6 py-2 bg-red-500 text-white border-4 border-white">
+                        {currentSong.year}
+                      </Badge>
+                      {results.length > 0 && (
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-6 h-6 text-green-500" />
+                          <span className="text-xl font-black text-white">
+                            {results.filter(r => r.correct).length}/{results.length} rätt
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -216,17 +230,6 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
           </div>
         )}
 
-          {phase === 'reveal' && (
-            <Button
-              size="lg"
-              className="w-full text-xl"
-              onClick={onNextRound}
-              data-testid="button-next-round"
-            >
-              <SkipForward className="w-6 h-6 mr-2" />
-              Nästa Runda
-            </Button>
-          )}
         </Card>
       </div>
     </div>
