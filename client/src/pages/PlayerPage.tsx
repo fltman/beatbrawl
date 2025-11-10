@@ -54,7 +54,7 @@ export default function PlayerPage() {
       return;
     }
 
-    // If QR code was scanned (gameCode in URL) and we have a name, join directly
+    // If QR code was scanned (gameCode in URL) and we have a profile with name, join directly
     if (params.gameCode && loadedProfile?.displayName) {
       const socket = socketService.connect();
       setupSocketListeners(socket);
@@ -70,6 +70,10 @@ export default function PlayerPage() {
           setPhase('lobby');
         }
       );
+    } else if (params.gameCode) {
+      // QR code scanned but no profile yet - will join after profile creation
+      setGameCode(params.gameCode.toUpperCase());
+      setPhase('join');
     } else {
       setPhase('join');
     }
