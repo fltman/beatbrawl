@@ -72,7 +72,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
       <WinnerConfetti trigger={true} />
 
       {/* BeatBrawl Logo - Upper Left */}
-      <div className="absolute top-8 left-8 z-20">
+      <div className="absolute top-8 left-8 z-50">
         <img
           src="/beatbrawl.png"
           alt="BeatBrawl Logo"
