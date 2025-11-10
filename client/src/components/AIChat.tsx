@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Send, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 
 interface Message {
   role: 'user' | 'ai';
@@ -143,12 +141,13 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         {/* Input Area */}
         <div className="bg-black/90 p-6 border-4 border-white shadow-2xl">
           <div className="flex gap-3 mb-4">
-            <Input
+            <input
+              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="T.ex. '80-tals rock' eller 'svensk pop'"
-              className="text-lg py-6 bg-white border-2 border-white font-medium"
+              className="flex-1 text-lg py-6 px-4 bg-white border-2 border-white font-medium rounded-lg"
               data-testid="input-music-preference"
             />
             <Button
