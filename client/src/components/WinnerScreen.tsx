@@ -41,9 +41,6 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
                   className="w-48 h-48 rounded-full object-cover border-4 border-white shadow-2xl"
                   style={{ backgroundColor: winner.avatarColor || '#8B5CF6' }}
                 />
-                <div className="absolute -top-2 -right-2 w-20 h-20 rounded-full bg-red-500 text-white flex items-center justify-center border-4 border-white shadow-xl">
-                  <Trophy className="w-10 h-10" />
-                </div>
               </div>
             ) : (
               <div className="inline-flex items-center justify-center w-40 h-40 rounded-full bg-red-500 border-4 border-white mb-6 shadow-2xl">
@@ -87,11 +84,6 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
                             className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
                             style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
                           />
-                          {idx === 0 && (
-                            <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center text-sm border-2 border-white font-bold">
-                              🏆
-                            </div>
-                          )}
                         </div>
                       ) : (
                         <div
