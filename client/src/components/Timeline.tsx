@@ -30,8 +30,8 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
               {confirmedPosition === 0 ? (
                 <>
                   <Lock className="w-12 h-12 text-green-500 mb-2" />
-                  <p className="text-sm text-white font-bold">Före {startYear}</p>
-                  <p className="text-xs text-white/60 mt-2">Låst</p>
+                  <p className="text-sm text-white font-bold">Before {startYear}</p>
+                  <p className="text-xs text-white/60 mt-2">Locked</p>
                 </>
               ) : highlightPosition === 0 ? (
                 <Button
@@ -42,12 +42,12 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                     onConfirmPlacement?.();
                   }}
                 >
-                  <span className="text-center">Bekräfta<br/>Före {startYear}</span>
+                  <span className="text-center">Confirm<br/>Before {startYear}</span>
                 </Button>
               ) : (
                 <>
                   <Plus className="w-12 h-12 text-white mb-2" />
-                  <p className="text-sm text-white/70 font-bold">Före {startYear}</p>
+                  <p className="text-sm text-white/70 font-bold">Before {startYear}</p>
                 </>
               )}
             </Card>
@@ -56,7 +56,7 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
               <Badge className="text-2xl font-mono font-black px-6 py-3 bg-red-500 text-white border-2 border-white">
                 {startYear}
               </Badge>
-              <p className="text-sm text-white font-bold mt-3">Startår</p>
+              <p className="text-sm text-white font-bold mt-3">Start Year</p>
             </Card>
 
             <Card
@@ -69,8 +69,8 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
               {confirmedPosition === 1 ? (
                 <>
                   <Lock className="w-12 h-12 text-green-500 mb-2" />
-                  <p className="text-sm text-white font-bold">Efter {startYear}</p>
-                  <p className="text-xs text-white/60 mt-2">Låst</p>
+                  <p className="text-sm text-white font-bold">After {startYear}</p>
+                  <p className="text-xs text-white/60 mt-2">Locked</p>
                 </>
               ) : highlightPosition === 1 ? (
                 <Button
@@ -81,12 +81,12 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                     onConfirmPlacement?.();
                   }}
                 >
-                  <span className="text-center">Bekräfta<br/>Efter {startYear}</span>
+                  <span className="text-center">Confirm<br/>After {startYear}</span>
                 </Button>
               ) : (
                 <>
                   <Plus className="w-12 h-12 text-white mb-2" />
-                  <p className="text-sm text-white/70 font-bold">Efter {startYear}</p>
+                  <p className="text-sm text-white/70 font-bold">After {startYear}</p>
                 </>
               )}
             </Card>
@@ -103,8 +103,8 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
               {confirmedPosition === 0 ? (
                 <>
                   <Lock className="w-10 h-10 text-green-500 mb-2" />
-                  <p className="text-xs text-white font-bold">Före {timeline[0].year}</p>
-                  <p className="text-xs text-white/60 mt-1">Låst</p>
+                  <p className="text-xs text-white font-bold">Before {timeline[0].year}</p>
+                  <p className="text-xs text-white/60 mt-1">Locked</p>
                 </>
               ) : highlightPosition === 0 ? (
                 <Button
@@ -115,12 +115,12 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                     onConfirmPlacement?.();
                   }}
                 >
-                  <span className="text-center leading-tight">Bekräfta<br/>Före {timeline[0].year}</span>
+                  <span className="text-center leading-tight">Confirm<br/>Before {timeline[0].year}</span>
                 </Button>
               ) : (
                 <>
                   <Plus className="w-10 h-10 text-white mb-2" />
-                  <p className="text-xs text-white/70 font-bold">Före {timeline[0].year}</p>
+                  <p className="text-xs text-white/70 font-bold">Before {timeline[0].year}</p>
                 </>
               )}
             </Card>
@@ -158,9 +158,9 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                         <>
                           <Lock className="w-10 h-10 text-green-500 mb-2" />
                           <p className="text-xs text-white font-bold text-center px-2">
-                            {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                            {nextSong ? `Between ${song.year} and ${nextSong.year}` : `After ${song.year}`}
                           </p>
-                          <p className="text-xs text-white/60 mt-1">Låst</p>
+                          <p className="text-xs text-white/60 mt-1">Locked</p>
                         </>
                       ) : highlightPosition === idx + 1 ? (
                         <Button
@@ -172,15 +172,15 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                           }}
                         >
                           <span className="text-center leading-tight">
-                            Bekräfta<br/>
-                            {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                            Confirm<br/>
+                            {nextSong ? `Between ${song.year} and ${nextSong.year}` : `After ${song.year}`}
                           </span>
                         </Button>
                       ) : (
                         <>
                           <Plus className="w-10 h-10 text-white mb-2" />
                           <p className="text-xs text-white/70 font-bold text-center px-2">
-                            {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                            {nextSong ? `Between ${song.year} and ${nextSong.year}` : `After ${song.year}`}
                           </p>
                         </>
                       )}

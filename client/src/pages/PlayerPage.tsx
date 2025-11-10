@@ -123,15 +123,15 @@ export default function PlayerPage() {
 
     socketService.onPlayerDisconnected((data) => {
       toast({
-        title: 'Spelare frånkopplad',
-        description: `${data.playerName} tappade anslutningen`,
+        title: 'Player Disconnected',
+        description: `${data.playerName} lost connection`,
         duration: 3000
       });
     });
 
     socketService.onError((message) => {
       toast({
-        title: 'Fel',
+        title: 'Error',
         description: message,
         variant: 'destructive'
       });
@@ -159,8 +159,8 @@ export default function PlayerPage() {
         }
 
         toast({
-          title: 'Återansluten! ✓',
-          description: 'Du är tillbaka i spelet',
+          title: 'Reconnected! ✓',
+          description: 'You are back in the game',
           duration: 3000
         });
       }
@@ -204,8 +204,8 @@ export default function PlayerPage() {
     socketService.placeCard(selectedPosition);
     setConfirmedPlacement(true);
     toast({
-      title: 'Placering bekräftad! ✓',
-      description: `Du valde position ${selectedPosition + 1}`,
+      title: 'Placement Confirmed! ✓',
+      description: `You chose position ${selectedPosition + 1}`,
       duration: 3000
     });
   };
@@ -235,15 +235,15 @@ export default function PlayerPage() {
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">🔄</div>
             <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              VÄLKOMMEN TILLBAKA!
+              WELCOME BACK!
             </h1>
-            <p className="text-white/70 text-lg">Vi hittade ditt senaste spel</p>
+            <p className="text-white/70 text-lg">We found your last game</p>
           </div>
           <div className="space-y-4">
             <div className="bg-white/10 rounded-2xl p-6 border-2 border-white/20">
-              <p className="text-sm text-white/60 mb-1 font-bold">Spelare</p>
+              <p className="text-sm text-white/60 mb-1 font-bold">Player</p>
               <p className="text-xl font-bold text-white mb-3">{savedSession?.playerName}</p>
-              <p className="text-sm text-white/60 mb-1 font-bold">Spelkod</p>
+              <p className="text-sm text-white/60 mb-1 font-bold">Game Code</p>
               <p className="text-2xl font-mono font-black text-white">{savedSession?.gameCode}</p>
             </div>
             <Button
@@ -252,7 +252,7 @@ export default function PlayerPage() {
               onClick={handleReconnect}
               data-testid="button-reconnect"
             >
-              Återanslut till Spel
+              Reconnect to Game
             </Button>
             <Button
               size="lg"
@@ -260,7 +260,7 @@ export default function PlayerPage() {
               onClick={handleStartNew}
               data-testid="button-start-new"
             >
-              Starta Nytt Spel
+              Start New Game
             </Button>
           </div>
         </Card>
@@ -288,35 +288,35 @@ export default function PlayerPage() {
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              GÅ MED I SPEL
+              JOIN GAME
             </h1>
             {!profile && (
-              <p className="text-white/70 text-lg">Gästläge</p>
+              <p className="text-white/70 text-lg">Guest Mode</p>
             )}
           </div>
           <div className="space-y-6">
             <div>
-              <label className="text-lg mb-2 block text-white font-bold">Ditt Namn</label>
+              <label className="text-lg mb-2 block text-white font-bold">Your Name</label>
               <Input
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Ange ditt namn"
+                placeholder="Enter your name"
                 className="text-lg bg-white text-black border-2 border-white h-12"
                 data-testid="input-player-name"
                 disabled={!!profile}
               />
               {profile && (
                 <p className="text-sm text-white/60 mt-1">
-                  Från din sparade profil
+                  From your saved profile
                 </p>
               )}
             </div>
             <div>
-              <label className="text-lg mb-2 block text-white font-bold">Spelkod</label>
+              <label className="text-lg mb-2 block text-white font-bold">Game Code</label>
               <Input
                 value={gameCode}
                 onChange={(e) => setGameCode(e.target.value.toUpperCase())}
-                placeholder="Ange spelkod"
+                placeholder="Enter game code"
                 className="text-lg font-mono bg-white text-black border-2 border-white h-12"
                 data-testid="input-game-code"
               />
@@ -328,7 +328,7 @@ export default function PlayerPage() {
               disabled={!playerName || !gameCode}
               data-testid="button-join"
             >
-              Gå Med
+              Join
             </Button>
           </div>
         </Card>
@@ -357,9 +357,9 @@ export default function PlayerPage() {
           <div className="mb-6">
             <div className="text-6xl mb-4">🎮</div>
             <h1 className="text-4xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              VÄLKOMMEN, {playerName.toUpperCase()}!
+              WELCOME, {playerName.toUpperCase()}!
             </h1>
-            <p className="text-xl text-white/70">Väntar på att spelet ska starta...</p>
+            <p className="text-xl text-white/70">Waiting for game to start...</p>
           </div>
         </Card>
       </div>

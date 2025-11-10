@@ -26,7 +26,7 @@ export default function CardPlacement({ song, selectedPosition, onConfirm }: Car
           onClick={onConfirm}
           data-testid="button-confirm-placement"
         >
-          {isSelected ? 'Bekräfta Placering' : 'Välj en Position'}
+          {isSelected ? 'Confirm Placement' : 'Choose a Position'}
         </Button>
       </div>
     </div>

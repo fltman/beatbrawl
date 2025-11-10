@@ -52,7 +52,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-6">
-      {/* VÄNSTER KOLUMN: Spelare */}
+      {/* LEFT COLUMN: Players */}
       <Card className="p-8 h-fit bg-black border-4 border-white shadow-2xl">
         <div className="space-y-4">
           {players
@@ -101,14 +101,14 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                       {!player.connected && (
                         <Badge variant="destructive" className="text-xs flex items-center gap-1">
                           <WifiOff className="w-3 h-3" />
-                          Frånkopplad
+                          Disconnected
                         </Badge>
                       )}
                       {player.connected && player.isReady && (
-                        <Badge className="text-sm bg-green-500 text-white border-2 border-white font-black px-3 py-1">✓ Klar</Badge>
+                        <Badge className="text-sm bg-green-500 text-white border-2 border-white font-black px-3 py-1">✓ Ready</Badge>
                       )}
                       {player.connected && !player.isReady && (
-                        <Badge className="text-sm bg-yellow-400 text-black border-2 border-white font-black px-3 py-1">Väntar...</Badge>
+                        <Badge className="text-sm bg-yellow-400 text-black border-2 border-white font-black px-3 py-1">Waiting...</Badge>
                       )}
                     </div>
                   </div>
@@ -195,11 +195,11 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                       <div className="flex items-center gap-3 mb-4">
                         <AlertCircle className="w-8 h-8 text-white/70" />
                         <p className="text-2xl font-bold text-white">
-                          Anslut Spotify för att spela musik
+                          Connect Spotify to play music
                         </p>
                       </div>
                       <p className="text-lg text-white/60">
-                        Klicka på "Anslut Spotify Premium" längst upp
+                        Click "Connect Spotify Premium" at the top
                       </p>
                     </>
                   )}

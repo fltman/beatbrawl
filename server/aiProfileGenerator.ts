@@ -38,25 +38,25 @@ export class AIProfileGenerator {
           content: [
             {
               type: 'text',
-              text: `Analysera personen på bilden och deras namn "${name}".
+              text: `Analyze the person in the image and their name "${name}".
 
-Baserat på deras utseende, stil, ålder, och namn - bestäm:
-1. Vilken musikstil som passar dem bäst (t.ex. "Rock", "Hip-Hop", "Elektronisk", "R&B", "Reggae", "Punk", "Metal", etc.)
-2. Ett COOLT och EDGIGT artistnamn som passar deras vibe och musikstil
+Based on their appearance, style, age, and name - determine:
+1. Which music style suits them best (e.g. "Rock", "Hip-Hop", "Electronic", "R&B", "Reggae", "Punk", "Metal", etc.)
+2. A COOL and EDGY artist name that matches their vibe and music style
 
-VIKTIGT för artistnamnet:
-- Gör det HÄFTIGT och STREET - tänk riktiga artistnamn som Notorious B.I.G., Dr. Dre, The Weeknd, Billie Eilish
-- Använd coola prefix: "Lil", "Big", "Young", "MC", "DJ", "The"
-- Eller använd suffixer: "Beats", "Flow", "Wave", "Soul"
-- Eller skapa unika namn med attityd som låter som riktiga artist stage names
-- UNDVIK: generiska namn som "DJ ${name}", vara för formell eller tråkig
-- FOKUSERA: På att skapa något som låter som ett RIKTIGT artistnamn med edge och personlighet
+IMPORTANT for the artist name:
+- Make it COOL and STREET - think real artist names like Notorious B.I.G., Dr. Dre, The Weeknd, Billie Eilish
+- Use cool prefixes: "Lil", "Big", "Young", "MC", "DJ", "The"
+- Or use suffixes: "Beats", "Flow", "Wave", "Soul"
+- Or create unique names with attitude that sound like real artist stage names
+- AVOID: generic names like "DJ ${name}", being too formal or boring
+- FOCUS: On creating something that sounds like a REAL artist name with edge and personality
 
-Svara ENDAST med JSON i detta format:
+Respond ONLY with JSON in this format:
 {
-  "musicStyle": "musikstil här",
-  "artistName": "coolt artistnamn här",
-  "reasoning": "kort förklaring på svenska"
+  "musicStyle": "music style here",
+  "artistName": "cool artist name here",
+  "reasoning": "brief explanation in English"
 }`
             },
             {

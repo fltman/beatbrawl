@@ -10,7 +10,8 @@
       "Bash(git commit:*)",
       "Bash(git fetch:*)",
       "Bash(git pull:*)",
-      "Bash(npm run db:push:*)"
+      "Bash(npm run db:push:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

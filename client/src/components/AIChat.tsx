@@ -23,17 +23,17 @@ interface AIChatProps {
 }
 
 const loadingMessages = [
-  "Hittar odödliga tracks!",
-  "Känner viben och rotar bland plattorna",
-  "Mixar den perfekta spellistan",
-  "Droppar beats från alla decennier",
-  "Spårar ner klassikerna",
-  "Låter AI:n välja bangers"
+  "Finding immortal tracks!",
+  "Feeling the vibe and digging through the records",
+  "Mixing the perfect playlist",
+  "Dropping beats from every decade",
+  "Tracking down the classics",
+  "Let AI choose the bangers"
 ];
 
 export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'ai', content: 'Hej! Jag är din AI-spelledare. Berätta vilken typ av musik ni vill spela med idag. Till exempel "80-tals rock" eller "svensk pop från 90-talet"!' }
+    { role: 'ai', content: 'Hey! I\'m your AI game master. Tell me what kind of music you want to play with today. For example "80s rock" or "Swedish pop from the 90s"!' }
   ]);
   const [input, setInput] = useState('');
   const [lastPreference, setLastPreference] = useState('');
@@ -104,7 +104,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       console.error('Chat error:', error);
       const fallbackMessage: Message = { 
         role: 'ai', 
-        content: `Perfekt! Jag har förberett ${userInput} för er. Klicka på "Bekräfta & Fortsätt" för att börja!` 
+        content: `Perfect! I've prepared ${userInput} for you. Click "Confirm & Continue" to begin!` 
       };
       setMessages(prev => [...prev, fallbackMessage]);
     } finally {
@@ -233,10 +233,10 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             {isConfirming ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin inline" />
-                Söker låtar...
+                Searching for songs...
               </>
             ) : (
-              'Bekräfta & Fortsätt'
+              'Confirm & Continue'
             )}
           </button>
         </div>

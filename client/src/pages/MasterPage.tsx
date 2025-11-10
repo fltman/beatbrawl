@@ -48,8 +48,8 @@ export default function MasterPage() {
 
     socketService.onPlayerDisconnected((data) => {
       toast({
-        title: 'Spelare frånkopplad',
-        description: `${data.playerName} har tappat anslutningen och kan återansluta`,
+        title: 'Player Disconnected',
+        description: `${data.playerName} lost connection and can reconnect`,
         duration: 5000
       });
     });
@@ -202,7 +202,7 @@ export default function MasterPage() {
       <div className="max-w-7xl mx-auto relative z-30">
         <div className="mb-6 text-center">
           <p className="text-white text-xl">
-            Spelkod: <span className="font-mono font-black text-2xl">{gameState.id}</span>
+            Game Code: <span className="font-mono font-black text-2xl">{gameState.id}</span>
           </p>
         </div>
 

@@ -144,10 +144,10 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
         profile = await response.json() as PlayerProfile;
 
         toast({
-          title: 'Profil uppdaterad! ✨',
+          title: 'Profile Updated! ✨',
           description: aiGeneratedProfile
-            ? `Din nya profil: ${aiGeneratedProfile.artistName}!`
-            : 'Profilen har uppdaterats!',
+            ? `Your new profile: ${aiGeneratedProfile.artistName}!`
+            : 'Profile has been updated!',
         });
       } else {
         const response = await apiRequest('POST', '/api/profiles', profileData);
@@ -157,10 +157,10 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
         localStorage.setItem(PROFILE_ID_KEY, profile.id);
 
         toast({
-          title: 'Profil skapad! ✓',
+          title: 'Profile Created! ✓',
           description: aiGeneratedProfile
-            ? `Välkommen ${aiGeneratedProfile.artistName}!`
-            : `Välkommen ${profile.displayName}!`,
+            ? `Welcome ${aiGeneratedProfile.artistName}!`
+            : `Welcome ${profile.displayName}!`,
         });
       }
 
@@ -168,8 +168,8 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
     } catch (error) {
       console.error('Failed to create profile:', error);
       toast({
-        title: 'Fel',
-        description: 'Kunde inte skapa profil. Försök igen.',
+        title: 'Error',
+        description: 'Could not create profile. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -284,15 +284,15 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
       });
 
       toast({
-        title: 'AI-profil genererad! ✨',
-        description: `Artistnamn: ${result.artistName}`,
+        title: 'AI Profile Generated! ✨',
+        description: `Artist Name: ${result.artistName}`,
         duration: 5000
       });
     } catch (error: any) {
       console.error('AI profile generation error:', error);
       toast({
-        title: 'Kunde inte generera profil',
-        description: 'Försök igen eller fortsätt utan AI',
+        title: 'Could Not Generate Profile',
+        description: 'Try again or continue without AI',
         variant: 'destructive'
       });
     } finally {
@@ -324,7 +324,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
           <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-red-500" />
-          <p className="text-xl text-white font-bold">Laddar din profil...</p>
+          <p className="text-xl text-white font-bold">Loading your profile...</p>
         </Card>
       </div>
     );
@@ -363,7 +363,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               )}
             </div>
             <h1 className="text-4xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              VÄLKOMMEN TILLBAKA!
+              WELCOME BACK!
             </h1>
             <p className="text-2xl text-white font-bold mb-2">{existingProfile.displayName}</p>
             {existingProfile.artistName && (
@@ -373,7 +373,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
             )}
             {existingProfile.musicStyle && (
               <p className="text-white/60 text-base">
-                Musikstil: {existingProfile.musicStyle}
+                Music Style: {existingProfile.musicStyle}
               </p>
             )}
           </div>
@@ -384,7 +384,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleContinueWithExisting}
             >
-              Fortsätt med Denna Profil
+              Continue with This Profile
             </Button>
 
             <Button
@@ -392,7 +392,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               className="w-full text-white/60 hover:text-white bg-transparent hover:bg-white/10"
               onClick={handleDeleteProfile}
             >
-              Radera Profil & Skapa Ny
+              Delete Profile & Create New
             </Button>
           </div>
         </Card>
@@ -421,13 +421,13 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
         <div className="space-y-6">
           <div>
             <Label htmlFor="display-name" className="text-lg mb-2 block text-white font-bold">
-              Ditt Namn
+              Your Name
             </Label>
             <Input
               id="display-name"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Ange ditt namn"
+              placeholder="Enter your name"
               className="text-lg bg-white text-black border-2 border-white h-12"
               data-testid="input-display-name"
               maxLength={20}
@@ -437,7 +437,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           {/* Photo Upload Section */}
           <div>
             <Label className="text-lg mb-3 block text-white font-bold">
-              Ladda upp foto (valfritt)
+              Upload Photo (Optional)
             </Label>
             <input
               ref={fileInputRef}
@@ -455,14 +455,14 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               >
                 <div className="text-center">
                   <Upload className="w-8 h-8 mx-auto mb-2 text-white" />
-                  <p className="text-sm font-bold">Klicka för att ladda upp foto</p>
+                  <p className="text-sm font-bold">Click to upload photo</p>
                 </div>
               </Button>
             ) : (
               <div className="relative">
                 <img
                   src={uploadedPhoto}
-                  alt="Uppladdad"
+                  alt="Uploaded"
                   className="w-full h-48 object-cover rounded-2xl border-4 border-white"
                 />
                 <Button
@@ -475,7 +475,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                     setShowAIOption(false);
                   }}
                 >
-                  Ändra
+                  Change
                 </Button>
               </div>
             )}
@@ -492,12 +492,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               {isGeneratingAI ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Genererar...
+                  Generating...
                 </>
               ) : (
                 <>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Skapa Profil
+                  Create Profile
                 </>
               )}
             </Button>
@@ -509,13 +509,13 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               <div className="flex items-center gap-4 mb-4">
                 <img
                   src={aiGeneratedProfile.profileImage}
-                  alt="AI-genererad avatar"
+                  alt="AI-generated avatar"
                   className="w-24 h-24 rounded-full object-cover border-4 border-white"
                 />
                 <div className="flex-1">
-                  <p className="text-sm text-white/70 font-bold">Artistnamn</p>
+                  <p className="text-sm text-white/70 font-bold">Artist Name</p>
                   <p className="text-2xl font-black text-white">{aiGeneratedProfile.artistName}</p>
-                  <p className="text-sm text-white/70 font-bold mt-2">Musikstil</p>
+                  <p className="text-sm text-white/70 font-bold mt-2">Music Style</p>
                   <p className="text-lg text-white">{aiGeneratedProfile.musicStyle}</p>
                 </div>
               </div>
@@ -527,7 +527,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 disabled={isGeneratingAI}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Generera Om
+                Regenerate
               </Button>
             </Card>
           )}
@@ -545,10 +545,10 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 {isSaving ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Sparar...
+                    Saving...
                   </>
                 ) : (
-                  'Spara'
+                  'Save'
                 )}
               </Button>
             )}
@@ -560,7 +560,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               disabled={isSaving}
               data-testid="button-continue-guest"
             >
-              Fortsätt som Gäst
+              Continue as Guest
             </Button>
           </div>
 

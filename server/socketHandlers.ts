@@ -28,13 +28,13 @@ export function setupSocketHandlers(io: SocketIOServer) {
       try {
         const game = gameManager.getGame(gameCode);
         if (!game) {
-          socket.emit('error', 'Spelet hittades inte');
+          socket.emit('error', 'Game not found');
           return;
         }
 
         // Allow joining during any phase except 'finished'
         if (game.getState().phase === 'finished') {
-          socket.emit('error', 'Spelet är slut');
+          socket.emit('error', 'Game is finished');
           return;
         }
 
@@ -43,13 +43,13 @@ export function setupSocketHandlers(io: SocketIOServer) {
         if (profileId) {
           const duplicateProfile = existingPlayers.find(p => p.profileId === profileId);
           if (duplicateProfile) {
-            socket.emit('error', 'Du är redan med i detta spel');
+            socket.emit('error', 'You are already in this game');
             return;
           }
         } else if (persistentId) {
           const duplicatePersistent = existingPlayers.find(p => p.persistentId === persistentId);
           if (duplicatePersistent) {
-            socket.emit('error', 'Du är redan med i detta spel');
+            socket.emit('error', 'You are already in this game');
             return;
           }
         }
@@ -86,7 +86,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         console.log(`Player ${playerName} joined game ${gameCode} with persistentId ${player.persistentId} and profileId ${profileId}`);
       } catch (error) {
         console.error('Error joining game:', error);
-        socket.emit('error', 'Kunde inte gå med i spelet');
+        socket.emit('error', 'Could not join game');
       }
     });
 
@@ -94,13 +94,13 @@ export function setupSocketHandlers(io: SocketIOServer) {
       try {
         const game = gameManager.getGame(gameCode);
         if (!game) {
-          socket.emit('error', 'Spelet hittades inte');
+          socket.emit('error', 'Game not found');
           return;
         }
 
         const player = game.reconnectPlayer(persistentId, socket.id);
         if (!player) {
-          socket.emit('error', 'Kunde inte återansluta - spelaren hittades inte');
+          socket.emit('error', 'Could not reconnect - player not found');
           return;
         }
 
@@ -118,7 +118,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         console.log(`Player ${player.name} (${persistentId}) reconnected to game ${gameCode}`);
       } catch (error) {
         console.error('Error reconnecting player:', error);
-        socket.emit('error', 'Kunde inte återansluta till spelet');
+        socket.emit('error', 'Could not reconnect to game');
       }
     });
 
@@ -424,7 +424,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
             console.log(`Player ${player.name} disconnected from game ${game.getId()}, can reconnect`);
           } else if (game.getMasterSocketId() === socket.id) {
             // Master disconnected - end game
-            io.to(game.getId()).emit('error', 'Spelledaren har kopplat från');
+            io.to(game.getId()).emit('error', 'Game master has disconnected');
             gameManager.removePlayer(socket.id);
             console.log(`Game master ${socket.id} disconnected, game ${game.getId()} ended`);
           }

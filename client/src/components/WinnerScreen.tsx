@@ -83,7 +83,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
       <div className="w-full max-w-7xl relative z-30">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-          {/* VÄNSTER KOLUMN: Vinnare */}
+          {/* LEFT COLUMN: Winner */}
           <Card className="p-10 bg-black border-4 border-white shadow-2xl flex flex-col items-center justify-center">
             {winner.profileImage ? (
               <div className="inline-block mb-6 relative">
@@ -99,7 +99,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
                 <Trophy className="w-20 h-20 text-white" />
               </div>
             )}
-            <h1 className="text-7xl font-black mb-4 text-white text-center" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>GRATTIS!</h1>
+            <h1 className="text-7xl font-black mb-4 text-white text-center" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>CONGRATS!</h1>
             <div className="inline-flex items-center gap-3 mb-3">
               <Sparkles className="w-8 h-8 text-red-500" />
               <h2 className="text-5xl font-black text-white text-center" data-testid="text-winner-name">{winner.name}</h2>
@@ -110,12 +110,12 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
                 "{winner.artistName}"
               </p>
             )}
-            <p className="text-2xl text-white/70 font-bold text-center">vann spelet!</p>
+            <p className="text-2xl text-white/70 font-bold text-center">won the game!</p>
           </Card>
 
-          {/* HÖGER KOLUMN: Slutställning */}
+          {/* RIGHT COLUMN: Final Standings */}
           <Card className="p-10 bg-black border-4 border-white shadow-2xl">
-            <h3 className="text-3xl font-black mb-6 text-white">Slutställning</h3>
+            <h3 className="text-3xl font-black mb-6 text-white">Final Standings</h3>
             <div ref={scrollContainerRef} className="space-y-4 max-h-[500px] overflow-y-auto scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {allPlayers
                 .sort((a, b) => b.score - a.score)
@@ -171,7 +171,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
           onClick={onNewGame}
           data-testid="button-new-game"
         >
-          Nytt Spel
+          New Game
         </Button>
       </div>
     </div>

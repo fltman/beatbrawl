@@ -42,23 +42,23 @@ export class ElevenLabsService {
     const history = gameId ? this.messageHistory.get(gameId)! : [];
     
     // Always refresh the system prompt at the start to keep context strong
-    const systemPrompt = `Du är en energisk svensk radio-DJ som kommenterar ett musikspel där spelare gissar årtal på låtar.${musicContext ? `\n\nMusiktema för denna spelomgång: ${musicContext}` : ''} 
+    const systemPrompt = `You are an energetic radio DJ commentating on a music game where players guess the years of songs.${musicContext ? `\n\nMusic theme for this session: ${musicContext}` : ''} 
         
-Ditt jobb är att:
-- Kommentera låten som just spelades på ett entusiastiskt och roligt sätt
-- Nämn intressande fakta om låten, artisten, filmen (om det är filmmusik) eller årtalet
-- Hålla energin uppe och skapa en festlig stämning
-- Tala svenska naturligt och vardagligt
-- Anpassa dina kommentarer till musiktemat när relevant
-- När en låt har filmkontext: ALLTID nämn filmen i din kommentar!
+Your job is to:
+- Comment on the song that just played in an enthusiastic and fun way
+- Mention interesting facts about the song, artist, movie (if it's a film soundtrack) or the year
+- Keep the energy high and create a festive atmosphere
+- Speak naturally and casually
+- Adapt your comments to the music theme when relevant
+- When a song has film context: ALWAYS mention the movie in your comment!
 
-Regler:
-- Håll kommentarerna korta: 2-3 meningar max (20-30 ord totalt)
-- Var MYCKET kortfattad och koncis
-- Aldrig längre än 40 ord
-- Använd vardagligt svenskt språk
-- Skippa fraser som "Hej där!" eller "Välkomna" - gå direkt på låten
-- Variera din stil mellan rundor - var kreativ!`;
+Rules:
+- Keep comments short: 2-3 sentences max (20-30 words total)
+- Be VERY brief and concise
+- Never longer than 40 words
+- Use casual language
+- Skip phrases like "Hey there!" or "Welcome" - go straight to the song
+- Vary your style between rounds - be creative!`;
 
     // Replace the first system message every round to keep context fresh
     if (history.length > 0 && history[0].role === 'system') {
@@ -68,28 +68,28 @@ Regler:
     }
 
     // Build song info with all available context
-    let songInfo = `"${song.title}" av ${song.artist}`;
+    let songInfo = `"${song.title}" by ${song.artist}`;
     if (song.movie) {
-      songInfo += ` från filmen "${song.movie}"`;
+      songInfo += ` from the movie "${song.movie}"`;
     }
     songInfo += ` (${song.year})`;
-    
+
     let userPrompt: string;
     if (isGameFinished && winnerName) {
-      userPrompt = `Sista låten var ${songInfo}. ${winnerName} har vunnit spelet med 10 poäng! Grattulera vinnaren kort och avsluta spelet på ett festligt sätt. Max 30 ord.`;
+      userPrompt = `The last song was ${songInfo}. ${winnerName} has won the game with 10 points! Congratulate the winner briefly and end the game in a festive way. Max 30 words.`;
     } else {
       // Build the prompt with trivia context if available
-      let promptParts = [`Kommentera låten: ${songInfo}.`];
-      
+      let promptParts = [`Comment on the song: ${songInfo}.`];
+
       if (song.trivia) {
-        promptParts.push(`Bakgrundsfakta (använd kreativt): ${song.trivia}`);
+        promptParts.push(`Background facts (use creatively): ${song.trivia}`);
       }
-      
+
       if (song.movie) {
-        promptParts.push(`VIKTIGT: Nämn filmen "${song.movie}" i din kommentar!`);
+        promptParts.push(`IMPORTANT: Mention the movie "${song.movie}" in your comment!`);
       }
-      
-      promptParts.push('Max 25 ord.');
+
+      promptParts.push('Max 25 words.');
       userPrompt = promptParts.join(' ');
     }
 
