@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -22,6 +22,15 @@ interface AIChatProps {
   onPreferencesConfirmed?: (preferences: string) => void;
 }
 
+const loadingMessages = [
+  "Hittar odödliga tracks!",
+  "Känner viben och rotar bland plattorna",
+  "Mixar den perfekta spellistan",
+  "Droppar beats från alla decennier",
+  "Spårar ner klassikerna",
+  "Låter AI:n välja bangers"
+];
+
 export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'ai', content: 'Hej! Jag är din AI-spelledare. Berätta vilken typ av musik ni vill spela med idag. Till exempel "80-tals rock" eller "svensk pop från 90-talet"!' }
@@ -32,6 +41,17 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   const [isThinking, setIsThinking] = useState(false);
   const [generatedSongs, setGeneratedSongs] = useState<Song[]>([]);
   const [startYearRange, setStartYearRange] = useState<StartYearRange | null>(null);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+
+  // Rotate loading messages
+  useEffect(() => {
+    if (isConfirming) {
+      const interval = setInterval(() => {
+        setLoadingMessageIndex(prev => (prev + 1) % loadingMessages.length);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [isConfirming]);
 
   const handleSend = async () => {
     if (!input.trim() || isThinking) return;
@@ -91,6 +111,31 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       setIsThinking(false);
     }
   };
+
+  // Loading overlay when confirming
+  if (isConfirming) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute top-12 left-12 z-20">
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+        </div>
+
+        {/* Large animated loading bubble */}
+        <div className="relative z-10 text-center">
+          <div className="bg-yellow-400 border-4 border-white rounded-3xl p-12 shadow-2xl mb-8 max-w-2xl animate-pulse">
+            <p className="text-4xl font-black text-black uppercase tracking-wider" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              {loadingMessages[loadingMessageIndex]}
+            </p>
+          </div>
+          <Loader2 className="w-16 h-16 animate-spin text-yellow-400 mx-auto" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
