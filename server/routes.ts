@@ -300,22 +300,27 @@ VIKTIGT:
     }
   });
 
-  // Serve profile images
-  app.get('/api/profiles/images/:filename', (req: Request, res: Response) => {
+  // Serve profile images from database
+  app.get('/api/profiles/images/:imageId', async (req: Request, res: Response) => {
     try {
-      const { filename } = req.params;
+      const { imageId } = req.params;
 
-      // Validate filename (prevent directory traversal)
-      if (filename.includes('..') || filename.includes('/')) {
-        return res.status(400).json({ error: 'Invalid filename' });
+      // Validate imageId format (UUID)
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(imageId)) {
+        return res.status(400).json({ error: 'Invalid image ID' });
       }
 
-      if (!imageStorage.imageExists(filename)) {
+      const image = await imageStorage.getImage(imageId);
+      if (!image) {
         return res.status(404).json({ error: 'Image not found' });
       }
 
-      const imagePath = imageStorage.getImagePath(filename);
-      res.sendFile(imagePath);
+      // Convert base64 to buffer and send
+      const buffer = Buffer.from(image.data, 'base64');
+      res.setHeader('Content-Type', image.mimeType);
+      res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+      res.send(buffer);
     } catch (error) {
       console.error('Serve image error:', error);
       res.status(500).json({ error: 'Internal server error' });

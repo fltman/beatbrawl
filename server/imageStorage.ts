@@ -1,84 +1,95 @@
-import fs from 'fs';
-import path from 'path';
-import { randomBytes } from 'crypto';
-
-const IMAGES_DIR = path.join(process.cwd(), 'profile-images');
-
-// Ensure images directory exists
-if (!fs.existsSync(IMAGES_DIR)) {
-  fs.mkdirSync(IMAGES_DIR, { recursive: true });
-  console.log('Created profile-images directory');
-}
+import { db } from "./db";
+import { profileImages } from "@shared/schema";
+import { eq, lt } from "drizzle-orm";
 
 export class ImageStorage {
   /**
-   * Save a base64 image to disk and return the filename
+   * Save a base64 image to database and return the image ID
    */
-  saveImage(base64Data: string, extension: string = 'png'): string {
-    const filename = `${randomBytes(16).toString('hex')}.${extension}`;
-    const filepath = path.join(IMAGES_DIR, filename);
+  async saveImage(base64Data: string, mimeType: string = 'image/png'): Promise<string> {
+    const result = await db
+      .insert(profileImages)
+      .values({
+        imageData: base64Data,
+        mimeType: mimeType,
+      })
+      .returning({ id: profileImages.id });
 
-    // Convert base64 to buffer and save
-    const buffer = Buffer.from(base64Data, 'base64');
-    fs.writeFileSync(filepath, buffer);
+    const imageId = result[0].id;
+    const dataSize = Buffer.from(base64Data, 'base64').length;
+    console.log(`Saved profile image to DB: ${imageId} (${dataSize} bytes)`);
 
-    console.log(`Saved profile image: ${filename} (${buffer.length} bytes)`);
-    return filename;
+    return imageId;
   }
 
   /**
-   * Get the full path to an image file
+   * Get image data from database
    */
-  getImagePath(filename: string): string {
-    return path.join(IMAGES_DIR, filename);
-  }
+  async getImage(imageId: string): Promise<{ data: string; mimeType: string } | null> {
+    const result = await db
+      .select({
+        imageData: profileImages.imageData,
+        mimeType: profileImages.mimeType,
+      })
+      .from(profileImages)
+      .where(eq(profileImages.id, imageId))
+      .limit(1);
 
-  /**
-   * Check if an image file exists
-   */
-  imageExists(filename: string): boolean {
-    return fs.existsSync(this.getImagePath(filename));
-  }
-
-  /**
-   * Delete an image file
-   */
-  deleteImage(filename: string): void {
-    const filepath = this.getImagePath(filename);
-    if (fs.existsSync(filepath)) {
-      fs.unlinkSync(filepath);
-      console.log(`Deleted profile image: ${filename}`);
-    }
-  }
-
-  /**
-   * Clean up old images (older than specified days)
-   */
-  cleanupOldImages(daysOld: number = 7): void {
-    const now = Date.now();
-    const maxAge = daysOld * 24 * 60 * 60 * 1000;
-
-    const files = fs.readdirSync(IMAGES_DIR);
-    let deletedCount = 0;
-
-    for (const file of files) {
-      const filepath = path.join(IMAGES_DIR, file);
-      const stats = fs.statSync(filepath);
-      const age = now - stats.mtimeMs;
-
-      if (age > maxAge) {
-        fs.unlinkSync(filepath);
-        deletedCount++;
-      }
+    if (result.length === 0) {
+      return null;
     }
 
-    if (deletedCount > 0) {
-      console.log(`Cleaned up ${deletedCount} old profile images`);
+    return {
+      data: result[0].imageData,
+      mimeType: result[0].mimeType,
+    };
+  }
+
+  /**
+   * Check if an image exists in database
+   */
+  async imageExists(imageId: string): Promise<boolean> {
+    const result = await db
+      .select({ id: profileImages.id })
+      .from(profileImages)
+      .where(eq(profileImages.id, imageId))
+      .limit(1);
+
+    return result.length > 0;
+  }
+
+  /**
+   * Delete an image from database
+   */
+  async deleteImage(imageId: string): Promise<void> {
+    await db
+      .delete(profileImages)
+      .where(eq(profileImages.id, imageId));
+
+    console.log(`Deleted profile image from DB: ${imageId}`);
+  }
+
+  /**
+   * Clean up old images from database (older than specified days)
+   */
+  async cleanupOldImages(daysOld: number = 7): Promise<void> {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+
+    const result = await db
+      .delete(profileImages)
+      .where(lt(profileImages.createdAt, cutoffDate))
+      .returning({ id: profileImages.id });
+
+    if (result.length > 0) {
+      console.log(`Cleaned up ${result.length} old profile images from DB`);
     }
   }
 }
 
 export const imageStorage = new ImageStorage();
 
-// Run cleanup on startup
-imageStorage.cleanupOldImages(7);
+// Run cleanup on startup (async)
+imageStorage.cleanupOldImages(7).catch(err =>
+  console.error('Failed to cleanup old images:', err)
+);

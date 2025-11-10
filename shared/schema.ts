@@ -57,3 +57,18 @@ export const insertSpotifyCredentialsSchema = createInsertSchema(spotifyCredenti
 
 export type InsertSpotifyCredentials = z.infer<typeof insertSpotifyCredentialsSchema>;
 export type SpotifyCredentials = typeof spotifyCredentials.$inferSelect;
+
+export const profileImages = pgTable("profile_images", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  imageData: text("image_data").notNull(), // Base64 encoded image
+  mimeType: varchar("mime_type", { length: 50 }).notNull().default('image/png'),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertProfileImageSchema = createInsertSchema(profileImages).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertProfileImage = z.infer<typeof insertProfileImageSchema>;
+export type ProfileImage = typeof profileImages.$inferSelect;

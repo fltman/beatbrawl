@@ -149,9 +149,9 @@ Bakgrund: Enkel gradient eller enfärgad bakgrund.`;
 
     console.log('AI Profile: Image generated successfully');
 
-    // Save image to disk and get filename
-    const filename = imageStorage.saveImage(generatedImageBase64, 'png');
-    const imageUrl = `/api/profiles/images/${filename}`;
+    // Save image to database and get image ID
+    const imageId = await imageStorage.saveImage(generatedImageBase64, 'image/png');
+    const imageUrl = `/api/profiles/images/${imageId}`;
 
     return {
       artistName: analysis.artistName,
