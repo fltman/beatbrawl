@@ -401,7 +401,7 @@ export default function PlayerPage() {
         />
       </div>
 
-      <div className="p-6 relative z-10">
+      <div className="pt-24 px-6 pb-6 relative z-10">
         <ScoreDisplay
           score={myPlayer.score}
           profileImage={myPlayer.profileImage}
