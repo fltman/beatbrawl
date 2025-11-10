@@ -91,15 +91,15 @@ Svara ENDAST med JSON i detta format:
 
     console.log(`AI Profile: Determined style="${analysis.musicStyle}", artist="${analysis.artistName}"`);
 
-    // Step 2: Generate graffiti street art portrait based on photo and music style
-    const imagePrompt = `Create a graffiti street art portrait based on the person in the photo.
+    // Step 2: Generate GTA/Rockstar-style portrait based on photo and music style
+    const imagePrompt = `Create a portrait in the iconic GTA (Grand Theft Auto) / Rockstar Games art style based on the person in the photo.
 Style: ${analysis.musicStyle} music artist
-Aesthetic: Bold, urban, edgy graffiti art style with vibrant colors and street art elements
-Details: Maintain the person's key features but stylize them with spray paint textures, bold outlines, urban graffiti elements, and musical motifs that match the ${analysis.musicStyle} genre.
-Background: Urban wall texture or solid bold color with graffiti tags.
-Mood: Cool, authentic, street culture, hip and edgy.`;
+Aesthetic: Bold comic book style with thick black outlines, cel-shaded look, vibrant saturated colors
+Details: Strong angular features, dramatic shadows and highlights, thick contour lines around features. Maintain the person's key characteristics but stylize them in the signature GTA cover art style - think loading screen character portraits from GTA V.
+Background: Solid bold color or simple gradient (no complex details)
+Art direction: Comic book meets street art, bold and iconic, highly recognizable silhouette, professional game art quality.`;
 
-    console.log('AI Profile: Generating graffiti street art portrait...');
+    console.log('AI Profile: Generating GTA/Rockstar-style portrait...');
 
     const imageResponse = await this.client.chat.completions.create({
       model: 'google/gemini-2.5-flash-image',
