@@ -43,7 +43,15 @@ export default function PlayerPage() {
   const handleNewGame = () => {
     socketService.disconnect();
     socketService.clearPlayerSession();
-    setLocation('/player');
+    // Reset all game state to go back to join view
+    setGameState(null);
+    setMyPlayer(null);
+    setGameCode('');
+    setSelectedPosition(null);
+    setConfirmedPlacement(false);
+    setSavedSession(null);
+    setIsJoining(false);
+    setPhase('join');
   };
 
   const handleProfileReady = (loadedProfile: PlayerProfile | null) => {
