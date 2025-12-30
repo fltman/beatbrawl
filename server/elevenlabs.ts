@@ -104,7 +104,7 @@ Style Guidelines:
           'X-Title': 'HITSTER AI'
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-sonnet-4.5',
+          model: 'google/gemini-3-flash-preview',
           messages: [...history, { role: 'user', content: userPrompt }],
           max_tokens: 150,
           temperature: 0.8

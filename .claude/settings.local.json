@@ -11,7 +11,9 @@
       "Bash(git fetch:*)",
       "Bash(git pull:*)",
       "Bash(npm run db:push:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git push)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []
