@@ -31,8 +31,14 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
     window.location.href = '/auth/spotify';
   };
 
-  const handleSelectMaster = () => {
+  const handleSelectMaster = async () => {
     if (spotifyConnected && onSelectMaster) {
+      // Request fullscreen mode for immersive experience
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (err) {
+        console.log('Fullscreen not supported or denied:', err);
+      }
       onSelectMaster();
     }
   };
