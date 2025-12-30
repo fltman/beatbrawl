@@ -1,7 +1,30 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { gameManager } from './gameManager';
 import { storage } from './storage';
-import type { SocketEvents } from '../shared/types';
+import type { SocketEvents, Song } from '../shared/types';
+
+// Cache for pre-generated DJ commentary (generated when round starts)
+const djCommentaryCache = new Map<string, Promise<Buffer | null>>();
+
+// Pre-generate DJ commentary in background when round starts
+async function preGenerateDJCommentary(gameId: string, song: Song, musicContext?: string): Promise<Buffer | null> {
+  console.log(`Pre-generating DJ commentary for game ${gameId}: "${song.title}"`);
+  try {
+    const { elevenLabsService } = await import('./elevenlabs');
+    const audioBuffer = await elevenLabsService.generateDJCommentary(
+      song,
+      false, // Not finished - we'll generate fresh if someone wins
+      undefined,
+      gameId,
+      musicContext
+    );
+    console.log(`DJ commentary pre-generated for game ${gameId}`);
+    return audioBuffer;
+  } catch (error) {
+    console.error(`Error pre-generating DJ commentary for game ${gameId}:`, error);
+    return null;
+  }
+}
 
 export function setupSocketHandlers(io: SocketIOServer) {
   io.on('connection', (socket: Socket) => {
@@ -240,6 +263,14 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         io.to(game.getId()).emit('gameStarted', game.getState());
         console.log(`Game ${game.getId()} started`);
+
+        // Pre-generate DJ commentary in background while players place cards
+        const currentSong = game.getState().currentSong;
+        const musicContext = game.getState().musicPreferences;
+        if (currentSong) {
+          const commentaryPromise = preGenerateDJCommentary(game.getId(), currentSong, musicContext);
+          djCommentaryCache.set(game.getId(), commentaryPromise);
+        }
       } catch (error) {
         console.error('Error starting game:', error);
         socket.emit('error', 'Failed to start game');
@@ -270,7 +301,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         if (game.allPlayersReady()) {
           console.log('All players ready, automatically revealing results...');
-          
+
           const results = game.evaluateRound();
           if (results) {
             game.setPhase('reveal');
@@ -280,26 +311,51 @@ export function setupSocketHandlers(io: SocketIOServer) {
               gameState: game.getState()
             });
 
-            // Check winner BEFORE generating DJ commentary
+            // Check winner BEFORE getting DJ commentary
             const winner = game.checkWinner();
             const isGameFinished = !!winner;
 
             const currentSong = game.getState().currentSong;
             const musicContext = game.getState().musicPreferences;
             if (currentSong) {
-              const { elevenLabsService } = await import('./elevenlabs');
-              const audioBuffer = await elevenLabsService.generateDJCommentary(
-                currentSong, 
-                isGameFinished, 
-                winner?.name,
-                game.getId(),
-                musicContext
-              );
-              
+              let audioBuffer: Buffer | null = null;
+
+              if (isGameFinished && winner) {
+                // Winner! Generate fresh commentary with winner announcement
+                console.log(`Game finished - generating winner commentary for ${winner.name}`);
+                const { elevenLabsService } = await import('./elevenlabs');
+                audioBuffer = await elevenLabsService.generateDJCommentary(
+                  currentSong,
+                  true,
+                  winner.name,
+                  game.getId(),
+                  musicContext
+                );
+              } else {
+                // Use pre-generated commentary from cache
+                const cachedPromise = djCommentaryCache.get(game.getId());
+                if (cachedPromise) {
+                  console.log(`Using pre-generated DJ commentary for game ${game.getId()}`);
+                  audioBuffer = await cachedPromise;
+                  djCommentaryCache.delete(game.getId());
+                } else {
+                  // Fallback: generate on the fly if cache miss
+                  console.log(`Cache miss - generating DJ commentary on the fly`);
+                  const { elevenLabsService } = await import('./elevenlabs');
+                  audioBuffer = await elevenLabsService.generateDJCommentary(
+                    currentSong,
+                    false,
+                    undefined,
+                    game.getId(),
+                    musicContext
+                  );
+                }
+              }
+
               if (audioBuffer) {
                 const base64Audio = audioBuffer.toString('base64');
                 io.to(game.getId()).emit('djCommentary', base64Audio);
-                console.log(`DJ commentary generated for game ${game.getId()}`);
+                console.log(`DJ commentary sent for game ${game.getId()}`);
               }
             }
 
@@ -343,26 +399,51 @@ export function setupSocketHandlers(io: SocketIOServer) {
           gameState: game.getState()
         });
 
-        // Check winner BEFORE generating DJ commentary
+        // Check winner BEFORE getting DJ commentary
         const winner = game.checkWinner();
         const isGameFinished = !!winner;
 
         const currentSong = game.getState().currentSong;
         const musicContext = game.getState().musicPreferences;
         if (currentSong) {
-          const { elevenLabsService } = await import('./elevenlabs');
-          const audioBuffer = await elevenLabsService.generateDJCommentary(
-            currentSong, 
-            isGameFinished, 
-            winner?.name,
-            game.getId(),
-            musicContext
-          );
-          
+          let audioBuffer: Buffer | null = null;
+
+          if (isGameFinished && winner) {
+            // Winner! Generate fresh commentary with winner announcement
+            console.log(`Game finished - generating winner commentary for ${winner.name}`);
+            const { elevenLabsService } = await import('./elevenlabs');
+            audioBuffer = await elevenLabsService.generateDJCommentary(
+              currentSong,
+              true,
+              winner.name,
+              game.getId(),
+              musicContext
+            );
+          } else {
+            // Use pre-generated commentary from cache
+            const cachedPromise = djCommentaryCache.get(game.getId());
+            if (cachedPromise) {
+              console.log(`Using pre-generated DJ commentary for game ${game.getId()}`);
+              audioBuffer = await cachedPromise;
+              djCommentaryCache.delete(game.getId());
+            } else {
+              // Fallback: generate on the fly if cache miss
+              console.log(`Cache miss - generating DJ commentary on the fly`);
+              const { elevenLabsService } = await import('./elevenlabs');
+              audioBuffer = await elevenLabsService.generateDJCommentary(
+                currentSong,
+                false,
+                undefined,
+                game.getId(),
+                musicContext
+              );
+            }
+          }
+
           if (audioBuffer) {
             const base64Audio = audioBuffer.toString('base64');
             io.to(game.getId()).emit('djCommentary', base64Audio);
-            console.log(`DJ commentary generated for game ${game.getId()}`);
+            console.log(`DJ commentary sent for game ${game.getId()}`);
           }
         }
 
@@ -407,6 +488,14 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         io.to(game.getId()).emit('roundStarted', game.getState());
         console.log(`Next round started for game ${game.getId()}`);
+
+        // Pre-generate DJ commentary in background while players place cards
+        const currentSong = game.getState().currentSong;
+        const musicContext = game.getState().musicPreferences;
+        if (currentSong) {
+          const commentaryPromise = preGenerateDJCommentary(game.getId(), currentSong, musicContext);
+          djCommentaryCache.set(game.getId(), commentaryPromise);
+        }
       } catch (error) {
         console.error('Error starting next round:', error);
         socket.emit('error', 'Failed to start next round');
