@@ -220,6 +220,7 @@ class SpotifyService {
 
     const allSongs: Song[] = [];
     const seenTrackIds = new Set<string>();
+    const seenSongKeys = new Set<string>(); // Track title+artist to catch same song on different albums
     const songsPerQuery = Math.ceil(targetCount / queries.length) + 2; // Get extra for filtering duplicates
 
     // Shuffle queries for variety
@@ -248,6 +249,11 @@ class SpotifyService {
           if (addedFromQuery >= songsPerQuery) break;
           if (seenTrackIds.has(track.id)) continue;
 
+          // Check for same song on different albums (normalize title + artist)
+          const artistName = track.artists.map((a: any) => a.name).join(', ');
+          const songKey = `${track.name.toLowerCase().trim()}|${artistName.toLowerCase().trim()}`;
+          if (seenSongKeys.has(songKey)) continue;
+
           const releaseDate = track.album.release_date;
           const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : null;
 
@@ -259,12 +265,13 @@ class SpotifyService {
           if (queryObj.yearMax && year > queryObj.yearMax) continue;
 
           seenTrackIds.add(track.id);
+          seenSongKeys.add(songKey);
           addedFromQuery++;
 
           allSongs.push({
             id: track.id,
             title: track.name,
-            artist: track.artists.map((a: any) => a.name).join(', '),
+            artist: artistName,
             year,
             albumCover: track.album.images[0]?.url || '',
             previewUrl: track.preview_url || undefined

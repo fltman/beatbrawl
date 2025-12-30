@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'wouter';
+import { useParams, useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,7 @@ interface PlayerProfile {
 
 export default function PlayerPage() {
   const params = useParams<{ gameCode?: string }>();
+  const [, setLocation] = useLocation();
   const [phase, setPhase] = useState<'profile' | 'join' | 'reconnect' | 'lobby' | 'playing'>('profile');
   const [profile, setProfile] = useState<PlayerProfile | null>(null);
   const [playerName, setPlayerName] = useState('');
@@ -37,6 +38,12 @@ export default function PlayerPage() {
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
   const [savedSession, setSavedSession] = useState<{ gameCode: string; playerName: string; persistentId: string; profileId?: string } | null>(null);
   const { toast } = useToast();
+
+  const handleNewGame = () => {
+    socketService.disconnect();
+    socketService.clearPlayerSession();
+    setLocation('/player');
+  };
 
   const handleProfileReady = (loadedProfile: PlayerProfile | null) => {
     if (loadedProfile) {
@@ -371,7 +378,7 @@ export default function PlayerPage() {
       <WinnerScreen
         winner={gameState.winner}
         allPlayers={gameState.players}
-        onNewGame={() => window.location.reload()}
+        onNewGame={handleNewGame}
       />
     );
   }

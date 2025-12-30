@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { useLobbyMusic } from '@/hooks/useLobbyMusic';
 import AIChat from '@/components/AIChat';
@@ -10,6 +11,7 @@ import type { GameState, RoundResult } from '@/types/game.types';
 import { Volume2, VolumeX } from 'lucide-react';
 
 export default function MasterPage() {
+  const [, setLocation] = useLocation();
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [preferences, setPreferences] = useState('');
@@ -18,6 +20,12 @@ export default function MasterPage() {
   const { toast } = useToast();
   const gameStateRef = useRef<GameState | null>(null);
   const lobbyMusic = useLobbyMusic();
+
+  const handleNewGame = () => {
+    // Disconnect current socket and navigate without reload to keep fullscreen
+    socketService.disconnect();
+    setLocation('/');
+  };
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -222,7 +230,7 @@ export default function MasterPage() {
       <WinnerScreen
         winner={gameState.winner}
         allPlayers={gameState.players}
-        onNewGame={() => window.location.reload()}
+        onNewGame={handleNewGame}
       />
     );
   }
