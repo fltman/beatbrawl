@@ -181,23 +181,28 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         game.setMusicPreferences(userPreference, searchQuery);
 
-        // If no pre-generated songs, use AI service to generate them
-        if (suggestions.length === 0) {
-          console.log(`Confirming preferences with query: "${searchQuery}"`);
+        const { spotifyService } = await import('./spotify');
+        let songs;
+
+        // If pre-generated songs exist (from old flow), use them
+        if (suggestions.length > 0) {
+          console.log(`Using ${suggestions.length} pre-generated songs`);
+          songs = await spotifyService.searchFromSuggestions(suggestions, 20);
+        } else {
+          // New flow: AI generates search queries, Spotify finds songs directly
+          console.log(`Generating Spotify search queries for: "${searchQuery}"`);
           const { aiService } = await import('./ai');
-          const result = await aiService.generateSongSuggestions(searchQuery);
-          suggestions = result.songs;
+          const result = await aiService.generateSpotifySearchQueries(searchQuery);
           startYearRange = result.startYearRange;
-          
-          if (suggestions.length === 0) {
-            socket.emit('error', 'Could not generate song suggestions. Please try again.');
+
+          if (result.queries.length === 0) {
+            socket.emit('error', 'Could not generate search queries. Please try again.');
             return;
           }
-        }
 
-        // Search Spotify for the songs - get at least 20 to ensure we have enough for a full game
-        const { spotifyService } = await import('./spotify');
-        const songs = await spotifyService.searchFromSuggestions(suggestions, 20);
+          // Search Spotify using the AI-generated queries
+          songs = await spotifyService.searchFromQueries(result.queries, 20);
+        }
 
         if (songs.length < 15) {
           socket.emit('error', `Only found ${songs.length} songs. Try different preferences like "80s rock" or "Swedish pop".`);

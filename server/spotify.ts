@@ -1,5 +1,6 @@
 import SpotifyWebApi from 'spotify-web-api-node';
 import type { Song, SongSuggestion } from '../shared/types';
+import type { SpotifySearchQuery } from './ai';
 
 class SpotifyService {
   private spotifyApi: SpotifyWebApi;
@@ -210,6 +211,108 @@ class SpotifyService {
       console.error('Spotify recommendations failed:', error);
       return this.searchSongs(genre, limit);
     }
+  }
+
+  async searchFromQueries(queries: SpotifySearchQuery[], targetCount: number = 20): Promise<Song[]> {
+    await this.ensureAuthenticated();
+
+    console.log(`Spotify: Searching with ${queries.length} queries, target: ${targetCount} songs`);
+
+    const allSongs: Song[] = [];
+    const seenTrackIds = new Set<string>();
+    const songsPerQuery = Math.ceil(targetCount / queries.length) + 2; // Get extra for filtering duplicates
+
+    // Shuffle queries for variety
+    const shuffledQueries = [...queries].sort(() => Math.random() - 0.5);
+
+    for (const queryObj of shuffledQueries) {
+      if (allSongs.length >= targetCount) break;
+
+      try {
+        console.log(`  Searching: "${queryObj.query}"`);
+
+        const response = await this.spotifyApi.searchTracks(queryObj.query, {
+          limit: 50,
+          market: 'SE'
+        });
+
+        const tracks = response.body.tracks?.items || [];
+        console.log(`    Got ${tracks.length} results`);
+
+        // Shuffle tracks to avoid always getting the same top results
+        const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
+
+        let addedFromQuery = 0;
+        for (const track of shuffledTracks) {
+          if (allSongs.length >= targetCount) break;
+          if (addedFromQuery >= songsPerQuery) break;
+          if (seenTrackIds.has(track.id)) continue;
+
+          const releaseDate = track.album.release_date;
+          const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : null;
+
+          // Check year validity
+          if (!year || year < 1950 || year > 2024) continue;
+
+          // Check year range filter if specified
+          if (queryObj.yearMin && year < queryObj.yearMin) continue;
+          if (queryObj.yearMax && year > queryObj.yearMax) continue;
+
+          seenTrackIds.add(track.id);
+          addedFromQuery++;
+
+          allSongs.push({
+            id: track.id,
+            title: track.name,
+            artist: track.artists.map((a: any) => a.name).join(', '),
+            year,
+            albumCover: track.album.images[0]?.url || '',
+            previewUrl: track.preview_url || undefined
+          });
+        }
+
+        console.log(`    Added ${addedFromQuery} songs (total: ${allSongs.length})`);
+
+      } catch (error: any) {
+        console.error(`  Error searching "${queryObj.query}":`, error.message);
+      }
+    }
+
+    // Shuffle final results to mix songs from different queries
+    const shuffledSongs = allSongs.sort(() => Math.random() - 0.5);
+
+    // Ensure good year distribution - sort by year and spread them out
+    const sortedByYear = [...shuffledSongs].sort((a, b) => a.year - b.year);
+    const finalSongs: Song[] = [];
+    const used = new Set<number>();
+
+    // Interleave songs from different decades for variety
+    while (finalSongs.length < targetCount && used.size < sortedByYear.length) {
+      for (let i = 0; i < sortedByYear.length && finalSongs.length < targetCount; i++) {
+        if (!used.has(i)) {
+          // Skip every other song to spread decades
+          if (finalSongs.length % 2 === 0 || used.size > sortedByYear.length - 5) {
+            finalSongs.push(sortedByYear[i]);
+            used.add(i);
+          }
+        }
+      }
+      // On second pass, add remaining
+      for (let i = 0; i < sortedByYear.length && finalSongs.length < targetCount; i++) {
+        if (!used.has(i)) {
+          finalSongs.push(sortedByYear[i]);
+          used.add(i);
+        }
+      }
+    }
+
+    // Final shuffle for game randomness
+    const result = finalSongs.sort(() => Math.random() - 0.5).slice(0, targetCount);
+
+    console.log(`Spotify: Returning ${result.length} diverse songs`);
+    console.log(`  Year range: ${Math.min(...result.map(s => s.year))} - ${Math.max(...result.map(s => s.year))}`);
+
+    return result;
   }
 }
 
