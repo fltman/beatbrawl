@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useLobbyMusic } from '@/hooks/useLobbyMusic';
 import AIChat from '@/components/AIChat';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
 import GameControl from '@/components/GameControl';
 import WinnerScreen from '@/components/WinnerScreen';
 import { socketService } from '@/lib/socket';
 import type { GameState, RoundResult } from '@/types/game.types';
+import { Volume2, VolumeX } from 'lucide-react';
 
 export default function MasterPage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -15,11 +17,23 @@ export default function MasterPage() {
   const [isDJPlaying, setIsDJPlaying] = useState(false);
   const { toast } = useToast();
   const gameStateRef = useRef<GameState | null>(null);
+  const lobbyMusic = useLobbyMusic();
 
   // Keep ref in sync with state
   useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
+
+  // Manage lobby music - start when in setup/lobby, stop when game starts
+  useEffect(() => {
+    if (gameState?.phase === 'setup' || gameState?.phase === 'lobby') {
+      if (!lobbyMusic.isPlaying) {
+        lobbyMusic.play();
+      }
+    } else if (gameState?.phase === 'playing') {
+      lobbyMusic.stop();
+    }
+  }, [gameState?.phase]);
 
   useEffect(() => {
     fetch('/api/spotify/status')
@@ -159,17 +173,47 @@ export default function MasterPage() {
       window.location.href = '/?spotify_required=true';
       return null;
     }
-    return <AIChat onPreferencesConfirmed={handleAIChatConfirm} />;
+    return (
+      <div className="relative">
+        <AIChat onPreferencesConfirmed={handleAIChatConfirm} />
+        {/* Floating music control */}
+        <button
+          onClick={lobbyMusic.toggle}
+          className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-black/80 hover:bg-black text-white shadow-lg transition-all hover:scale-110"
+          title={lobbyMusic.isPlaying ? 'Pause music' : 'Play music'}
+        >
+          {lobbyMusic.isPlaying ? (
+            <Volume2 className="w-6 h-6" />
+          ) : (
+            <VolumeX className="w-6 h-6" />
+          )}
+        </button>
+      </div>
+    );
   }
 
   if (gameState.phase === 'lobby') {
     return (
-      <QRCodeDisplay
-        gameCode={gameState.id}
-        playerCount={gameState.players.length}
-        players={gameState.players}
-        onStartGame={handleStartGame}
-      />
+      <div className="relative">
+        <QRCodeDisplay
+          gameCode={gameState.id}
+          playerCount={gameState.players.length}
+          players={gameState.players}
+          onStartGame={handleStartGame}
+        />
+        {/* Floating music control */}
+        <button
+          onClick={lobbyMusic.toggle}
+          className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-black/80 hover:bg-black text-white shadow-lg transition-all hover:scale-110"
+          title={lobbyMusic.isPlaying ? 'Pause music' : 'Play music'}
+        >
+          {lobbyMusic.isPlaying ? (
+            <Volume2 className="w-6 h-6" />
+          ) : (
+            <VolumeX className="w-6 h-6" />
+          )}
+        </button>
+      </div>
     );
   }
 

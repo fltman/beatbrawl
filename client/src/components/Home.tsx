@@ -60,13 +60,13 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
           <Button
             onClick={handleConnectSpotify}
             disabled={isConnectingSpotify}
-            className="gap-2 text-xs px-3 py-2 bg-black/80 hover:bg-black text-white font-medium shadow-lg border border-white"
+            className="gap-2 text-xs px-3 py-2 bg-black/80 hover:bg-black text-white font-medium shadow-lg border border-green-500 animate-pulse-glow"
             data-testid="button-connect-spotify-home"
           >
             {isConnectingSpotify ? (
               <Loader2 className="w-3 h-3 animate-spin" />
             ) : (
-              <Music className="w-3 h-3 text-red-500" />
+              <Music className="w-3 h-3 text-green-500" />
             )}
             Connect Spotify
           </Button>
