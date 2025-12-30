@@ -37,6 +37,7 @@ export default function PlayerPage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
   const [savedSession, setSavedSession] = useState<{ gameCode: string; playerName: string; persistentId: string; profileId?: string } | null>(null);
+  const [isJoining, setIsJoining] = useState(false);
   const { toast } = useToast();
 
   const handleNewGame = () => {
@@ -137,6 +138,7 @@ export default function PlayerPage() {
     });
 
     socketService.onError((message) => {
+      setIsJoining(false); // Reset joining state on error
       toast({
         title: 'Error',
         description: message,
@@ -184,6 +186,9 @@ export default function PlayerPage() {
 
   const handleJoin = () => {
     if (!playerName || !gameCode) return;
+    if (isJoining) return; // Prevent double-click
+
+    setIsJoining(true);
 
     // If user manually enters different game code, clear old session
     const session = socketService.getPlayerSession();
@@ -199,6 +204,7 @@ export default function PlayerPage() {
       playerName,
       profile?.id,
       (data) => {
+        setIsJoining(false);
         setMyPlayer(data.player);
         setGameState(data.gameState);
         setPhase('lobby');
@@ -332,10 +338,10 @@ export default function PlayerPage() {
               size="lg"
               className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleJoin}
-              disabled={!playerName || !gameCode}
+              disabled={!playerName || !gameCode || isJoining}
               data-testid="button-join"
             >
-              Join
+              {isJoining ? 'Joining...' : 'Join'}
             </Button>
           </div>
         </Card>
