@@ -32,6 +32,10 @@ if (!process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET environment variable is required');
 }
 
+// Behind a reverse proxy (TLS terminated upstream), trust X-Forwarded-Proto
+// so secure session cookies are still set in production
+app.set('trust proxy', 1);
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
