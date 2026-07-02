@@ -1,0 +1,1 @@
+- [Profile image storage](profile-image-storage.md) — profile/AI-generated images must persist in Postgres, not the filesystem, since Replit's disk is ephemeral.
