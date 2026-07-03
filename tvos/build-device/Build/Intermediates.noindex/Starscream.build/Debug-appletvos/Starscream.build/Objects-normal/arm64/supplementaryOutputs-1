@@ -1,0 +1,23 @@
+{
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/DerivedSources/resource_bundle_accessor.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.dia",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.swiftdeps"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/Starscream/Sources/Compression/Compression.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/Compression.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/Compression.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/Compression.dia",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/Compression.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/Compression.swiftdeps"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/Starscream/Sources/Compression/WSCompression.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/WSCompression.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/WSCompression.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/WSCompression.dia",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/WSCompression.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/Starscream.build/Debug-appletvos/Starscream.build/Objects-normal/arm64/WSCompression.swiftdeps"
+  }
+}

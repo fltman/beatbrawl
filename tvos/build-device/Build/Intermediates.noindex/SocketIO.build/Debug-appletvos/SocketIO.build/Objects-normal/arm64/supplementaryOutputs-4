@@ -1,0 +1,23 @@
+{
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOClientOption.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.dia",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.swiftdeps"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOClientSpec.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.dia",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.swiftdeps"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOStatus.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.dia",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.swiftdeps"
+  }
+}

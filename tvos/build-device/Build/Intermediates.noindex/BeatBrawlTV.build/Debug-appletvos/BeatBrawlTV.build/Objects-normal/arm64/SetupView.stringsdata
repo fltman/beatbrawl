@@ -1,0 +1,40 @@
+{
+  "source": "/Users/andersbj/Projekt/hitsterAI/tvos/BeatBrawlTV/Views/SetupView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "e.g. '80s rock' or 'Swedish pop'",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 68
+        }
+      },
+      {
+        "comment": "",
+        "key": "FINDING THE SONGS...",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 93
+        }
+      },
+      {
+        "comment": "",
+        "key": "CONFIRM & CONTINUE",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 95
+        }
+      },
+      {
+        "comment": "",
+        "key": "CONFIRM & CONTINUE – %lld SONGS READY",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 96
+        }
+      }
+    ]
+  },
+  "version": 1
+}

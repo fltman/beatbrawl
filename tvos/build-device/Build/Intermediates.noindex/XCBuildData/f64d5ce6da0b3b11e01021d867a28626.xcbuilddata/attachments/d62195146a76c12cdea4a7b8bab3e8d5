@@ -1,0 +1,249 @@
+{
+  "" : {
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIO-primary.dia",
+    "emit-module-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIO-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIO-primary-emit-module.dia",
+    "pch" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIO-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIO-primary.swiftdeps"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Ack/SocketAckEmitter.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckEmitter~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Ack/SocketAckManager.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAckManager~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketAnyEvent.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketAnyEvent~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketEventHandler.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEventHandler~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOClient.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClient~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOClientConfiguration.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientConfiguration~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOClientOption.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientOption~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOClientSpec.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOClientSpec~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketIOStatus.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketIOStatus~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Client/SocketRawView.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketRawView~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Engine/SocketEngine.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngine~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Engine/SocketEngineClient.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineClient~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Engine/SocketEnginePacketType.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePacketType~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Engine/SocketEnginePollable.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEnginePollable~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Engine/SocketEngineSpec.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineSpec~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Engine/SocketEngineWebsocket.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketEngineWebsocket~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Manager/SocketManager.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManager~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Manager/SocketManagerSpec.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketManagerSpec~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Parse/SocketPacket.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketPacket~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Parse/SocketParsable.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketParsable~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Util/SocketExtensions.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketExtensions~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Util/SocketLogger.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketLogger~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Util/SocketStringReader.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketStringReader~partial.swiftmodule"
+  },
+  "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/SourcePackages/checkouts/socket.io-client-swift/Source/SocketIO/Util/SocketTypes.swift" : {
+    "const-values" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.swiftconstvalues",
+    "dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.d",
+    "diagnostics" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.dia",
+    "index-unit-output-path" : "/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.o",
+    "llvm-bc" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.bc",
+    "object" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.o",
+    "swift-dependencies" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes.swiftdeps",
+    "swiftmodule" : "/Users/andersbj/Projekt/hitsterAI/tvos/build-device/Build/Intermediates.noindex/SocketIO.build/Debug-appletvos/SocketIO.build/Objects-normal/arm64/SocketTypes~partial.swiftmodule"
+  }
+}

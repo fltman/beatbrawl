@@ -1,0 +1,14 @@
+Target dependency graph (6 targets)
+Target 'BeatBrawlTV' in project 'BeatBrawlTV'
+➜ Explicit dependency on target 'SocketIO' in project 'SocketIO'
+Target 'SocketIO' in project 'SocketIO'
+➜ Explicit dependency on target 'SocketIO' in project 'SocketIO'
+➜ Explicit dependency on target 'Starscream' in project 'Starscream'
+Target 'SocketIO' in project 'SocketIO'
+➜ Explicit dependency on target 'Starscream' in project 'Starscream'
+Target 'Starscream' in project 'Starscream'
+➜ Explicit dependency on target 'Starscream' in project 'Starscream'
+➜ Explicit dependency on target 'Starscream_Starscream' in project 'Starscream'
+Target 'Starscream' in project 'Starscream'
+➜ Explicit dependency on target 'Starscream_Starscream' in project 'Starscream'
+Target 'Starscream_Starscream' in project 'Starscream' (no dependencies)

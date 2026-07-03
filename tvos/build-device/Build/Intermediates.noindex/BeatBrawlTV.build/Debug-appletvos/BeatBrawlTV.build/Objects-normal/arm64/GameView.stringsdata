@@ -1,0 +1,96 @@
+{
+  "source": "/Users/andersbj/Projekt/hitsterAI/tvos/BeatBrawlTV/Views/GameView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Game Code: ",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 15
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "✓ Ready",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 103
+        }
+      },
+      {
+        "comment": "",
+        "key": "Waiting...",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 110
+        }
+      },
+      {
+        "comment": "",
+        "key": "Disconnected",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 99
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld/%lld ready",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 63
+        }
+      },
+      {
+        "comment": "",
+        "key": "?",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 142
+        }
+      },
+      {
+        "comment": "",
+        "key": "DJ ON AIR",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 199
+        }
+      },
+      {
+        "comment": "",
+        "key": "Correct!",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 231
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wrong",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 231
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld/%lld correct",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 279
+        }
+      }
+    ]
+  },
+  "version": 1
+}

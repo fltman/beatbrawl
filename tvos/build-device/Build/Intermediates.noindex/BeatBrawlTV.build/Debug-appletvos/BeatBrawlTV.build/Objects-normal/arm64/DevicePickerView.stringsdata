@@ -1,0 +1,48 @@
+{
+  "source": "/Users/andersbj/Projekt/hitsterAI/tvos/BeatBrawlTV/Views/DevicePickerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Where should the music play?",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 15
+        }
+      },
+      {
+        "comment": "",
+        "key": "Refresh list",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "No Spotify devices found",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open the Spotify app on your Apple TV or a speaker and try again.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "Active",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 44
+        }
+      }
+    ]
+  },
+  "version": 1
+}
