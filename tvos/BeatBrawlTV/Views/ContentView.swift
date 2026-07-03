@@ -12,7 +12,7 @@ struct ContentView: View {
                 VStack(spacing: 32) {
                     BrandLogo(height: 200)
                     ProgressView().tint(.white)
-                    Text(client.isConnected ? "Skapar spel..." : "Ansluter till \(Config.serverURL.host ?? "servern")...")
+                    Text(client.isConnected ? "Creating game..." : "Connecting to \(Config.serverURL.host ?? "server")...")
                         .font(BrandFont.heading(32))
                         .foregroundStyle(.white)
                 }
@@ -61,12 +61,12 @@ struct FindingTracksView: View {
     @State private var messageIndex = 0
 
     private let messages = [
-        "Letar upp odödliga låtar!",
-        "Känner in vibben och gräver i skivbackarna",
-        "Mixar den perfekta spellistan",
-        "Släpper beats från varje årtionde",
-        "Spårar upp klassikerna",
-        "AI:n väljer ut bangers"
+        "Finding immortal tracks!",
+        "Feeling the vibe and digging through the records",
+        "Mixing the perfect playlist",
+        "Dropping beats from every decade",
+        "Tracking down the classics",
+        "Let AI choose the bangers"
     ]
 
     var body: some View {

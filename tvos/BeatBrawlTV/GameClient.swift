@@ -210,7 +210,7 @@ final class GameClient: ObservableObject {
                     startYearRange = chat.startYearRange
                 }
             } catch {
-                errorMessage = "AI-chatten svarade inte. Försök igen."
+                errorMessage = "The AI chat did not respond. Please try again."
             }
         }
     }

@@ -96,7 +96,7 @@ struct GameView: View {
     @ViewBuilder
     private func statusBadge(for player: Player) -> some View {
         if !player.connected {
-            Label("Frånkopplad", systemImage: "wifi.slash")
+            Label("Disconnected", systemImage: "wifi.slash")
                 .font(BrandFont.bold(18))
                 .foregroundStyle(.red)
         } else if player.isReady {
@@ -228,7 +228,7 @@ struct RevealView: View {
                             Text(result.playerName)
                                 .foregroundStyle(.white)
                             Spacer()
-                            Text(result.correct ? "Rätt!" : "Fel")
+                            Text(result.correct ? "Correct!" : "Wrong")
                                 .foregroundStyle(result.correct ? .green : .red)
                         }
                         .font(BrandFont.bold(26))
@@ -276,7 +276,7 @@ struct SongCard: View {
                         HStack(spacing: 8) {
                             Image(systemName: "checkmark.circle")
                                 .foregroundStyle(.green)
-                            Text("\(results.filter(\.correct).count)/\(results.count) rätt")
+                            Text("\(results.filter(\.correct).count)/\(results.count) correct")
                         }
                         .font(BrandFont.bold(26))
                         .foregroundStyle(.white)

@@ -34,7 +34,7 @@ struct LobbyView: View {
                     Button {
                         client.startGame()
                     } label: {
-                        CTALabel(text: "Starta spelet", size: 36)
+                        CTALabel(text: "Start Game", size: 36)
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.card)
@@ -45,7 +45,7 @@ struct LobbyView: View {
                     } label: {
                         HStack {
                             Image(systemName: "hifispeaker")
-                            Text(spotify.selectedDeviceName ?? "Välj Spotify-högtalare")
+                            Text(spotify.selectedDeviceName ?? "Choose Spotify speaker")
                         }
                         .font(BrandFont.bold(24))
                         .foregroundStyle(spotify.selectedDeviceId == nil ? .yellow : .white)
@@ -57,7 +57,7 @@ struct LobbyView: View {
                     }
                     .buttonStyle(.card)
 
-                    Text("Eller gå till \(Config.serverURL.host ?? "") och ange koden")
+                    Text("Or go to \(Config.serverURL.host ?? "") and enter the code")
                         .font(BrandFont.body(20))
                         .foregroundStyle(.white.opacity(0.6))
                 }
@@ -73,10 +73,10 @@ struct LobbyView: View {
                             Image(systemName: "person.fill")
                                 .font(.system(size: 80))
                                 .foregroundStyle(.white.opacity(0.25))
-                            Text("Väntar på spelare...")
+                            Text("Waiting for players...")
                                 .font(BrandFont.heading(34))
                                 .foregroundStyle(.white.opacity(0.6))
-                            Text("Skanna QR-koden för att gå med")
+                            Text("Scan the QR code to join")
                                 .font(BrandFont.body(24))
                                 .foregroundStyle(.white.opacity(0.4))
                         }

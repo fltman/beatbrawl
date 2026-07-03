@@ -483,7 +483,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('nextRound', () => {
+    socket.on('nextRound', async () => {
       try {
         const game = gameManager.getGameBySocket(socket.id);
         if (!game || game.getMasterSocketId() !== socket.id) {
@@ -507,6 +507,28 @@ export function setupSocketHandlers(io: SocketIOServer) {
         if (!nextSong) {
           io.to(game.getId()).emit('gameStateUpdate', game.getState());
           console.log(`Game ${game.getId()} finished - no more songs`);
+
+          // Songs ran out: announce the winner (highest score), same as a
+          // 10-point win. Previously this path ended the game silently.
+          const finalState = game.getState();
+          if (finalState.winner && finalState.currentSong) {
+            try {
+              const { elevenLabsService } = await import('./elevenlabs');
+              const audioBuffer = await elevenLabsService.generateDJCommentary(
+                finalState.currentSong,
+                true,
+                finalState.winner.name,
+                game.getId(),
+                finalState.musicPreferences
+              );
+              if (audioBuffer) {
+                io.to(game.getId()).emit('djCommentary', audioBuffer.toString('base64'));
+                console.log(`Winner commentary sent for game ${game.getId()} (out of songs)`);
+              }
+            } catch (error) {
+              console.error('Winner commentary failed:', error);
+            }
+          }
           return;
         }
 

@@ -29,13 +29,13 @@ final class SpotifyController: ObservableObject {
             let response = try JSONDecoder().decode(SpotifyDevicesResponse.self, from: data)
             devices = response.devices
         } catch {
-            lastError = "Kunde inte hämta Spotify-enheter"
+            lastError = "Could not fetch Spotify devices"
         }
     }
 
     func play(trackId: String) async {
         guard let deviceId = selectedDeviceId else {
-            lastError = "Ingen Spotify-enhet vald"
+            lastError = "No Spotify device selected"
             return
         }
         guard let token = await tokenProvider?() else { return }
@@ -50,13 +50,13 @@ final class SpotifyController: ObservableObject {
 
             let (_, response) = try await URLSession.shared.data(for: request)
             if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
-                lastError = "Spotify kunde inte spela låten (kod \(http.statusCode))"
+                lastError = "Spotify could not play the track (code \(http.statusCode))"
             } else {
                 isPlaying = true
                 lastError = nil
             }
         } catch {
-            lastError = "Spotify-uppspelning misslyckades"
+            lastError = "Spotify playback failed"
         }
     }
 

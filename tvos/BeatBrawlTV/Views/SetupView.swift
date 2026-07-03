@@ -7,11 +7,11 @@ struct SetupView: View {
     @EnvironmentObject var client: GameClient
     @State private var input = ""
 
-    private let greeting = "Hej! Jag är er AI-spelledare. Berätta vilken musik ni vill spela med – t.ex. \"80-tals rock\" eller \"svensk pop från 90-talet\"!"
+    private let greeting = "Hey! I'm your AI game master. Tell me what kind of music you want to play with today. For example \"80s rock\" or \"Swedish pop from the 90s\"!"
 
     private let quickPicks = [
-        "80-tals rock", "Svensk pop från 90-talet", "Filmmusik",
-        "2000-tals hits", "Disco och funk", "Rock-klassiker"
+        "80s rock", "Swedish 90s pop", "Movie soundtracks",
+        "2000s hits", "Disco and funk", "Rock classics"
     ]
 
     var body: some View {
@@ -65,7 +65,7 @@ struct SetupView: View {
                 // Input panel, framed like the web app
                 VStack(spacing: 22) {
                     HStack(spacing: 18) {
-                        TextField("t.ex. '80-tals rock' eller 'svensk pop'", text: $input)
+                        TextField("e.g. '80s rock' or 'Swedish pop'", text: $input)
                             .font(BrandFont.body(28))
                             .onSubmit { send() }
 
@@ -90,10 +90,10 @@ struct SetupView: View {
                                 ProgressView().tint(.black)
                             }
                             Text(client.isConfirming
-                                 ? "LETAR UPP LÅTARNA..."
+                                 ? "FINDING THE SONGS..."
                                  : (client.generatedSongs.isEmpty
-                                    ? "BEKRÄFTA & FORTSÄTT"
-                                    : "BEKRÄFTA & FORTSÄTT – \(client.generatedSongs.count) LÅTAR REDO"))
+                                    ? "CONFIRM & CONTINUE"
+                                    : "CONFIRM & CONTINUE – \(client.generatedSongs.count) SONGS READY"))
                                 .font(BrandFont.impact(38))
                                 .kerning(2)
                                 .foregroundStyle(.black)
