@@ -8,6 +8,8 @@ class SocketService {
   // Master credentials for reclaiming the game after a silent socket reconnect
   private masterGameId: string | null = null;
   private masterToken: string | null = null;
+  // Player seat to reclaim after a silent socket reconnect
+  private playerSession: { gameCode: string; persistentId: string } | null = null;
 
   connect() {
     if (!this.socket) {
@@ -17,13 +19,16 @@ class SocketService {
 
       this.socket.on('connect', () => {
         console.log('Connected to server');
-        // Socket.io reconnects give us a new socket id - reclaim master role
+        // Socket.io reconnects give us a new socket id - reclaim our role
         if (this.masterGameId && this.masterToken) {
           console.log('Reclaiming master role for game', this.masterGameId);
           this.socket!.emit('reconnectMaster', {
             gameId: this.masterGameId,
             masterToken: this.masterToken
           });
+        } else if (this.playerSession) {
+          console.log('Reclaiming player seat in game', this.playerSession.gameCode);
+          this.socket!.emit('reconnectPlayer', this.playerSession);
         }
       });
 
@@ -53,6 +58,7 @@ class SocketService {
     }
     this.masterGameId = null;
     this.masterToken = null;
+    this.playerSession = null;
   }
 
   getSocket() {
@@ -82,7 +88,9 @@ class SocketService {
     this.socket.emit('joinGame', { gameCode, playerName, persistentId, profileId });
     this.socket.once('playerJoined', (data) => {
       // Save session info for reconnection
-      this.savePlayerSession(gameCode, playerName, data.player.persistentId || persistentId, profileId);
+      const finalPersistentId = data.player.persistentId || persistentId;
+      this.savePlayerSession(gameCode, playerName, finalPersistentId, profileId);
+      this.playerSession = { gameCode, persistentId: finalPersistentId };
       if (callback) callback(data);
     });
   }
@@ -90,6 +98,7 @@ class SocketService {
   reconnectPlayer(gameCode: string, persistentId: string, profileId?: string, callback?: (data: { player: Player; gameState: GameState }) => void) {
     if (!this.socket) return;
     this.socket.emit('reconnectPlayer', { gameCode, persistentId, profileId });
+    this.playerSession = { gameCode, persistentId };
     if (callback) {
       this.socket.once('playerReconnected', callback);
     }
