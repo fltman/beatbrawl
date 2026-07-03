@@ -28,6 +28,10 @@ final class GameClient: ObservableObject {
     private var socket: SocketIOClient?
     private let djPlayer = DJAudioPlayer()
 
+    // Master credentials for reconnecting after a socket drop
+    private var gameId: String?
+    private var masterToken: String?
+
     func connect() {
         guard manager == nil else { return }
 
@@ -45,9 +49,12 @@ final class GameClient: ObservableObject {
 
         socket.on(clientEvent: .connect) { [weak self] _, _ in
             Task { @MainActor in
-                self?.isConnected = true
-                // (Re)create the game whenever we get a fresh connection
-                if self?.gameState == nil {
+                guard let self else { return }
+                self.isConnected = true
+                if let gameId = self.gameId, let token = self.masterToken {
+                    // Socket reconnected mid-game: reclaim the master role
+                    socket.emit("reconnectMaster", ["gameId": gameId, "masterToken": token])
+                } else {
                     socket.emit("createGame")
                 }
             }
@@ -61,7 +68,29 @@ final class GameClient: ObservableObject {
             guard let dict = data.first as? [String: Any],
                   let stateDict = dict["gameState"],
                   let state = decodePayload(GameState.self, from: stateDict) else { return }
+            let token = dict["masterToken"] as? String
+            Task { @MainActor in
+                self?.gameState = state
+                self?.gameId = state.id
+                self?.masterToken = token
+            }
+        }
+
+        socket.on("masterReconnected") { [weak self] data, _ in
+            guard let first = data.first,
+                  let state = decodePayload(GameState.self, from: first) else { return }
             Task { @MainActor in self?.gameState = state }
+        }
+
+        socket.on("masterReconnectFailed") { [weak self] _, _ in
+            // Game is gone (e.g. server restart) - start over with a new one
+            Task { @MainActor in
+                guard let self else { return }
+                self.gameId = nil
+                self.masterToken = nil
+                self.gameState = nil
+                self.socket?.emit("createGame")
+            }
         }
 
         socket.on("gameStateUpdate") { [weak self] data, _ in
@@ -126,6 +155,8 @@ final class GameClient: ObservableObject {
         manager = nil
         socket = nil
         gameState = nil
+        gameId = nil
+        masterToken = nil
         results = []
         chatMessages = []
         generatedSongs = []

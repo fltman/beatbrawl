@@ -34,16 +34,40 @@ export function setupSocketHandlers(io: SocketIOServer) {
       try {
         const game = gameManager.createGame(socket.id);
         socket.join(game.getId());
-        
+
         socket.emit('gameCreated', {
           gameId: game.getId(),
-          gameState: game.getState()
+          gameState: game.getState(),
+          masterToken: game.getMasterToken()
         });
 
         console.log(`Game created: ${game.getId()} by ${socket.id}`);
       } catch (error) {
         console.error('Error creating game:', error);
         socket.emit('error', 'Failed to create game');
+      }
+    });
+
+    // Master reconnection (e.g. the Apple TV app after a socket drop).
+    // The masterToken from gameCreated proves ownership of the game.
+    socket.on('reconnectMaster', ({ gameId, masterToken }: { gameId: string; masterToken: string }) => {
+      try {
+        const game = gameManager.getGame(gameId);
+        if (!game || game.getMasterToken() !== masterToken) {
+          socket.emit('masterReconnectFailed');
+          return;
+        }
+
+        gameManager.updateMasterSocket(gameId, socket.id);
+        socket.join(gameId);
+
+        socket.emit('masterReconnected', game.getState());
+        io.to(gameId).emit('gameStateUpdate', game.getState());
+
+        console.log(`Master reconnected to game ${gameId} with socket ${socket.id}`);
+      } catch (error) {
+        console.error('Error reconnecting master:', error);
+        socket.emit('masterReconnectFailed');
       }
     });
 
@@ -557,10 +581,23 @@ export function setupSocketHandlers(io: SocketIOServer) {
             io.to(game.getId()).emit('gameStateUpdate', game.getState());
             console.log(`Player ${player.name} disconnected from game ${game.getId()}, can reconnect`);
           } else if (game.getMasterSocketId() === socket.id) {
-            // Master disconnected - end game
-            io.to(game.getId()).emit('error', 'Game master has disconnected');
-            gameManager.removePlayer(socket.id);
-            console.log(`Game master ${socket.id} disconnected, game ${game.getId()} ended`);
+            // Master disconnected - keep the game alive for a grace period
+            // so the master (e.g. Apple TV) can reconnect with its token
+            const gameId = game.getId();
+            const disconnectedSocketId = socket.id;
+            gameManager.detachSocket(disconnectedSocketId);
+
+            setTimeout(() => {
+              const currentGame = gameManager.getGame(gameId);
+              // Still the same (stale) master socket -> nobody reconnected
+              if (currentGame && currentGame.getMasterSocketId() === disconnectedSocketId) {
+                io.to(gameId).emit('error', 'Game master has disconnected');
+                gameManager.deleteGame(gameId);
+                console.log(`Master never reconnected, game ${gameId} ended`);
+              }
+            }, 3 * 60 * 1000);
+
+            console.log(`Game master ${socket.id} disconnected, game ${gameId} waiting for master reconnect`);
           }
         }
       } catch (error) {

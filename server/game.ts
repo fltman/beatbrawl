@@ -1,7 +1,9 @@
+import { randomBytes } from 'crypto';
 import { Song, Player, GameState, RoundResult } from '../shared/types';
 
 export class Game {
   private state: GameState;
+  private masterToken: string = randomBytes(24).toString('hex');
 
   constructor(masterSocketId: string) {
     this.state = {
@@ -33,6 +35,14 @@ export class Game {
 
   getMasterSocketId(): string {
     return this.state.masterSocketId;
+  }
+
+  getMasterToken(): string {
+    return this.masterToken;
+  }
+
+  setMasterSocketId(socketId: string): void {
+    this.state.masterSocketId = socketId;
   }
 
   addPlayer(

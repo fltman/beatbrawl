@@ -28,6 +28,22 @@ class GameManager {
     return true;
   }
 
+  // Remove a socket mapping without touching the game (master grace period)
+  detachSocket(socketId: string): void {
+    this.socketToGame.delete(socketId);
+  }
+
+  // Point the game's master at a new socket (master reconnection)
+  updateMasterSocket(gameId: string, newSocketId: string): boolean {
+    const game = this.games.get(gameId);
+    if (!game) return false;
+
+    this.socketToGame.delete(game.getMasterSocketId());
+    game.setMasterSocketId(newSocketId);
+    this.socketToGame.set(newSocketId, gameId);
+    return true;
+  }
+
   removePlayer(socketId: string): { game: Game; wasPlayer: boolean } | null {
     const gameId = this.socketToGame.get(socketId);
     if (!gameId) return null;

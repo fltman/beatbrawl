@@ -65,7 +65,11 @@ export interface RoundResult {
 
 export interface SocketEvents {
   createGame: () => void;
-  gameCreated: (data: { gameId: string; gameState: GameState }) => void;
+  gameCreated: (data: { gameId: string; gameState: GameState; masterToken?: string }) => void;
+
+  reconnectMaster: (data: { gameId: string; masterToken: string }) => void;
+  masterReconnected: (gameState: GameState) => void;
+  masterReconnectFailed: () => void;
 
   joinGame: (data: { gameCode: string; playerName: string; persistentId?: string }) => void;
   playerJoined: (data: { player: Player; gameState: GameState }) => void;
