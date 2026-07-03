@@ -76,8 +76,7 @@ Return JSON in this exact format:
             content: prompt
           }
         ],
-        temperature: 1.0,
-        max_tokens: 3000
+        temperature: 1.0
       });
 
       const content = completion.choices[0]?.message?.content;
@@ -163,8 +162,7 @@ Return JSON in this exact format (no markdown):
             content: prompt
           }
         ],
-        temperature: 0.9,
-        max_tokens: 1500
+        temperature: 0.9
       });
 
       const content = completion.choices[0]?.message?.content;
