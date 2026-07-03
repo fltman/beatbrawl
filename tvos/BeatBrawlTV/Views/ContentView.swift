@@ -55,20 +55,35 @@ struct ContentView: View {
     }
 }
 
-/// Full-screen "finding tracks" state while Spotify search runs,
-/// like the web's FINDING IMMORTAL TRACKS! banner.
+/// Full-screen "finding tracks" state while Spotify search runs. Rotates
+/// through the same playful wait messages as the web (4s interval).
 struct FindingTracksView: View {
+    @State private var messageIndex = 0
+
+    private let messages = [
+        "Letar upp odödliga låtar!",
+        "Känner in vibben och gräver i skivbackarna",
+        "Mixar den perfekta spellistan",
+        "Släpper beats från varje årtionde",
+        "Spårar upp klassikerna",
+        "AI:n väljer ut bangers"
+    ]
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             VStack(spacing: 50) {
-                Text("LETAR UPP ODÖDLIGA LÅTAR!")
+                Text(messages[messageIndex].uppercased())
                     .font(BrandFont.impact(56))
                     .kerning(3)
                     .foregroundStyle(.black)
+                    .multilineTextAlignment(.center)
                     .padding(.horizontal, 70)
                     .padding(.vertical, 40)
                     .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 30))
                     .overlay(RoundedRectangle(cornerRadius: 30).stroke(.white, lineWidth: 3))
+                    .id(messageIndex)
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                    .frame(maxWidth: 1500)
 
                 ProgressView()
                     .tint(Color(red: 0.98, green: 0.8, blue: 0.08))
@@ -78,6 +93,14 @@ struct FindingTracksView: View {
 
             BrandLogo(height: 280)
                 .padding(60)
+        }
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 4_000_000_000)
+                withAnimation(.easeInOut(duration: 0.4)) {
+                    messageIndex = (messageIndex + 1) % messages.count
+                }
+            }
         }
     }
 }
