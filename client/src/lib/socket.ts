@@ -5,6 +5,9 @@ const SOCKET_URL = window.location.origin;
 
 class SocketService {
   private socket: Socket | null = null;
+  // Master credentials for reclaiming the game after a silent socket reconnect
+  private masterGameId: string | null = null;
+  private masterToken: string | null = null;
 
   connect() {
     if (!this.socket) {
@@ -14,6 +17,22 @@ class SocketService {
 
       this.socket.on('connect', () => {
         console.log('Connected to server');
+        // Socket.io reconnects give us a new socket id - reclaim master role
+        if (this.masterGameId && this.masterToken) {
+          console.log('Reclaiming master role for game', this.masterGameId);
+          this.socket!.emit('reconnectMaster', {
+            gameId: this.masterGameId,
+            masterToken: this.masterToken
+          });
+        }
+      });
+
+      this.socket.on('masterReconnectFailed', () => {
+        // Game is gone (e.g. server restart) - reload to start fresh
+        if (this.masterGameId) {
+          console.warn('Master reconnect failed - reloading');
+          window.location.reload();
+        }
       });
 
       this.socket.on('disconnect', () => {
@@ -32,6 +51,8 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
     }
+    this.masterGameId = null;
+    this.masterToken = null;
   }
 
   getSocket() {
@@ -41,7 +62,11 @@ class SocketService {
   createGame(callback: (data: { gameId: string; gameState: GameState }) => void) {
     if (!this.socket) return;
     this.socket.emit('createGame');
-    this.socket.once('gameCreated', callback);
+    this.socket.once('gameCreated', (data: { gameId: string; gameState: GameState; masterToken?: string }) => {
+      this.masterGameId = data.gameId;
+      this.masterToken = data.masterToken ?? null;
+      callback(data);
+    });
   }
 
   joinGame(gameCode: string, playerName: string, profileId?: string, callback?: (data: { player: Player; gameState: GameState }) => void) {
