@@ -7,5 +7,5 @@ vite.config.ts.*
 profile-images/
 image-cache/
 # Xcode
-tvos/build/
+tvos/build*/
 **/xcuserdata/

@@ -1,4 +1,0 @@
-module SocketIO {
-header "SocketIO-Swift.h"
-export *
-}
