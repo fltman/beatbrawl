@@ -6,3 +6,6 @@ vite.config.ts.*
 *.tar.gz
 profile-images/
 image-cache/
+# Xcode
+tvos/build/
+**/xcuserdata/

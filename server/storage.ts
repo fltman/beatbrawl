@@ -1,10 +1,12 @@
-import { 
-  type User, 
+import {
+  type User,
   type InsertUser,
   type PlayerProfile,
   type InsertPlayerProfile,
   type UpdatePlayerProfile,
-  playerProfiles
+  type SpotifyCredentials,
+  playerProfiles,
+  spotifyCredentials
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
@@ -23,6 +25,10 @@ export interface IStorage {
   createPlayerProfile(profile: InsertPlayerProfile): Promise<PlayerProfile>;
   updatePlayerProfile(id: string, profile: UpdatePlayerProfile): Promise<PlayerProfile | undefined>;
   updateLastUsed(id: string): Promise<void>;
+
+  // Spotify credentials (single row - the household's Spotify account)
+  getSpotifyCredentials(): Promise<SpotifyCredentials | undefined>;
+  saveSpotifyCredentials(refreshToken: string, accessToken?: string, expiresAt?: number): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -71,6 +77,23 @@ export class MemStorage implements IStorage {
     await db.update(playerProfiles)
       .set({ lastUsedAt: new Date() })
       .where(eq(playerProfiles.id, id));
+  }
+
+  async getSpotifyCredentials(): Promise<SpotifyCredentials | undefined> {
+    const result = await db.select().from(spotifyCredentials).limit(1);
+    return result[0];
+  }
+
+  async saveSpotifyCredentials(refreshToken: string, accessToken?: string, expiresAt?: number): Promise<void> {
+    const existing = await this.getSpotifyCredentials();
+    if (existing) {
+      await db.update(spotifyCredentials)
+        .set({ refreshToken, accessToken: accessToken ?? null, expiresAt: expiresAt ?? null })
+        .where(eq(spotifyCredentials.id, existing.id));
+    } else {
+      await db.insert(spotifyCredentials)
+        .values({ refreshToken, accessToken: accessToken ?? null, expiresAt: expiresAt ?? null });
+    }
   }
 }
 

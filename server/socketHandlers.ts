@@ -502,6 +502,46 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
+    // Used by non-browser masters (Apple TV app) that have no web session.
+    // Returns a Spotify access token from the DB-persisted refresh token.
+    socket.on('getSpotifyToken', async (callback: (data: { accessToken?: string; expiresIn?: number; error?: string }) => void) => {
+      try {
+        if (typeof callback !== 'function') return;
+
+        const game = gameManager.getGameBySocket(socket.id);
+        if (!game || game.getMasterSocketId() !== socket.id) {
+          callback({ error: 'Not authorized' });
+          return;
+        }
+
+        const creds = await storage.getSpotifyCredentials();
+        if (!creds) {
+          callback({ error: 'Spotify not connected - connect Spotify in a browser first' });
+          return;
+        }
+
+        // Reuse cached access token if valid for at least another minute
+        if (creds.accessToken && creds.expiresAt && creds.expiresAt > Date.now() + 60_000) {
+          callback({
+            accessToken: creds.accessToken,
+            expiresIn: Math.floor((creds.expiresAt - Date.now()) / 1000)
+          });
+          return;
+        }
+
+        const { spotifyAuthService } = await import('./spotifyAuth');
+        const { accessToken, expiresIn } = await spotifyAuthService.refreshAccessToken(creds.refreshToken);
+        await storage.saveSpotifyCredentials(creds.refreshToken, accessToken, Date.now() + expiresIn * 1000);
+
+        callback({ accessToken, expiresIn });
+      } catch (error) {
+        console.error('Error getting Spotify token:', error);
+        if (typeof callback === 'function') {
+          callback({ error: 'Failed to get Spotify token' });
+        }
+      }
+    });
+
     socket.on('disconnect', () => {
       try {
         const game = gameManager.getGameBySocket(socket.id);

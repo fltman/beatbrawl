@@ -39,6 +39,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.spotifyRefreshToken = refreshToken;
       req.session.spotifyTokenExpiry = Date.now() + expiresIn * 1000;
 
+      // Persist to DB so non-browser masters (Apple TV) can get tokens via socket
+      storage.saveSpotifyCredentials(refreshToken, accessToken, Date.now() + expiresIn * 1000)
+        .catch(err => console.error('Failed to persist Spotify credentials:', err));
+
       res.redirect('/?spotify_connected=true');
     } catch (error) {
       console.error('Spotify OAuth callback error:', error);

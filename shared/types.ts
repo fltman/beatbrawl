@@ -97,4 +97,7 @@ export interface SocketEvents {
 
   gameStateUpdate: (gameState: GameState) => void;
   error: (message: string) => void;
+
+  // Master-only, ack-style: lets non-browser masters (Apple TV) fetch a Spotify access token
+  getSpotifyToken: (callback: (data: { accessToken?: string; expiresIn?: number; error?: string }) => void) => void;
 }
