@@ -32,6 +32,22 @@ export default function MasterPage() {
     gameStateRef.current = gameState;
   }, [gameState]);
 
+  // Failsafe: if DJ commentary never arrives while in reveal (missed during
+  // a disconnect, TTS failure...), advance anyway so the game can't get stuck
+  useEffect(() => {
+    if (gameState?.phase !== 'reveal' || isDJPlaying) return;
+
+    const timer = setTimeout(() => {
+      const current = gameStateRef.current;
+      if (current?.phase === 'reveal') {
+        console.log('No DJ commentary within 20s - auto-advancing to next round');
+        socketService.nextRound();
+      }
+    }, 20000);
+
+    return () => clearTimeout(timer);
+  }, [gameState?.phase, isDJPlaying]);
+
   // Manage lobby music - start when in setup/lobby, stop when game starts
   useEffect(() => {
     if (gameState?.phase === 'setup' || gameState?.phase === 'lobby') {

@@ -27,6 +27,7 @@ final class GameClient: ObservableObject {
     private var manager: SocketManager?
     private var socket: SocketIOClient?
     private let djPlayer = DJAudioPlayer()
+    private var revealFallbackTask: Task<Void, Never>?
 
     // Master credentials for reconnecting after a socket drop
     private var gameId: String?
@@ -129,6 +130,7 @@ final class GameClient: ObservableObject {
                 // Duck instead of pause: a paused Spotify app gets suspended
                 // by tvOS and disappears from Spotify Connect
                 await self?.spotify.duck()
+                self?.scheduleRevealFallback()
             }
         }
 
@@ -291,7 +293,21 @@ final class GameClient: ObservableObject {
 
     // MARK: - DJ commentary
 
+    /// Failsafe: if DJ commentary never arrives while in reveal (missed
+    /// during a disconnect, TTS failure...), advance anyway.
+    private func scheduleRevealFallback() {
+        revealFallbackTask?.cancel()
+        revealFallbackTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 20_000_000_000)
+            guard let self, !Task.isCancelled else { return }
+            if self.gameState?.phase == .reveal && !self.isDJPlaying {
+                self.nextRound()
+            }
+        }
+    }
+
     private func playDJCommentary(_ base64: String) {
+        revealFallbackTask?.cancel()
         isDJPlaying = true
         Task { await spotify.duck() }
 

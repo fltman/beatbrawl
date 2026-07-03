@@ -6,6 +6,10 @@ import type { SocketEvents, Song } from '../shared/types';
 // Cache for pre-generated DJ commentary (generated when round starts)
 const djCommentaryCache = new Map<string, Promise<Buffer | null>>();
 
+// Last commentary sent per game, so a reconnecting master can replay it
+// if it was emitted while the master was disconnected
+const lastDJCommentary = new Map<string, string>();
+
 // Pre-generate DJ commentary in background when round starts
 async function preGenerateDJCommentary(gameId: string, song: Song, musicContext?: string): Promise<Buffer | null> {
   console.log(`Pre-generating DJ commentary for game ${gameId}: "${song.title}"`);
@@ -63,6 +67,15 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
         socket.emit('masterReconnected', game.getState());
         io.to(gameId).emit('gameStateUpdate', game.getState());
+
+        // If commentary was sent while the master was gone, replay it so the
+        // game can advance (the master drives nextRound after the audio ends)
+        const phase = game.getState().phase;
+        const missedCommentary = lastDJCommentary.get(gameId);
+        if (missedCommentary && (phase === 'reveal' || phase === 'finished')) {
+          socket.emit('djCommentary', missedCommentary);
+          console.log(`Replayed DJ commentary to reconnected master for game ${gameId}`);
+        }
 
         console.log(`Master reconnected to game ${gameId} with socket ${socket.id}`);
       } catch (error) {
@@ -378,6 +391,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
               if (audioBuffer) {
                 const base64Audio = audioBuffer.toString('base64');
+                lastDJCommentary.set(game.getId(), base64Audio);
                 io.to(game.getId()).emit('djCommentary', base64Audio);
                 console.log(`DJ commentary sent for game ${game.getId()}`);
               }
@@ -466,6 +480,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
           if (audioBuffer) {
             const base64Audio = audioBuffer.toString('base64');
+            lastDJCommentary.set(game.getId(), base64Audio);
             io.to(game.getId()).emit('djCommentary', base64Audio);
             console.log(`DJ commentary sent for game ${game.getId()}`);
           }
@@ -522,7 +537,9 @@ export function setupSocketHandlers(io: SocketIOServer) {
                 finalState.musicPreferences
               );
               if (audioBuffer) {
-                io.to(game.getId()).emit('djCommentary', audioBuffer.toString('base64'));
+                const base64Audio = audioBuffer.toString('base64');
+                lastDJCommentary.set(game.getId(), base64Audio);
+                io.to(game.getId()).emit('djCommentary', base64Audio);
                 console.log(`Winner commentary sent for game ${game.getId()} (out of songs)`);
               }
             } catch (error) {
@@ -615,6 +632,8 @@ export function setupSocketHandlers(io: SocketIOServer) {
               if (currentGame && currentGame.getMasterSocketId() === disconnectedSocketId) {
                 io.to(gameId).emit('error', 'Game master has disconnected');
                 gameManager.deleteGame(gameId);
+                lastDJCommentary.delete(gameId);
+                djCommentaryCache.delete(gameId);
                 console.log(`Master never reconnected, game ${gameId} ended`);
               }
             }, 3 * 60 * 1000);
