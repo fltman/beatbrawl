@@ -118,6 +118,7 @@ struct LobbyMusicButton: View {
                 .foregroundStyle(.white)
                 .padding(24)
                 .background(.black.opacity(0.8), in: Circle())
+                .focusHighlight()
         }
         .buttonStyle(.card)
     }

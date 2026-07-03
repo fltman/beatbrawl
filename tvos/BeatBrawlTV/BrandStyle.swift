@@ -101,10 +101,29 @@ struct CTALabel: View {
             .padding(.vertical, 22)
             .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 8))
             .opacity(isEnabled ? 1 : 0.35)
+            .focusHighlight()
+    }
+}
+
+/// Makes the focused state clearly visible on custom button labels:
+/// scale up + bright glow, since the default .card lift is subtle on
+/// our dark panels.
+struct FocusHighlight: ViewModifier {
+    @Environment(\.isFocused) private var isFocused
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isFocused ? 1.08 : 1.0)
+            .shadow(color: .white.opacity(isFocused ? 0.9 : 0), radius: isFocused ? 16 : 0)
+            .animation(.easeOut(duration: 0.15), value: isFocused)
     }
 }
 
 extension View {
+    func focusHighlight() -> some View {
+        modifier(FocusHighlight())
+    }
+
     /// Black panel with white border, like the web app's main cards.
     func brandPanel(cornerRadius: CGFloat = 28) -> some View {
         self
@@ -141,5 +160,6 @@ struct ChipLabel: View {
             .padding(.vertical, 14)
             .background(.white.opacity(0.14), in: Capsule())
             .overlay(Capsule().stroke(.white.opacity(0.4), lineWidth: 2))
+            .focusHighlight()
     }
 }

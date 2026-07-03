@@ -53,6 +53,7 @@ struct LobbyView: View {
                         .padding(.vertical, 12)
                         .background(.white.opacity(0.08), in: Capsule())
                         .overlay(Capsule().stroke(.white.opacity(0.4), lineWidth: 2))
+                        .focusHighlight()
                     }
                     .buttonStyle(.card)
 
@@ -123,7 +124,7 @@ struct LobbyView: View {
                 .padding(.leading, 30)
                 .padding(.top, 20)
         }
-        .sheet(isPresented: $showDevicePicker) {
+        .fullScreenCover(isPresented: $showDevicePicker) {
             DevicePickerView()
         }
     }

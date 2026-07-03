@@ -77,6 +77,7 @@ struct SetupView: View {
                                 .foregroundStyle(.black)
                                 .padding(22)
                                 .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 12))
+                                .focusHighlight()
                         }
                         .buttonStyle(.card)
                     }
@@ -101,6 +102,7 @@ struct SetupView: View {
                         .padding(.vertical, 24)
                         .background(Color(red: 0.98, green: 0.8, blue: 0.08))
                         .opacity(client.lastPreference.isEmpty || client.isConfirming ? 0.45 : 1)
+                        .focusHighlight()
                     }
                     .buttonStyle(.card)
                     .disabled(client.lastPreference.isEmpty || client.isConfirming)
