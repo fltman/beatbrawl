@@ -17,7 +17,11 @@ struct ContentView: View {
                         .foregroundStyle(.white)
                 }
             case .setup:
-                SetupView()
+                if client.isConfirming {
+                    FindingTracksView()
+                } else {
+                    SetupView()
+                }
             case .lobby:
                 LobbyView()
             case .playing, .reveal:
@@ -47,6 +51,33 @@ struct ContentView: View {
                         client.errorMessage = nil
                     }
             }
+        }
+    }
+}
+
+/// Full-screen "finding tracks" state while Spotify search runs,
+/// like the web's FINDING IMMORTAL TRACKS! banner.
+struct FindingTracksView: View {
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            VStack(spacing: 50) {
+                Text("LETAR UPP ODÖDLIGA LÅTAR!")
+                    .font(BrandFont.impact(56))
+                    .kerning(3)
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 70)
+                    .padding(.vertical, 40)
+                    .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 30))
+                    .overlay(RoundedRectangle(cornerRadius: 30).stroke(.white, lineWidth: 3))
+
+                ProgressView()
+                    .tint(Color(red: 0.98, green: 0.8, blue: 0.08))
+                    .scaleEffect(1.8)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            BrandLogo(height: 280)
+                .padding(60)
         }
     }
 }

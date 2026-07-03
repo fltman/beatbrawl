@@ -1,7 +1,8 @@
 import SwiftUI
 import CoreImage.CIFilterBuiltins
 
-/// Lobby: big QR code for joining + connected players + Spotify device picker.
+/// Lobby styled like the web: two black white-bordered panels — QR + game
+/// code plate + start button on the left, joined players on the right.
 struct LobbyView: View {
     @EnvironmentObject var client: GameClient
     @EnvironmentObject var spotify: SpotifyController
@@ -10,95 +11,118 @@ struct LobbyView: View {
     var players: [Player] { client.gameState?.players ?? [] }
 
     var body: some View {
-        HStack(spacing: 80) {
-            VStack(spacing: 26) {
-                BrandLogo(height: 110)
+        ZStack(alignment: .topLeading) {
+            HStack(alignment: .top, spacing: 40) {
+                // Left panel: QR + code + start
+                VStack(spacing: 24) {
+                    if let qr = QRCodeGenerator.image(for: client.joinURL) {
+                        Image(uiImage: qr)
+                            .interpolation(.none)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 360, height: 360)
+                            .padding(20)
+                            .background(.white, in: RoundedRectangle(cornerRadius: 24))
+                    }
 
-                if let qr = QRCodeGenerator.image(for: client.joinURL) {
-                    Image(uiImage: qr)
-                        .interpolation(.none)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 400, height: 400)
-                        .padding(24)
-                        .background(.white, in: RoundedRectangle(cornerRadius: 24))
+                    Text("Game Code")
+                        .font(BrandFont.bold(30))
+                        .foregroundStyle(.white)
+
+                    GameCodePlate(code: client.gameState?.id ?? "")
+
+                    Button {
+                        client.startGame()
+                    } label: {
+                        CTALabel(text: "Starta spelet", size: 36)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.card)
+                    .disabled(players.isEmpty || spotify.selectedDeviceId == nil)
+
+                    Button {
+                        showDevicePicker = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "hifispeaker")
+                            Text(spotify.selectedDeviceName ?? "Välj Spotify-högtalare")
+                        }
+                        .font(BrandFont.bold(24))
+                        .foregroundStyle(spotify.selectedDeviceId == nil ? .yellow : .white)
+                        .padding(.horizontal, 28)
+                        .padding(.vertical, 12)
+                        .background(.white.opacity(0.08), in: Capsule())
+                        .overlay(Capsule().stroke(.white.opacity(0.4), lineWidth: 2))
+                    }
+                    .buttonStyle(.card)
+
+                    Text("Eller gå till \(Config.serverURL.host ?? "") och ange koden")
+                        .font(BrandFont.body(20))
+                        .foregroundStyle(.white.opacity(0.6))
                 }
+                .padding(44)
+                .frame(width: 760)
+                .brandPanel()
 
-                Text("Skanna för att gå med")
-                    .font(BrandFont.bold(30))
-                    .foregroundStyle(.white)
-
-                Text(client.gameState?.id ?? "")
-                    .font(BrandFont.mono(64))
-                    .foregroundStyle(.red)
-            }
-
-            VStack(alignment: .leading, spacing: 24) {
-                Text("Spelare (\(players.count))")
-                    .font(BrandFont.heading(38))
-                    .foregroundStyle(.white)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(players) { player in
-                            HStack(spacing: 16) {
-                                PlayerAvatar(player: player, size: 60)
-                                VStack(alignment: .leading) {
-                                    Text(player.name)
-                                        .font(BrandFont.bold(28))
-                                        .foregroundStyle(.white)
-                                    if let artist = player.artistName {
-                                        Text("\"\(artist)\"")
-                                            .font(BrandFont.body(22))
-                                            .foregroundStyle(.white.opacity(0.6))
+                // Right panel: players
+                Group {
+                    if players.isEmpty {
+                        VStack(spacing: 18) {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 80))
+                                .foregroundStyle(.white.opacity(0.25))
+                            Text("Väntar på spelare...")
+                                .font(BrandFont.heading(34))
+                                .foregroundStyle(.white.opacity(0.6))
+                            Text("Skanna QR-koden för att gå med")
+                                .font(BrandFont.body(24))
+                                .foregroundStyle(.white.opacity(0.4))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        ScrollView {
+                            VStack(spacing: 18) {
+                                ForEach(Array(players.enumerated()), id: \.element.id) { index, player in
+                                    HStack(spacing: 18) {
+                                        PlayerAvatar(player: player, size: 70)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(player.name)
+                                                .font(BrandFont.bold(30))
+                                                .foregroundStyle(.white)
+                                            if let artist = player.artistName {
+                                                Text(artist)
+                                                    .font(BrandFont.body(22).italic())
+                                                    .foregroundStyle(.white.opacity(0.6))
+                                            }
+                                        }
+                                        Spacer()
+                                        Text("#\(index + 1)")
+                                            .font(BrandFont.mono(26))
+                                            .foregroundStyle(.black)
+                                            .padding(.horizontal, 18)
+                                            .padding(.vertical, 8)
+                                            .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 8))
                                     }
+                                    .padding(22)
+                                    .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 18))
+                                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(.white.opacity(0.15), lineWidth: 2))
                                 }
                             }
-                        }
-                        if players.isEmpty {
-                            Text("Väntar på spelare...")
-                                .font(BrandFont.body(26))
-                                .foregroundStyle(.white.opacity(0.5))
+                            .padding(6)
                         }
                     }
                 }
-                .frame(maxHeight: 380)
-
-                Spacer()
-
-                Button {
-                    showDevicePicker = true
-                } label: {
-                    HStack {
-                        Image(systemName: "hifispeaker")
-                        Text(spotify.selectedDeviceName ?? "Välj Spotify-högtalare")
-                    }
-                    .font(BrandFont.bold(26))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 32)
-                    .padding(.vertical, 14)
-                    .background(.black.opacity(0.55), in: Capsule())
-                    .overlay(Capsule().stroke(.white.opacity(0.4), lineWidth: 2))
-                }
-                .buttonStyle(.card)
-
-                Button {
-                    client.startGame()
-                } label: {
-                    CTALabel(text: "Starta spelet")
-                }
-                .buttonStyle(.card)
-                .disabled(players.isEmpty || spotify.selectedDeviceId == nil)
-
-                if spotify.selectedDeviceId == nil {
-                    Text("Välj en Spotify-enhet innan ni startar")
-                        .font(BrandFont.body(22))
-                        .foregroundStyle(.yellow)
-                }
+                .padding(36)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .brandPanel()
             }
-            .frame(width: 620)
+            .padding(.horizontal, 70)
+            .padding(.vertical, 60)
+
+            BrandLogo(height: 170)
+                .padding(.leading, 30)
+                .padding(.top, 20)
         }
-        .padding(80)
         .sheet(isPresented: $showDevicePicker) {
             DevicePickerView()
         }
@@ -120,6 +144,7 @@ enum QRCodeGenerator {
 struct PlayerAvatar: View {
     let player: Player
     let size: CGFloat
+    var rank: Int? = nil
 
     var color: Color {
         Color(hex: player.avatarColor ?? "#8B5CF6") ?? .purple
@@ -140,6 +165,17 @@ struct PlayerAvatar: View {
         .frame(width: size, height: size)
         .clipShape(Circle())
         .overlay(Circle().stroke(.white, lineWidth: 3))
+        .overlay(alignment: .topLeading) {
+            if let rank {
+                Text("\(rank)")
+                    .font(BrandFont.bold(size * 0.26))
+                    .foregroundStyle(.white)
+                    .frame(width: size * 0.38, height: size * 0.38)
+                    .background(.red, in: Circle())
+                    .overlay(Circle().stroke(.white, lineWidth: 2))
+                    .offset(x: -size * 0.08, y: -size * 0.08)
+            }
+        }
     }
 
     var initialCircle: some View {

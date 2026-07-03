@@ -16,8 +16,8 @@ struct SetupView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            VStack(alignment: .leading, spacing: 30) {
-                BrandLogo(height: 170)
+            VStack(alignment: .leading, spacing: 22) {
+                BrandLogo(height: 230)
                     .padding(.leading, 10)
 
                 // Chat area
@@ -112,7 +112,7 @@ struct SetupView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(.horizontal, 90)
-            .padding(.vertical, 50)
+            .padding(.vertical, 40)
         }
     }
 

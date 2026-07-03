@@ -104,6 +104,31 @@ struct CTALabel: View {
     }
 }
 
+extension View {
+    /// Black panel with white border, like the web app's main cards.
+    func brandPanel(cornerRadius: CGFloat = 28) -> some View {
+        self
+            .background(.black.opacity(0.92), in: RoundedRectangle(cornerRadius: cornerRadius))
+            .overlay(RoundedRectangle(cornerRadius: cornerRadius).stroke(.white, lineWidth: 3))
+    }
+}
+
+/// Yellow "license plate" game code, like the web lobby.
+struct GameCodePlate: View {
+    let code: String
+    var size: CGFloat = 60
+
+    var body: some View {
+        Text(code)
+            .font(BrandFont.mono(size))
+            .foregroundStyle(.black)
+            .padding(.horizontal, 44)
+            .padding(.vertical, 12)
+            .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.white, lineWidth: 3))
+    }
+}
+
 /// Small selectable chip (quick genre picks etc).
 struct ChipLabel: View {
     let text: String
