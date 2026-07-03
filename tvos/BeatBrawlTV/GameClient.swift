@@ -5,7 +5,9 @@ import SocketIO
 /// responsibilities of client/src/pages/MasterPage.tsx in the web app.
 @MainActor
 final class GameClient: ObservableObject {
-    @Published var gameState: GameState?
+    @Published var gameState: GameState? {
+        didSet { syncLobbyMusic() }
+    }
     @Published var results: [RoundResult] = []
     @Published var isDJPlaying = false
     @Published var errorMessage: String?
@@ -20,6 +22,7 @@ final class GameClient: ObservableObject {
     @Published var isConfirming = false
 
     let spotify = SpotifyController()
+    let lobbyMusic = LobbyMusicPlayer()
 
     private var manager: SocketManager?
     private var socket: SocketIOClient?
@@ -130,6 +133,19 @@ final class GameClient: ObservableObject {
         startYearRange = nil
         isConfirming = false
         connect()
+    }
+
+    /// Same behavior as the web master: lobby music during setup/lobby,
+    /// silence once the game starts.
+    private func syncLobbyMusic() {
+        switch gameState?.phase {
+        case .setup, .lobby:
+            lobbyMusic.play()
+        case .playing:
+            lobbyMusic.stop()
+        default:
+            break
+        }
     }
 
     // MARK: - Setup phase (AI chat over HTTP, like the web AIChat component)

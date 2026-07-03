@@ -26,6 +26,13 @@ struct ContentView: View {
                 WinnerView()
             }
         }
+        .overlay(alignment: .bottomTrailing) {
+            // Floating music toggle during setup/lobby, like the web master
+            if client.gameState?.phase == .setup || client.gameState?.phase == .lobby {
+                LobbyMusicButton(player: client.lobbyMusic)
+                    .padding(40)
+            }
+        }
         .overlay(alignment: .top) {
             if let error = client.errorMessage {
                 Text(error)
@@ -41,5 +48,23 @@ struct ContentView: View {
                     }
             }
         }
+    }
+}
+
+/// Floating speaker button that toggles the lobby music.
+struct LobbyMusicButton: View {
+    @ObservedObject var player: LobbyMusicPlayer
+
+    var body: some View {
+        Button {
+            player.toggle()
+        } label: {
+            Image(systemName: player.isPlaying ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                .font(.system(size: 28, weight: .bold))
+                .foregroundStyle(.white)
+                .padding(24)
+                .background(.black.opacity(0.8), in: Circle())
+        }
+        .buttonStyle(.card)
     }
 }
