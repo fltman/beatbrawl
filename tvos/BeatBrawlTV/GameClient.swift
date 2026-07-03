@@ -126,7 +126,9 @@ final class GameClient: ObservableObject {
             Task { @MainActor in
                 if let state { self?.gameState = state }
                 if let roundResults { self?.results = roundResults }
-                await self?.spotify.pause()
+                // Duck instead of pause: a paused Spotify app gets suspended
+                // by tvOS and disappears from Spotify Connect
+                await self?.spotify.duck()
             }
         }
 
@@ -284,13 +286,14 @@ final class GameClient: ObservableObject {
     private func playCurrentSong() async {
         guard let song = gameState?.currentSong, gameState?.phase == .playing, !isDJPlaying else { return }
         await spotify.play(trackId: song.id)
+        await spotify.restoreVolume()
     }
 
     // MARK: - DJ commentary
 
     private func playDJCommentary(_ base64: String) {
         isDJPlaying = true
-        Task { await spotify.pause() }
+        Task { await spotify.duck() }
 
         djPlayer.play(base64: base64) { [weak self] in
             Task { @MainActor in
@@ -300,6 +303,9 @@ final class GameClient: ObservableObject {
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
                 if let phase = self.gameState?.phase, phase != .finished {
                     self.nextRound()
+                } else {
+                    // Game over: now it is safe to actually stop the music
+                    await self.spotify.pause()
                 }
             }
         }

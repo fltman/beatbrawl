@@ -124,10 +124,12 @@ struct SpotifyDevice: Codable, Identifiable, Equatable {
     let name: String
     let type: String
     let isActive: Bool
+    var volumePercent: Int?
 
     enum CodingKeys: String, CodingKey {
         case id, name, type
         case isActive = "is_active"
+        case volumePercent = "volume_percent"
     }
 }
 
