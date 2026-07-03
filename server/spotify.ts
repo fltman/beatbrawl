@@ -148,20 +148,23 @@ class SpotifyService {
   }
 
   async searchFromSuggestions(suggestions: SongSuggestion[], targetCount: number = 15): Promise<Song[]> {
-    console.log(`Spotify: Searching for ${suggestions.length} AI-suggested songs`);
-    
+    console.log(`Spotify: Searching for ${suggestions.length} AI-suggested songs in parallel`);
+    await this.ensureAuthenticated();
+
+    // All searches in parallel - sequential searches made this phase take 10s+
+    const results = await Promise.all(
+      suggestions.map(suggestion =>
+        this.searchSpecificSong(suggestion).catch(() => null)
+      )
+    );
+
     const songs: Song[] = [];
-    
-    for (const suggestion of suggestions) {
-      if (songs.length >= targetCount) break;
-      
-      const song = await this.searchSpecificSong(suggestion);
+    for (let i = 0; i < results.length && songs.length < targetCount; i++) {
+      const song = results[i];
       if (song) {
-        const movieInfo = song.movie ? ` från ${song.movie}` : '';
-        console.log(`  ✓ Found: "${song.title}" by ${song.artist} (${song.year})${movieInfo}`);
         songs.push(song);
       } else {
-        console.log(`  ✗ Not found: "${suggestion.title}" by ${suggestion.artist} (${suggestion.year})`);
+        console.log(`  ✗ Not found: "${suggestions[i].title}" by ${suggestions[i].artist}`);
       }
     }
 
@@ -226,19 +229,28 @@ class SpotifyService {
     // Shuffle queries for variety
     const shuffledQueries = [...queries].sort(() => Math.random() - 0.5);
 
-    for (const queryObj of shuffledQueries) {
+    // Fetch all queries in parallel, then dedupe/filter sequentially
+    const queryResults = await Promise.all(
+      shuffledQueries.map(async (queryObj) => {
+        try {
+          console.log(`  Searching: "${queryObj.query}"`);
+          const response = await this.spotifyApi.searchTracks(queryObj.query, {
+            limit: 50,
+            market: 'SE'
+          });
+          return { queryObj, tracks: response.body.tracks?.items || [] };
+        } catch (error: any) {
+          console.error(`  Error searching "${queryObj.query}":`, error.message);
+          return { queryObj, tracks: [] as any[] };
+        }
+      })
+    );
+
+    for (const { queryObj, tracks } of queryResults) {
       if (allSongs.length >= targetCount) break;
 
-      try {
-        console.log(`  Searching: "${queryObj.query}"`);
-
-        const response = await this.spotifyApi.searchTracks(queryObj.query, {
-          limit: 50,
-          market: 'SE'
-        });
-
-        const tracks = response.body.tracks?.items || [];
-        console.log(`    Got ${tracks.length} results`);
+      {
+        console.log(`    Got ${tracks.length} results for "${queryObj.query}"`);
 
         // Shuffle tracks to avoid always getting the same top results
         const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
@@ -280,8 +292,6 @@ class SpotifyService {
 
         console.log(`    Added ${addedFromQuery} songs (total: ${allSongs.length})`);
 
-      } catch (error: any) {
-        console.error(`  Error searching "${queryObj.query}":`, error.message);
       }
     }
 
