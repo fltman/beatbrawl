@@ -1,12 +1,13 @@
 import SwiftUI
 
-/// Setup phase: pick a quick genre chip or type freely, chat with the AI,
-/// then confirm. Focus is driven by the tvOS focus engine (arrow keys /
-/// remote swipes; click to activate).
+/// Setup phase, styled like the web AIChat: black white-bordered AI bubbles on
+/// the left, yellow user bubbles on the right, and a framed input panel with a
+/// yellow send button and a big yellow confirm CTA at the bottom.
 struct SetupView: View {
     @EnvironmentObject var client: GameClient
     @State private var input = ""
-    @FocusState private var textFieldFocused: Bool
+
+    private let greeting = "Hej! Jag är er AI-spelledare. Berätta vilken musik ni vill spela med – t.ex. \"80-tals rock\" eller \"svensk pop från 90-talet\"!"
 
     private let quickPicks = [
         "80-tals rock", "Svensk pop från 90-talet", "Filmmusik",
@@ -14,102 +15,115 @@ struct SetupView: View {
     ]
 
     var body: some View {
-        HStack(alignment: .top, spacing: 60) {
-            VStack(alignment: .leading, spacing: 28) {
-                BrandLogo(height: 110)
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 30) {
+                BrandLogo(height: 170)
+                    .padding(.leading, 10)
 
-                Text("Vilken musik vill ni spela med?")
-                    .font(BrandFont.heading(44))
-                    .foregroundStyle(.white)
+                // Chat area
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 26) {
+                            ChatBubble(message: ChatMessage(role: "assistant", content: greeting))
 
-                if client.chatMessages.isEmpty {
-                    Text("Välj ett snabbval eller skriv själv – AI:n fixar spellistan.")
-                        .font(BrandFont.body(28))
-                        .foregroundStyle(.white.opacity(0.7))
-
-                    // Quick picks: easy to use with the remote, no typing needed
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 20)], alignment: .leading, spacing: 20) {
-                        ForEach(quickPicks, id: \.self) { pick in
-                            Button {
-                                client.sendChatMessage(pick)
-                            } label: {
-                                ChipLabel(text: pick)
+                            ForEach(client.chatMessages) { message in
+                                ChatBubble(message: message)
+                                    .id(message.id)
                             }
-                            .buttonStyle(.card)
+
+                            if client.isChatLoading {
+                                ProgressView()
+                                    .tint(.white)
+                                    .padding(.leading, 20)
+                            }
+
+                            if client.chatMessages.isEmpty {
+                                // Quick picks: no typing needed on the TV
+                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 360), spacing: 20)], alignment: .leading, spacing: 20) {
+                                    ForEach(quickPicks, id: \.self) { pick in
+                                        Button {
+                                            client.sendChatMessage(pick)
+                                        } label: {
+                                            ChipLabel(text: pick)
+                                        }
+                                        .buttonStyle(.card)
+                                    }
+                                }
+                                .padding(.top, 10)
+                            }
+                        }
+                        .padding(.vertical, 12)
+                        .padding(.horizontal, 10)
+                    }
+                    .onChange(of: client.chatMessages) { _, messages in
+                        if let last = messages.last {
+                            withAnimation { proxy.scrollTo(last.id, anchor: .bottom) }
                         }
                     }
-                } else {
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 20) {
-                                ForEach(client.chatMessages) { message in
-                                    ChatBubble(message: message)
-                                        .id(message.id)
-                                }
-                                if client.isChatLoading {
-                                    ProgressView().tint(.white)
-                                }
-                            }
-                            .padding(.vertical, 10)
-                        }
-                        .onChange(of: client.chatMessages) { _, messages in
-                            if let last = messages.last {
-                                withAnimation { proxy.scrollTo(last.id, anchor: .bottom) }
-                            }
-                        }
-                    }
-                    .frame(maxHeight: 480)
                 }
 
-                TextField("Beskriv er musik...", text: $input)
-                    .font(BrandFont.body(30))
-                    .focused($textFieldFocused)
-                    .onSubmit {
-                        client.sendChatMessage(input)
-                        input = ""
-                    }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+                // Input panel, framed like the web app
+                VStack(spacing: 22) {
+                    HStack(spacing: 18) {
+                        TextField("t.ex. '80-tals rock' eller 'svensk pop'", text: $input)
+                            .font(BrandFont.body(28))
+                            .onSubmit { send() }
 
-            VStack(spacing: 30) {
-                if !client.generatedSongs.isEmpty {
-                    VStack(spacing: 8) {
-                        Text("\(client.generatedSongs.count)")
-                            .font(BrandFont.mono(90))
-                            .foregroundStyle(.red)
-                        Text("låtar redo")
-                            .font(BrandFont.bold(30))
-                            .foregroundStyle(.white)
+                        Button {
+                            send()
+                        } label: {
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 30, weight: .bold))
+                                .foregroundStyle(.black)
+                                .padding(22)
+                                .background(Color(red: 0.98, green: 0.8, blue: 0.08), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        .buttonStyle(.card)
                     }
-                    .padding(40)
-                    .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 24))
-                }
 
-                Button {
-                    client.confirmPreferences()
-                } label: {
-                    if client.isConfirming {
+                    Button {
+                        client.confirmPreferences()
+                    } label: {
                         HStack(spacing: 16) {
-                            ProgressView()
-                            Text("Letar upp låtarna...")
-                                .font(BrandFont.bold(28))
+                            if client.isConfirming {
+                                ProgressView().tint(.black)
+                            }
+                            Text(client.isConfirming
+                                 ? "LETAR UPP LÅTARNA..."
+                                 : (client.generatedSongs.isEmpty
+                                    ? "BEKRÄFTA & FORTSÄTT"
+                                    : "BEKRÄFTA & FORTSÄTT – \(client.generatedSongs.count) LÅTAR REDO"))
+                                .font(BrandFont.impact(38))
+                                .kerning(2)
+                                .foregroundStyle(.black)
                         }
-                        .padding(.horizontal, 40)
-                        .padding(.vertical, 22)
-                    } else {
-                        CTALabel(text: "Bekräfta")
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                        .background(Color(red: 0.98, green: 0.8, blue: 0.08))
+                        .opacity(client.lastPreference.isEmpty || client.isConfirming ? 0.45 : 1)
                     }
+                    .buttonStyle(.card)
+                    .disabled(client.lastPreference.isEmpty || client.isConfirming)
                 }
-                .buttonStyle(.card)
-                .disabled(client.lastPreference.isEmpty || client.isConfirming)
+                .padding(28)
+                .background(.black.opacity(0.85))
+                .overlay(Rectangle().stroke(.white, lineWidth: 3))
+                .frame(maxWidth: 1400)
+                .frame(maxWidth: .infinity, alignment: .center)
             }
-            .frame(width: 500)
-            .padding(.top, 60)
+            .padding(.horizontal, 90)
+            .padding(.vertical, 50)
         }
-        .padding(70)
+    }
+
+    private func send() {
+        client.sendChatMessage(input)
+        input = ""
     }
 }
 
+/// Chat bubble matching the web app: assistant = black with white border on
+/// the left, user = yellow with black text on the right.
 struct ChatBubble: View {
     let message: ChatMessage
 
@@ -117,16 +131,23 @@ struct ChatBubble: View {
 
     var body: some View {
         HStack {
-            if isUser { Spacer(minLength: 100) }
+            if isUser { Spacer(minLength: 300) }
+
             Text(message.content)
-                .font(BrandFont.body(26))
-                .padding(20)
+                .font(BrandFont.body(28))
+                .foregroundStyle(isUser ? .black : .white)
+                .padding(.horizontal, 30)
+                .padding(.vertical, 22)
                 .background(
-                    isUser ? Color.red.opacity(0.85) : Color.black.opacity(0.55),
-                    in: RoundedRectangle(cornerRadius: 20)
+                    isUser ? Color(red: 0.98, green: 0.8, blue: 0.08) : Color.black.opacity(0.88),
+                    in: RoundedRectangle(cornerRadius: 22)
                 )
-                .foregroundStyle(.white)
-            if !isUser { Spacer(minLength: 100) }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 22)
+                        .stroke(isUser ? .clear : .white.opacity(0.9), lineWidth: 2)
+                )
+
+            if !isUser { Spacer(minLength: 300) }
         }
     }
 }
