@@ -162,7 +162,7 @@ IMPORTANT:
           'X-Title': 'HITSTER AI'
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-pro',
+          model: 'google/gemini-3.5-flash',
           messages,
           temperature: 0.8
         })
