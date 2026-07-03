@@ -64,6 +64,7 @@ struct LobbyView: View {
                 .padding(44)
                 .frame(width: 760)
                 .brandPanel()
+                .focusSection()
 
                 // Right panel: players
                 Group {
@@ -116,6 +117,7 @@ struct LobbyView: View {
                 .padding(36)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .brandPanel()
+                .focusSection()
             }
             .padding(.horizontal, 70)
             .padding(.vertical, 60)
