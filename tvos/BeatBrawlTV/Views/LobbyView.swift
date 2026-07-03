@@ -11,31 +11,31 @@ struct LobbyView: View {
 
     var body: some View {
         HStack(spacing: 80) {
-            VStack(spacing: 30) {
-                BrandTitle()
+            VStack(spacing: 26) {
+                BrandLogo(height: 110)
 
                 if let qr = QRCodeGenerator.image(for: client.joinURL) {
                     Image(uiImage: qr)
                         .interpolation(.none)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 420, height: 420)
+                        .frame(width: 400, height: 400)
                         .padding(24)
                         .background(.white, in: RoundedRectangle(cornerRadius: 24))
                 }
 
                 Text("Skanna för att gå med")
-                    .font(.title2.weight(.bold))
+                    .font(BrandFont.bold(30))
                     .foregroundStyle(.white)
 
                 Text(client.gameState?.id ?? "")
-                    .font(.system(size: 60, weight: .black, design: .monospaced))
+                    .font(BrandFont.mono(64))
                     .foregroundStyle(.red)
             }
 
             VStack(alignment: .leading, spacing: 24) {
                 Text("Spelare (\(players.count))")
-                    .font(.title.weight(.black))
+                    .font(BrandFont.heading(38))
                     .foregroundStyle(.white)
 
                 ScrollView {
@@ -45,11 +45,11 @@ struct LobbyView: View {
                                 PlayerAvatar(player: player, size: 60)
                                 VStack(alignment: .leading) {
                                     Text(player.name)
-                                        .font(.title3.weight(.black))
+                                        .font(BrandFont.bold(28))
                                         .foregroundStyle(.white)
                                     if let artist = player.artistName {
                                         Text("\"\(artist)\"")
-                                            .font(.callout)
+                                            .font(BrandFont.body(22))
                                             .foregroundStyle(.white.opacity(0.6))
                                     }
                                 }
@@ -57,12 +57,12 @@ struct LobbyView: View {
                         }
                         if players.isEmpty {
                             Text("Väntar på spelare...")
-                                .font(.title3)
+                                .font(BrandFont.body(26))
                                 .foregroundStyle(.white.opacity(0.5))
                         }
                     }
                 }
-                .frame(maxHeight: 400)
+                .frame(maxHeight: 380)
 
                 Spacer()
 
@@ -73,25 +73,30 @@ struct LobbyView: View {
                         Image(systemName: "hifispeaker")
                         Text(spotify.selectedDeviceName ?? "Välj Spotify-högtalare")
                     }
-                    .font(.title3.weight(.bold))
+                    .font(BrandFont.bold(26))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 14)
+                    .background(.black.opacity(0.55), in: Capsule())
+                    .overlay(Capsule().stroke(.white.opacity(0.4), lineWidth: 2))
                 }
+                .buttonStyle(.card)
 
                 Button {
                     client.startGame()
                 } label: {
-                    Text("STARTA SPELET")
-                        .font(.title.weight(.black))
-                        .frame(maxWidth: .infinity)
+                    CTALabel(text: "Starta spelet")
                 }
+                .buttonStyle(.card)
                 .disabled(players.isEmpty || spotify.selectedDeviceId == nil)
 
                 if spotify.selectedDeviceId == nil {
                     Text("Välj en Spotify-enhet innan ni startar")
-                        .font(.callout)
+                        .font(BrandFont.body(22))
                         .foregroundStyle(.yellow)
                 }
             }
-            .frame(width: 600)
+            .frame(width: 620)
         }
         .padding(80)
         .sheet(isPresented: $showDevicePicker) {

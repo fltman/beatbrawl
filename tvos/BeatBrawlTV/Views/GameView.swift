@@ -19,13 +19,13 @@ struct GameView: View {
                         PlayerAvatar(player: player, size: 64)
                         VStack(alignment: .leading, spacing: 6) {
                             Text(player.name)
-                                .font(.title3.weight(.black))
+                                .font(BrandFont.bold(28))
                                 .foregroundStyle(.white)
                             statusBadge(for: player)
                         }
                         Spacer()
                         Text("\(player.score)")
-                            .font(.system(size: 44, weight: .black, design: .monospaced))
+                            .font(BrandFont.mono(44))
                             .foregroundStyle(.white)
                     }
                     .padding(20)
@@ -43,11 +43,11 @@ struct GameView: View {
             VStack(spacing: 30) {
                 HStack {
                     Text("Runda \(state?.roundNumber ?? 0)")
-                        .font(.title2.weight(.black))
+                        .font(BrandFont.heading(32))
                         .foregroundStyle(.white)
                     Spacer()
                     Text("\(connectedPlayers.filter(\.isReady).count)/\(connectedPlayers.count) klara")
-                        .font(.title3.weight(.black))
+                        .font(BrandFont.bold(28))
                         .padding(.horizontal, 28)
                         .padding(.vertical, 12)
                         .background(.red, in: Capsule())
@@ -69,7 +69,7 @@ struct GameView: View {
         .padding(60)
         .overlay(alignment: .bottomTrailing) {
             Text("Kod: \(state?.id ?? "")")
-                .font(.title3.monospaced().weight(.black))
+                .font(BrandFont.mono(26))
                 .foregroundStyle(.white.opacity(0.7))
                 .padding(40)
         }
@@ -79,18 +79,18 @@ struct GameView: View {
     private func statusBadge(for player: Player) -> some View {
         if !player.connected {
             Label("Frånkopplad", systemImage: "wifi.slash")
-                .font(.caption.weight(.bold))
+                .font(BrandFont.bold(18))
                 .foregroundStyle(.red)
         } else if player.isReady {
             Text("✓ Klar")
-                .font(.caption.weight(.black))
+                .font(BrandFont.bold(18))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
                 .background(.green, in: Capsule())
                 .foregroundStyle(.white)
         } else {
             Text("Väntar...")
-                .font(.caption.weight(.black))
+                .font(BrandFont.bold(18))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
                 .background(.yellow, in: Capsule())
@@ -107,7 +107,7 @@ struct MysterySongView: View {
     var body: some View {
         VStack(spacing: 30) {
             Text("?")
-                .font(.system(size: 220, weight: .black))
+                .font(BrandFont.heading(220))
                 .foregroundStyle(.red.opacity(isPlaying ? 1 : 0.5))
                 .scaleEffect(pulse ? 1.06 : 1.0)
                 .animation(
@@ -165,7 +165,7 @@ struct DJOnAirView: View {
                     .opacity(pulse ? 1 : 0.4)
                     .animation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true), value: pulse)
                 Text("DJ ON AIR")
-                    .font(.system(size: 44, weight: .black))
+                    .font(BrandFont.impact(48))
                     .foregroundStyle(.red)
             }
             if let song {
@@ -199,7 +199,7 @@ struct RevealView: View {
                         Text(result.correct ? "Rätt!" : "Fel")
                             .foregroundStyle(result.correct ? .green : .red)
                     }
-                    .font(.title3.weight(.bold))
+                    .font(BrandFont.bold(26))
                 }
             }
             .padding(30)
@@ -228,21 +228,21 @@ struct SongCard: View {
             }
             VStack(alignment: .leading, spacing: 12) {
                 Text(song.title)
-                    .font(.title.weight(.black))
+                    .font(BrandFont.heading(36))
                     .foregroundStyle(.white)
                 Text(song.artist)
-                    .font(.title2)
+                    .font(BrandFont.body(30))
                     .foregroundStyle(.white.opacity(0.7))
                 HStack(spacing: 20) {
                     Text(String(song.year))
-                        .font(.title2.monospaced().weight(.black))
+                        .font(BrandFont.mono(32))
                         .padding(.horizontal, 24)
                         .padding(.vertical, 8)
                         .background(.red, in: RoundedRectangle(cornerRadius: 12))
                         .foregroundStyle(.white)
                     if !results.isEmpty {
                         Text("\(results.filter(\.correct).count)/\(results.count) rätt")
-                            .font(.title3.weight(.black))
+                            .font(BrandFont.bold(28))
                             .foregroundStyle(.white)
                     }
                 }

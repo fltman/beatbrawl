@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		928C7EF42FF7A26B00866841 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = B0000000000000000000000A /* SocketIO */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B00000000000000000000001 /* BeatBrawlTV */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -19,6 +23,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928C7EF42FF7A26B00866841 /* SocketIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,7 +41,6 @@
 		B00000000000000000000003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B00000000000000000000004 /* BeatBrawlTV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -64,7 +68,6 @@
 				B0000000000000000000000A /* SocketIO */,
 			);
 			productName = BeatBrawlTV;
-			productReference = B00000000000000000000004 /* BeatBrawlTV.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -92,7 +95,7 @@
 			mainGroup = B00000000000000000000002;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				B0000000000000000000000D /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
+				B0000000000000000000000D /* XCRemoteSwiftPackageReference "socket" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B00000000000000000000003 /* Products */;
@@ -241,7 +244,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B0000000000000000000000D /* XCRemoteSwiftPackageReference "socket.io-client-swift" */ = {
+		B0000000000000000000000D /* XCRemoteSwiftPackageReference "socket" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
 			requirement = {
@@ -254,7 +257,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		B0000000000000000000000A /* SocketIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B0000000000000000000000D /* XCRemoteSwiftPackageReference "socket.io-client-swift" */;
+			package = B0000000000000000000000D /* XCRemoteSwiftPackageReference "socket" */;
 			productName = SocketIO;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -4,6 +4,10 @@ import SwiftUI
 struct BeatBrawlTVApp: App {
     @StateObject private var client = GameClient()
 
+    init() {
+        BrandFont.registerAll()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

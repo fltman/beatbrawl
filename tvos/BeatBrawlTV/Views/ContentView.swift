@@ -9,10 +9,12 @@ struct ContentView: View {
 
             switch client.gameState?.phase {
             case .none:
-                VStack(spacing: 24) {
-                    ProgressView()
+                VStack(spacing: 32) {
+                    BrandLogo(height: 200)
+                    ProgressView().tint(.white)
                     Text(client.isConnected ? "Skapar spel..." : "Ansluter till \(Config.serverURL.host ?? "servern")...")
-                        .font(.title2.weight(.black))
+                        .font(BrandFont.heading(32))
+                        .foregroundStyle(.white)
                 }
             case .setup:
                 SetupView()
@@ -27,7 +29,7 @@ struct ContentView: View {
         .overlay(alignment: .top) {
             if let error = client.errorMessage {
                 Text(error)
-                    .font(.headline)
+                    .font(BrandFont.bold(24))
                     .padding(.horizontal, 32)
                     .padding(.vertical, 16)
                     .background(.red, in: Capsule())
@@ -39,26 +41,5 @@ struct ContentView: View {
                     }
             }
         }
-    }
-}
-
-/// Shared dark, energetic backdrop that echoes the web app's styling.
-struct BrandBackground: View {
-    var body: some View {
-        LinearGradient(
-            colors: [Color(red: 0.08, green: 0.02, blue: 0.03), Color(red: 0.25, green: 0.04, blue: 0.07)],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
-    }
-}
-
-struct BrandTitle: View {
-    var body: some View {
-        Text("BEATBRAWL")
-            .font(.system(size: 46, weight: .black))
-            .foregroundStyle(.white)
-            .kerning(4)
     }
 }

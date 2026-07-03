@@ -14,10 +14,10 @@ struct WinnerView: View {
             if let winner {
                 VStack(spacing: 16) {
                     Text(winner.name)
-                        .font(.system(size: 80, weight: .black))
+                        .font(BrandFont.heading(80))
                         .foregroundStyle(.yellow)
                     Text("VINNER!")
-                        .font(.system(size: 44, weight: .black))
+                        .font(BrandFont.impact(52))
                         .foregroundStyle(.white)
                         .kerning(6)
                 }
@@ -27,15 +27,15 @@ struct WinnerView: View {
                 ForEach(Array(players.enumerated()), id: \.element.id) { index, player in
                     HStack(spacing: 20) {
                         Text("\(index + 1).")
-                            .font(.title2.monospaced().weight(.black))
+                            .font(BrandFont.mono(30))
                             .foregroundStyle(.white.opacity(0.6))
                         PlayerAvatar(player: player, size: 50)
                         Text(player.name)
-                            .font(.title2.weight(.bold))
+                            .font(BrandFont.bold(30))
                             .foregroundStyle(.white)
                         Spacer()
                         Text("\(player.score)")
-                            .font(.title.monospaced().weight(.black))
+                            .font(BrandFont.mono(38))
                             .foregroundStyle(.white)
                     }
                 }
@@ -47,9 +47,9 @@ struct WinnerView: View {
             Button {
                 client.newGame()
             } label: {
-                Text("NYTT SPEL")
-                    .font(.title.weight(.black))
+                CTALabel(text: "Nytt spel")
             }
+            .buttonStyle(.card)
         }
         .padding(80)
     }

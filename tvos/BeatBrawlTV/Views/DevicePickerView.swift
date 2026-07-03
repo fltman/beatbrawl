@@ -13,7 +13,7 @@ struct DevicePickerView: View {
 
             VStack(spacing: 40) {
                 Text("Var ska musiken spelas?")
-                    .font(.title.weight(.black))
+                    .font(BrandFont.heading(40))
                     .foregroundStyle(.white)
 
                 if isLoading {
@@ -21,10 +21,10 @@ struct DevicePickerView: View {
                 } else if spotify.devices.isEmpty {
                     VStack(spacing: 16) {
                         Text("Inga Spotify-enheter hittades")
-                            .font(.title3.weight(.bold))
+                            .font(BrandFont.bold(26))
                             .foregroundStyle(.white)
                         Text("Öppna Spotify-appen på din Apple TV eller en högtalare och försök igen.")
-                            .font(.callout)
+                            .font(BrandFont.body(22))
                             .foregroundStyle(.white.opacity(0.6))
                             .multilineTextAlignment(.center)
                     }
@@ -41,13 +41,13 @@ struct DevicePickerView: View {
                                         Text(device.name)
                                         Spacer()
                                         if device.isActive {
-                                            Text("Aktiv").font(.callout).foregroundStyle(.green)
+                                            Text("Aktiv").font(BrandFont.body(22)).foregroundStyle(.green)
                                         }
                                         if device.id == spotify.selectedDeviceId {
                                             Image(systemName: "checkmark")
                                         }
                                     }
-                                    .font(.title3.weight(.bold))
+                                    .font(BrandFont.bold(26))
                                 }
                             }
                         }
