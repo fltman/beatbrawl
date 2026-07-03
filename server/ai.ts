@@ -156,7 +156,7 @@ Return JSON in this exact format (no markdown):
       console.log('AI: Calling OpenRouter API for search queries...');
 
       const completion = await this.client.chat.completions.create({
-        model: 'google/gemini-2.5-flash-preview',
+        model: 'google/gemini-2.5-flash',
         messages: [
           {
             role: 'user',

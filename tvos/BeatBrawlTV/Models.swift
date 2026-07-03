@@ -81,12 +81,40 @@ struct SongSuggestion: Codable, Equatable {
     let year: Int
     var movie: String?
     var trivia: String?
+
+    // Tolerant decoding: the AI sometimes returns year as a string or float
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try c.decode(String.self, forKey: .title)
+        artist = try c.decode(String.self, forKey: .artist)
+        if let i = try? c.decode(Int.self, forKey: .year) {
+            year = i
+        } else if let d = try? c.decode(Double.self, forKey: .year) {
+            year = Int(d)
+        } else if let s = try? c.decode(String.self, forKey: .year),
+                  let i = Int(s.trimmingCharacters(in: .whitespaces)) {
+            year = i
+        } else {
+            year = 0
+        }
+        movie = try? c.decode(String.self, forKey: .movie)
+        trivia = try? c.decode(String.self, forKey: .trivia)
+    }
 }
 
 struct ChatResponse: Codable {
     let response: String
     let songs: [SongSuggestion]
     var startYearRange: YearRange?
+
+    // A malformed songs list should not sink the whole chat reply
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        response = try c.decode(String.self, forKey: .response)
+        songs = ((try? c.decode([SongSuggestion].self, forKey: .songs)) ?? [])
+            .filter { $0.year > 0 }
+        startYearRange = try? c.decode(YearRange.self, forKey: .startYearRange)
+    }
 }
 
 // Spotify Connect devices (GET /v1/me/player/devices)
