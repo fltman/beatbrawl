@@ -162,8 +162,10 @@ Return JSON in this exact format (no markdown):
             content: prompt
           }
         ],
-        temperature: 0.9
-      });
+        temperature: 0.9,
+        // Reasoning model: keep thinking short for this simple structured task
+        reasoning: { effort: 'low' }
+      } as any);
 
       const content = completion.choices[0]?.message?.content;
 

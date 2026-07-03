@@ -106,7 +106,8 @@ Style Guidelines:
         body: JSON.stringify({
           model: 'google/gemini-3.5-flash',
           messages: [...history, { role: 'user', content: userPrompt }],
-          temperature: 0.8
+          temperature: 0.8,
+          reasoning: { effort: 'low' }
         })
       });
 

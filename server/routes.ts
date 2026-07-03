@@ -164,7 +164,8 @@ IMPORTANT:
         body: JSON.stringify({
           model: 'google/gemini-3.5-flash',
           messages,
-          temperature: 0.8
+          temperature: 0.8,
+          reasoning: { effort: 'low' }
         })
       });
 
